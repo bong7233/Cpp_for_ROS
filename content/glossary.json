@@ -225,5 +225,9 @@
   { "term": "decltype(auto) (C++14)", "def": "함수 반환 타입 자리에서 반환식에 decltype의 규칙을 그대로 적용해 값 범주를 보존하는 지정자. 평범한 auto 반환은 레퍼런스를 벗기지만 decltype(auto)는 벗기지 않는다.", "chapter": "type-deduction" },
   { "term": "auto&& (auto 전달 레퍼런스)", "def": "템플릿 파라미터가 아닌 문맥에서도 전달 레퍼런스와 같은 규칙을 따르는 auto 조합. lvalue를 바인딩하면 T&로, rvalue를 바인딩하면 T&&로 축소되어, lvalue·rvalue를 둘 다 받는 유일한 auto 형태다.", "chapter": "type-deduction" },
   { "term": "std::vector<bool>::reference (프록시 참조)", "def": "std::vector<bool>이 비트 하나로 값을 압축 저장하기 위해 operator[]가 진짜 bool& 대신 돌려주는 프록시 클래스. auto로 받으면 타입을 bool로 착각하기 쉽고, 원본 버퍼가 재할당되면 댕글링 상태가 된다.", "chapter": "type-deduction" },
-  { "term": "함수 반환 타입 추론 (C++14)", "def": "함수 선언에 auto만 적고 본문의 return문에서 반환 타입을 추론하게 하는 문법. 여러 return문의 타입이 서로 어긋나면 그 자리에서 컴파일 에러가 난다.", "chapter": "type-deduction" }
+  { "term": "함수 반환 타입 추론 (C++14)", "def": "함수 선언에 auto만 적고 본문의 return문에서 반환 타입을 추론하게 하는 문법. 여러 return문의 타입이 서로 어긋나면 그 자리에서 컴파일 에러가 난다.", "chapter": "type-deduction" },
+  { "term": "capacity vs size", "def": "size()는 실제로 채워진 원소 개수(end_ - begin_), capacity()는 재할당 없이 더 넣을 수 있는 버퍼 전체 크기(end_of_storage_ - begin_)다. 항상 capacity() >= size()가 성립한다.", "chapter": "vector" },
+  { "term": "성장 전략 (growth factor)", "def": "vector가 capacity를 다 채운 뒤 재할당할 때 새 버퍼를 얼마나 크게 잡을지 정하는 배율. C++ 표준은 강제하지 않고 구현이 자유롭게 고르며, g++ libstdc++는 실측상 매번 정확히 2배씩 키운다.", "chapter": "vector" },
+  { "term": "재할당 (reallocation)", "def": "vector의 capacity가 바닥나 push_back을 한 번 더 호출할 때, 더 큰 새 버퍼를 할당하고 기존 원소를 전부 옮긴 뒤 옛 버퍼를 해제하는 과정. 기존 원소는 이동 생성자가 있고 noexcept면 이동으로, 아니면 복사로 옮겨진다.", "chapter": "vector" },
+  { "term": "end_of_storage_ (capacity 포인터)", "def": "vector 내부에서 할당된 버퍼 전체의 끝(즉 capacity가 가리키는 지점)을 나타내는 포인터. begin_·end_과 함께 vector의 상태 전부(24바이트, x86-64 기준)를 구성한다.", "chapter": "vector" }
 ]
