@@ -133,5 +133,9 @@
   { "term": "멤버별 이동 (memberwise move)", "def": "암묵적 이동 생성자·이동 대입 연산자의 기본 동작 — 각 멤버를 그 타입의 이동 방법으로 하나씩 옮긴다. 이동을 모르는 타입은 그냥 복사된다.", "chapter": "rule-of-five" },
   { "term": "Rule of Zero", "def": "자원을 원시 포인터로 직접 쥐지 않고 std::vector·std::unique_ptr 같은 이미 검증된 타입으로 감싸면, 다섯 개의 특수 멤버 함수 중 아무것도 직접 쓸 필요가 없다는 지침. 가장 좋은 코드는 이 다섯 개를 안 쓰는 코드다.", "chapter": "rule-of-five" },
   { "term": "Rule of Three", "def": "C++11 이전 규칙 — 소멸자·복사 생성자·복사 대입 연산자 중 하나가 필요하면(자원을 직접 소유한다는 신호) 셋 다 직접 써야 한다는 지침. 하나만 고치면 나머지는 틀린 멤버별 복사로 남는다.", "chapter": "rule-of-five" },
-  { "term": "Rule of Five", "def": "C++11 이후 규칙 — 자원을 직접 소유하는 클래스는 소멸자·복사 생성자·복사 대입·이동 생성자·이동 대입 다섯 개를 전부 올바르게 쓰거나, 복사·이동 자체를 =delete로 막아야 한다는 지침.", "chapter": "rule-of-five" }
+  { "term": "Rule of Five", "def": "C++11 이후 규칙 — 자원을 직접 소유하는 클래스는 소멸자·복사 생성자·복사 대입·이동 생성자·이동 대입 다섯 개를 전부 올바르게 쓰거나, 복사·이동 자체를 =delete로 막아야 한다는 지침.", "chapter": "rule-of-five" },
+  { "term": "제어 블록 (control block)", "def": "shared_ptr가 소유 객체와 별도로 힙에 만드는 블록 — 강한 참조 수, 약한 참조 수, 딜리터를 담는다. shared_ptr 자신은 이 블록을 가리키는 포인터만 추가로 든다.", "chapter": "shared-ptr" },
+  { "term": "use_count (참조 카운트)", "def": "제어 블록이 세는 강한 참조(shared_ptr) 수 — 복사할 때마다 오르고 소멸할 때마다 내리며, 0이 되는 순간 실제 객체가 delete된다.", "chapter": "shared-ptr" },
+  { "term": "순환 참조 (circular reference)", "def": "두 객체가 서로를 shared_ptr로 소유해 각자의 use_count가 0에 도달하지 못하는 상황 — 소멸자가 영원히 안 불려 LeakSanitizer가 Indirect leak으로 잡는다.", "chapter": "shared-ptr" },
+  { "term": "weak_ptr", "def": "제어 블록의 약한 참조 수만 올리고 강한 참조 수(use_count)에는 영향을 주지 않는 관찰용 스마트 포인터 — lock()으로 임시 shared_ptr를 얻어야 접근할 수 있고, expired()로 원본 소멸 여부를 확인한다.", "chapter": "shared-ptr" }
 ]
