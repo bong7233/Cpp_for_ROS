@@ -6,51 +6,52 @@
 
 ## counter++ 레이스를 다시 원자적으로 만든다
 
-6.2와 똑같은 코드를 그대로 가져온다. 스레드 두 개가 각각 20만 번씩 `counter++`를 실행한다.
+6.2의 `race1_counter.cpp`를 그대로 가져온다. 전역 변수 `counter`를 스레드 두 개가 각각 500만 번씩 증가시킨다 — 동기화는 없다.
 
-```cpp title="mut1_race_recap.cpp — 6.2의 레이스를 그대로 재현"
+```cpp title="mut1_race_recap.cpp — 6.2의 race1_counter.cpp를 그대로 재현"
 #include <iostream>
 #include <thread>
 
-int counter = 0;
+constexpr long N = 5'000'000;
+long counter = 0;   // 동기화 없이 두 스레드가 공유한다
 
-void worker() {
-    for (int i = 0; i < 200000; ++i) {
+void increment_loop() {
+    for (long i = 0; i < N; ++i) {
         counter++;   // load -> add -> store, 원자적이지 않다
     }
 }
 
 int main() {
-    std::thread t1(worker), t2(worker);
+    std::thread t1(increment_loop);
+    std::thread t2(increment_loop);
     t1.join();
     t2.join();
-    std::cout << "기대값 400000, 실제값 " << counter << "\n";
+    std::cout << "기대값: " << (2 * N) << ", 실제값: " << counter << "\n";
     return 0;
 }
 ```
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -pthread mut1_race_recap.cpp -o mut1_race_recap
-$ for i in 1 2 3 4 5; do ./mut1_race_recap; done
-기대값 400000, 실제값 253060
-기대값 400000, 실제값 244572
-기대값 400000, 실제값 266379
-기대값 400000, 실제값 271422
-기대값 400000, 실제값 266830
+$ g++ -std=c++20 -O0 -Wall -Wextra mut1_race_recap.cpp -o mut1_race_recap -lpthread
+$ for i in 1 2 3; do ./mut1_race_recap; done
+기대값: 10000000, 실제값: 5205965
+기대값: 10000000, 실제값: 5358969
+기대값: 10000000, 실제값: 5447264
 ```
 
-(g++ 13.3.0 / Ubuntu 24.04 / x86-64 실측, `-O0`.) 다섯 번 모두 40만에 한참 못 미친다 — 실행마다 스케줄러가 스레드를 겹치는 지점이 달라서 사라지는 증가분의 개수도 매번 다르다. 이제 `counter++` 앞뒤를 `std::mutex`로 감싼다. `std::mutex`는 `lock()`을 부른 스레드 하나만 통과시키고, 이미 누가 잠근 상태라면 다음 `lock()` 호출은 그 잠금이 풀릴 때까지 그 자리에서 블록(대기)한다 — `lock()`부터 `unlock()`까지의 구간을 **임계 구역(critical section)**이라고 부른다.
+(g++ 13.3.0 / Ubuntu 24.04 / x86-64 실측, `-O0`.) 세 번 모두 1,000만에 한참 못 미친다 — 실행마다 스케줄러가 스레드를 겹치는 지점이 달라서 사라지는 증가분의 개수도 매번 다르다. 이제 `counter++` 앞뒤를 `std::mutex`로 감싼다. `std::mutex`는 `lock()`을 부른 스레드 하나만 통과시키고, 이미 누가 잠근 상태라면 다음 `lock()` 호출은 그 잠금이 풀릴 때까지 그 자리에서 블록(대기)한다 — `lock()`부터 `unlock()`까지의 구간을 **임계 구역(critical section)**이라고 부른다.
 
 ```cpp title="mut2_lock_unlock.cpp — lock()/unlock()으로 감싼 임계 구역"
 #include <iostream>
 #include <thread>
 #include <mutex>
 
-int counter = 0;
+constexpr long N = 5'000'000;
+long counter = 0;
 std::mutex m;
 
-void worker() {
-    for (int i = 0; i < 200000; ++i) {
+void increment_loop() {
+    for (long i = 0; i < N; ++i) {
         m.lock();
         counter++;
         m.unlock();
@@ -58,49 +59,51 @@ void worker() {
 }
 
 int main() {
-    std::thread t1(worker), t2(worker);
+    std::thread t1(increment_loop);
+    std::thread t2(increment_loop);
     t1.join();
     t2.join();
-    std::cout << "기대값 400000, 실제값 " << counter << "\n";
+    std::cout << "기대값: " << (2 * N) << ", 실제값: " << counter << "\n";
     return 0;
 }
 ```
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -pthread mut2_lock_unlock.cpp -o mut2_lock_unlock
-$ for i in 1 2 3 4 5; do ./mut2_lock_unlock; done
-기대값 400000, 실제값 400000
-기대값 400000, 실제값 400000
-기대값 400000, 실제값 400000
-기대값 400000, 실제값 400000
-기대값 400000, 실제값 400000
+$ g++ -std=c++20 -O0 -Wall -Wextra mut2_lock_unlock.cpp -o mut2_lock_unlock -lpthread
+$ for i in 1 2 3; do ./mut2_lock_unlock; done
+기대값: 10000000, 실제값: 10000000
+기대값: 10000000, 실제값: 10000000
+기대값: 10000000, 실제값: 10000000
 ```
 
-(g++ 13.3.0 실측.) 다섯 번 모두 정확히 40만이다. 눈으로 값만 확인하는 걸로는 부족하다 — 6.2에서 쓴 ThreadSanitizer(TSan)로 두 버전을 다시 검사해서, "값이 우연히 맞았다"가 아니라 "레이스 자체가 없어졌다"는 걸 확인한다.
+(g++ 13.3.0 실측.) 세 번 모두 정확히 1,000만이다. 눈으로 값만 확인하는 걸로는 부족하다 — 6.2에서 쓴 ThreadSanitizer(TSan)로 두 버전을 다시 검사해서, "값이 우연히 맞았다"가 아니라 "레이스 자체가 없어졌다"는 걸 확인한다.
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -fsanitize=thread -pthread mut1_race_recap.cpp -o mut1_tsan
+$ g++ -std=c++20 -g -O0 -fsanitize=thread -Wall -Wextra mut1_race_recap.cpp -o mut1_tsan -lpthread
 $ ./mut1_tsan
 ==================
-WARNING: ThreadSanitizer: data race (pid=25202)
-  Read of size 4 at 0x564f856c5154 by thread T2:
-    #0 worker() ...
-  Previous write of size 4 at 0x564f856c5154 by thread T1:
-    #0 worker() ...
-  Location is global 'counter' of size 4 at 0x564f856c5154
-SUMMARY: ThreadSanitizer: data race (.../mut1_tsan+0x1399) in worker()
+WARNING: ThreadSanitizer: data race (pid=14626)
+  Read of size 8 at 0x55ac46746158 by thread T2:
+    #0 increment_loop() mut1_race_recap.cpp:9 (mut1_tsan+0x135a)
+  Previous write of size 8 at 0x55ac46746158 by thread T1:
+    #0 increment_loop() mut1_race_recap.cpp:9 (mut1_tsan+0x1374)
+SUMMARY: ThreadSanitizer: data race mut1_race_recap.cpp:9 in increment_loop()
 ==================
-기대값 400000, 실제값 400000
+기대값: 10000000, 실제값: 10000000
 ThreadSanitizer: reported 2 warnings
+$ echo $?
+66
 ```
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -fsanitize=thread -pthread mut2_lock_unlock.cpp -o mut2_tsan
+$ g++ -std=c++20 -g -O0 -fsanitize=thread -Wall -Wextra mut2_lock_unlock.cpp -o mut2_tsan -lpthread
 $ ./mut2_tsan
-기대값 400000, 실제값 400000
+기대값: 10000000, 실제값: 10000000
+$ echo $?
+0
 ```
 
-(g++ 13.3.0 실측, 출력은 길어서 핵심 줄만 남겼다.) `mut1`은 TSan이 경고 2건을 내고("data race", `counter`를 읽던 스레드와 쓰던 스레드가 순서를 보장받지 못했다는 진단), `mut2`는 경고가 **0건**이다 — 뮤텍스가 두 스레드의 `counter` 접근에 순서를 강제했다는 걸 TSan이 직접 확인해 준 것이다. 값만 맞고 TSan이 조용하지 않다면 그건 "이번엔 운이 좋았다"([6.2](#/data-races)의 `race-lucky` 시나리오)일 뿐이지 고쳐진 게 아니다 — 이 구분이 레이스 디버깅에서 가장 자주 놓치는 지점이다.
+(g++ 13.3.0 실측, 출력은 길어서 핵심 줄만 남겼다.) `mut1`은 TSan이 경고 2건을 내고 종료 코드도 66(0이 아님)이지만, `mut2`는 경고 **0건**에 종료 코드도 0이다 — 뮤텍스가 두 스레드의 `counter` 접근에 순서를 강제했다는 걸 TSan이 직접 확인해 준 것이다. 값만 맞고 TSan이 조용하지 않다면 그건 "이번엔 운이 좋았다"(6.2에서 `-O2`로 다시 컴파일했을 때 항상 정답이 나왔던 것과 같은 함정)일 뿐이지 고쳐진 게 아니다 — 이 구분이 레이스 디버깅에서 가장 자주 놓치는 지점이다.
 
 ## 위젯으로 보는 임계 구역
 
@@ -156,7 +159,7 @@ int main() {
 ```
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -pthread mut3_exception_no_raii.cpp -o mut3_exception_no_raii
+$ g++ -std=c++20 -Wall -Wextra mut3_exception_no_raii.cpp -o mut3_exception_no_raii -lpthread
 $ ./mut3_exception_no_raii
 [T1] 락 획득, 위험한 작업 시작
 [T1] 예외 잡음: 설정 파싱 실패 -- 뮤텍스는 여전히 잠긴 채다
@@ -215,7 +218,7 @@ int main() {
 ```
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -pthread mut4_lock_guard.cpp -o mut4_lock_guard
+$ g++ -std=c++20 -Wall -Wextra mut4_lock_guard.cpp -o mut4_lock_guard -lpthread
 $ ./mut4_lock_guard
 [T1] 락 획득, 위험한 작업 시작
 [T1] 예외 잡음: 설정 파싱 실패 -- guard 소멸자가 이미 unlock() 했다
@@ -258,7 +261,7 @@ int main() {
 ```
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -pthread mut5_unique_lock.cpp -o mut5_unique_lock
+$ g++ -std=c++20 -Wall -Wextra mut5_unique_lock.cpp -o mut5_unique_lock -lpthread
 $ ./mut5_unique_lock
 락 보유? 1
 unlock() 후 보유? 0
@@ -270,7 +273,7 @@ unlock() 후 보유? 0
 (g++ 13.3.0 실측.) 반대로 `lock_guard`로 두 번째 줄을 그대로 옮겨 컴파일하면 어떻게 되는지도 실측해 둔다.
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -pthread mut5b_lock_guard_no_move.cpp -o mut5b
+$ g++ -std=c++20 -Wall -Wextra mut5b_lock_guard_no_move.cpp -o mut5b -lpthread
 mut5b_lock_guard_no_move.cpp: In function 'int main()':
 mut5b_lock_guard_no_move.cpp:5:50: error: use of deleted function
 'std::lock_guard<_Mutex>::lock_guard(const std::lock_guard<_Mutex>&)'
@@ -339,7 +342,7 @@ int main() {
 ```
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -pthread mut6_deadlock.cpp -o mut6_deadlock
+$ g++ -std=c++20 -Wall -Wextra mut6_deadlock.cpp -o mut6_deadlock -lpthread
 $ timeout 10 ./mut6_deadlock
 [T1] mA 잠금, mB를 기다린다...
 [T2] mB 잠금, mA를 기다린다...
@@ -383,7 +386,7 @@ int main() {
 ```
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -pthread mut7_scoped_lock_fixed.cpp -o mut7_scoped_lock_fixed
+$ g++ -std=c++20 -Wall -Wextra mut7_scoped_lock_fixed.cpp -o mut7_scoped_lock_fixed -lpthread
 $ timeout 5 ./mut7_scoped_lock_fixed
 [T1] mA, mB 모두 잠금
 두 스레드 모두 정상 종료, 걸린 시간: 100ms
@@ -452,7 +455,7 @@ int main() {
 ```
 
 ```console
-$ g++ -std=c++20 -Wall -Wextra -O2 -pthread mut8_cost.cpp -o mut8_cost
+$ g++ -std=c++20 -Wall -Wextra -O2 mut8_cost.cpp -o mut8_cost -lpthread
 $ ./mut8_cost
 경합 없음 (스레드 1개): 5.82873 ns/lock+unlock
 경합 있음 (스레드 4개, 같은 락 두드림): 44.4515 ns/lock+unlock
@@ -506,6 +509,6 @@ $ ./mut8_cost
 4. 개별 `lock()` 호출로 순서를 반대로 짠 버전은 이 절의 `mut6_deadlock.cpp`와 동일한 구조라 데드락이 재현된다 — 워치독 타임아웃(예: 2초) 안에 두 스레드 모두 완료 신호를 보내지 못하는 걸 직접 확인했어야 한다. `scoped_lock(mA, mB)`로 바꾼 버전은 `mut7_scoped_lock_fixed.cpp`와 동일한 구조이므로, 어느 스레드가 먼저 실행되든 항상 짧은 시간 안에 정상 종료해야 한다 — 반복 실행할 때마다 타이밍이 아주 조금씩 달라질 수는 있어도, 데드락 버전처럼 "영원히 안 끝나는" 일은 없어야 정답이다.
 :::
 
-이 절의 코드는 전부 직접 쳐라. 스레드를 쓰는 모든 예제는 링크 단계에 `-pthread`가 필요하다. 기준 명령: `g++ -std=c++20 -Wall -Wextra -pthread main.cpp -o main && ./main`. TSan으로 재확인하려면 `g++ -std=c++20 -Wall -Wextra -fsanitize=thread -pthread main.cpp -o main && ./main` — `mut1`(레이스 버전)에서는 경고가 뜨고 `mut2`(뮤텍스 버전)에서는 조용한지 직접 비교해라. 데드락 예제(`mut6`)는 정말로 프로그램이 멈추는 걸 눈으로 본 다음 `Ctrl+C`나 `timeout` 명령으로 빠져나와라 — 무한정 기다릴 필요는 없다.
+이 절의 코드는 전부 직접 쳐라. 스레드를 쓰는 모든 예제는 링크 단계에 `-lpthread`가 필요하다. 기준 명령: `g++ -std=c++20 -Wall -Wextra main.cpp -o main -lpthread && ./main`. TSan으로 재확인하려면 `g++ -std=c++20 -g -O0 -fsanitize=thread -Wall -Wextra main.cpp -o main -lpthread && ./main` — `mut1`(레이스 버전)에서는 경고가 뜨고 `mut2`(뮤텍스 버전)에서는 조용한지 직접 비교해라. 데드락 예제(`mut6`)는 정말로 프로그램이 멈추는 걸 눈으로 본 다음 `Ctrl+C`나 `timeout` 명령으로 빠져나와라 — 무한정 기다릴 필요는 없다.
 
 **다음 절**: [6.4 condition_variable과 대기 패턴](#/condvar) — `unique_lock`이 왜 필요했는지가 여기서 완성된다. 락을 쥔 채로 "조건이 될 때까지" 스레드를 재웠다 깨우는 법을 본다.
