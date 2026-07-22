@@ -253,6 +253,8 @@
   { "term": "std::advance/std::distance의 카테고리 분기", "def": "std::advance(it, n)과 std::distance(first, last)는 반복자 카테고리에 따라 컴파일 타임에 다른 오버로드로 디스패치된다. random-access면 산술 한 번(O(1)), 그 아래는 ++/--를 n번 반복(O(n))한다.", "chapter": "iterators" },
   { "term": "부분 무효화 (partial invalidation)", "def": "vector::insert가 재할당 없이 일어날 때, 삽입 지점 이전 포인터는 안전하지만 이후 포인터는 여전히 유효한 메모리를 가리키면서도 다른 원소를 가리키게 되는 상태. ASan 등 새니타이저가 잡지 못하는 의미론적 버그다.", "chapter": "iterators" },
   { "term": "erase 반환값 관용구", "def": "컨테이너를 순회하며 원소를 지울 때 it = container.erase(it);처럼 erase의 반환값을 그 자리에서 반복자에 다시 대입하는 관용구. 반환값을 버리고 원래 반복자에 ++를 계속하면 무효화된 반복자를 쓰게 되어 세그폴트나 heap-buffer-overflow로 이어진다.", "chapter": "iterators" },
+  { "term": "반복자 무효화 (iterator invalidation)", "def": "컨테이너의 삽입/삭제로 인해 반복자가 더 이상 원래 의도한 원소를 가리키지 못하게 되는 것. 컨테이너마다 규칙이 다르며, 항상 크래시로 나타나는 것은 아니다 — 메모리는 유효한 채로 값만 달라지는 경우도 있다.", "chapter": "iterators" },
+  { "term": "노드 기반 컨테이너 (node-based container)", "def": "원소 하나하나가 힙의 독립된 블록(노드)으로 존재하고 포인터로 엮이는 컨테이너(list, map, set). 삽입/삭제가 다른 원소를 물리적으로 옮기지 않아 반복자·포인터·레퍼런스가 안전하다.", "chapter": "iterators" },
   { "term": "클로저 타입/클로저 객체 (closure type/object)", "def": "람다 표현식이 나타날 때마다 컴파일러가 즉석으로 만드는 이름 없는 클래스(클로저 타입)와 그 인스턴스(클로저 객체). operator()가 실제 멤버 함수이고, 같은 코드의 람다 두 개도 서로 다른 타입이 된다.", "chapter": "lambdas" },
   { "term": "값 캡처 vs 레퍼런스 캡처", "def": "람다의 캡처는 클로저 클래스의 멤버 변수로 저장된다. 값 캡처([x])는 캡처 시점의 값을 복사해 원본이 나중에 바뀌어도 영향받지 않고, 레퍼런스 캡처([&x])는 원본을 가리키는 참조를 저장해 원본의 수명이 클로저보다 짧아지면 댕글링이 된다.", "chapter": "lambdas" },
   { "term": "mutable (람다)", "def": "값 캡처 멤버를 operator() 안에서 고칠 수 있게 클로저의 operator()에서 const를 벗기는 키워드. 클로저 내부 복사본만 바꿀 뿐 원본에는 반영되지 않는다.", "chapter": "lambdas" },
