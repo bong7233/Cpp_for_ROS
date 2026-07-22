@@ -4,5 +4,12 @@
   { "term": "build-essential", "def": "gcc, g++, make, C 표준 라이브러리 헤더를 묶은 우분투 메타패키지. C++ 빌드 환경의 최소 단위.", "chapter": "toolchain-setup" },
   { "term": "GNU 확장", "def": "표준 C++가 아니지만 g++가 추가로 받아 주는 문법. 기본 모드(gnu++17 등)에서 조용히 통과해 이식성 문제를 만든다.", "chapter": "toolchain-setup" },
   { "term": "구성 (configure)", "def": "CMake의 1단계 — 컴파일러를 찾고 빌드 파일을 생성한다. 실제 컴파일은 2단계인 빌드(cmake --build)에서 일어난다.", "chapter": "toolchain-setup" },
-  { "term": "디버그 정보 (-g)", "def": "실행파일에 소스 줄 번호와 변수 이름을 담는 컴파일 옵션. gdb로 열려면 필요하다.", "chapter": "toolchain-setup" }
+  { "term": "디버그 정보 (-g)", "def": "실행파일에 소스 줄 번호와 변수 이름을 담는 컴파일 옵션. gdb로 열려면 필요하다.", "chapter": "toolchain-setup" },
+  { "term": "컴파일러 드라이버 (compiler driver)", "def": "전처리·컴파일·링크 전 과정을 지휘하는 실행 파일(g++).", "chapter": "first-build" },
+  { "term": "undefined reference", "def": "선언으로 약속된 정의를 링커가 어떤 오브젝트 파일에서도 찾지 못했다는 링크 단계 에러.", "chapter": "first-build" },
+  { "term": "오브젝트 파일 (object file, .o)", "def": "-c 옵션으로 컴파일만 마친, 링크 전 단계의 기계어 산출물.", "chapter": "first-build" },
+  { "term": "분리 컴파일 (separate compilation)", "def": "소스 파일별로 .o를 만들어 두고 바뀐 파일만 재컴파일한 뒤 링크만 다시 하는 방식.", "chapter": "first-build" },
+  { "term": "진단 메시지 (diagnostic)", "def": "컴파일러가 내는 error(빌드 실패)/warning(통과하지만 수상)/note(각주) 세 종류의 출력.", "chapter": "first-build" },
+  { "term": "연쇄 에러 (cascading errors)", "def": "첫 에러가 파싱을 무너뜨려 파생시키는 유령 에러들 — 첫 에러만 고치고 재컴파일한다.", "chapter": "first-build" },
+  { "term": "수정 제안 (fix-it)", "def": "진단 메시지에 붙는 패치 형식의 고침 제안(예: +++ |+#include <iostream>).", "chapter": "first-build" }
 ]
