@@ -141,5 +141,8 @@
   { "term": "캐시 라인 (cache line)", "def": "CPU가 메모리를 읽고 쓰는 최소 전송 단위(대개 64바이트). 이 경계를 넘나드는 접근이나 여러 스레드가 같은 라인을 공유하는 것이 성능 문제(false sharing)의 근원이다.", "chapter": "object-layout" },
   { "term": "alignas", "def": "타입·변수에 컴파일러 기본값보다 더 엄격한 정렬을 강제하는 지정자. 캐시 라인 경계에 변수를 붙여 false sharing을 피하는 데 흔히 쓴다.", "chapter": "object-layout" },
   { "term": "offsetof", "def": "<cstddef>가 제공하는 매크로 — 구조체 시작부터 특정 멤버까지의 바이트 오프셋을 컴파일 타임 상수로 돌려준다.", "chapter": "object-layout" },
-  { "term": "packed 구조체", "def": "[[gnu::packed]]나 #pragma pack으로 멤버 사이 패딩을 강제로 없앤 구조체. sizeof가 멤버 합과 같아지지만 정렬 보장을 잃어, 통신 프로토콜처럼 바이트 수가 계약인 경계에서만 쓴다.", "chapter": "object-layout" }
+  { "term": "packed 구조체", "def": "[[gnu::packed]]나 #pragma pack으로 멤버 사이 패딩을 강제로 없앤 구조체. sizeof가 멤버 합과 같아지지만 정렬 보장을 잃어, 통신 프로토콜처럼 바이트 수가 계약인 경계에서만 쓴다.", "chapter": "object-layout" },
+  { "term": "미지정 동작 (unspecified behavior)", "def": "결과가 여러 개 중 하나로 나오지만 어느 것인지는 표준이 정하지 않고, 구현이 그 선택을 문서화할 의무도 없는 등급. 예: 함수 인자의 평가 순서.", "chapter": "ub-sanitizers" },
+  { "term": "구현 정의 동작 (implementation-defined behavior)", "def": "결과가 여러 개 중 하나로 나오되, 구현이 어느 쪽을 골랐는지 반드시 문서화해야 하는 등급. 예: sizeof(int).", "chapter": "ub-sanitizers" },
+  { "term": "미정의 동작 (undefined behavior, UB)", "def": "표준이 결과에 아무 요구도 하지 않는 등급 — 표준을 위반하지 않고도 무슨 일이든 일어날 수 있다. 컴파일러는 UB가 나는 입력이 애초에 없다고 가정하고 최적화하므로, UB를 밟으면 앞뒤 코드의 의미까지 바뀔 수 있다.", "chapter": "ub-sanitizers" }
 ]
