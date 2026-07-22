@@ -213,5 +213,9 @@
   { "term": "constexpr 변수", "def": "초기화 식 자체가 컴파일 타임에 계산 가능해야 하는 변수. const와 달리 런타임 값으로는 초기화할 수 없고, 배열 크기나 템플릿 비타입 인자 자리에 쓸 수 있다.", "chapter": "constexpr" },
   { "term": "constexpr 함수", "def": "컴파일 타임에도 런타임에도 호출 가능한 함수. 인자가 상수 표현식이면 컴파일러가 그 자리에서 계산을 끝내 call 명령 자체가 사라지고, 런타임 값이면 평범한 함수로 컴파일된다.", "chapter": "constexpr" },
   { "term": "consteval (C++20)", "def": "반드시 컴파일 타임에만 평가되도록 강제하는 함수 지정자. constexpr와 달리 런타임 값으로 호출하면 그 자리에서 컴파일 에러가 난다.", "chapter": "constexpr" },
-  { "term": "constexpr if (C++17)", "def": "템플릿 안에서 컴파일 타임 조건에 따라 분기 중 선택되지 않은 쪽은 아예 인스턴스화되지 않게 하는 문법. 선택 안 된 분기의 타입 불일치 코드도 에러 없이 넘어간다.", "chapter": "constexpr" }
+  { "term": "constexpr if (C++17)", "def": "템플릿 안에서 컴파일 타임 조건에 따라 분기 중 선택되지 않은 쪽은 아예 인스턴스화되지 않게 하는 문법. 선택 안 된 분기의 타입 불일치 코드도 에러 없이 넘어간다.", "chapter": "constexpr" },
+  { "term": "SFINAE", "def": "치환 실패는 에러가 아니다(Substitution Failure Is Not An Error) — 템플릿 조건이 거짓이면 해당 오버로드가 에러 없이 조용히 후보에서 빠지는 C++20 이전의 제약 기법. std::enable_if로 구현했다.", "chapter": "concepts" },
+  { "term": "constraints not satisfied", "def": "템플릿 인자가 requires 절의 조건을 만족하지 못했을 때 나는 진단 문구. SFINAE 시절의 방대한 후보 목록 대신 어떤 조건이 왜 거짓인지를 짧게 명시한다.", "chapter": "concepts" },
+  { "term": "축약 템플릿 문법 (abbreviated template syntax)", "def": "template<std::integral T>처럼 콘셉트 이름을 typename 자리에 직접 쓰거나, std::floating_point auto 파라미터로 requires 절 자체를 생략하는 C++20 문법.", "chapter": "concepts" },
+  { "term": "서브섬션 (subsumption)", "def": "한 콘셉트의 조건이 다른 콘셉트의 조건을 완전히 포함하는 관계. 제약이 겹치는 오버로드 중 더 좁게 제약된 쪽이 오버로드 해석에서 우선한다.", "chapter": "concepts" }
 ]
