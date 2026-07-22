@@ -63,5 +63,16 @@
   { "term": "패딩 (padding)", "def": "정렬 요구 때문에 컴파일러가 구조체 멤버 사이·끝에 끼워 넣는 이름 없는 빈 공간 — sizeof가 멤버 합보다 커지는 이유.", "chapter": "structs-enums" },
   { "term": "enum class (범위 있는 열거형)", "def": "열거자가 타입 이름 안에 갇히고 정수로 암묵 변환되지 않는 C++11 열거형 — 새 코드의 기본값.", "chapter": "structs-enums" },
   { "term": "기저 타입 (underlying type)", "def": "열거형이 값 저장에 쓰는 정수 타입. enum class GaitState : uint8_t처럼 지정하며, enum class의 기본은 int다.", "chapter": "structs-enums" },
-  { "term": "std::to_underlying", "def": "열거형 값을 기저 타입 정수로 벗기는 C++23 함수 — C++20에서는 static_cast<std::underlying_type_t<E>>(e) 관용구를 쓴다.", "chapter": "structs-enums" }
+  { "term": "std::to_underlying", "def": "열거형 값을 기저 타입 정수로 벗기는 C++23 함수 — C++20에서는 static_cast<std::underlying_type_t<E>>(e) 관용구를 쓴다.", "chapter": "structs-enums" },
+  { "term": "네임스페이스 (namespace)", "def": "이름이 소속되는 영역. 맹글링을 통해 심볼 문자열 자체를 갈라 이름 충돌을 심볼 수준에서 격리한다.", "chapter": "linkage" },
+  { "term": "ODR (하나의 정의 규칙)", "def": "선언은 무한, 함수·변수의 정의는 프로그램 전체에 하나. 클래스·템플릿·inline은 번역 단위마다 하나씩 있되 토큰까지 동일해야 한다.", "chapter": "linkage" },
+  { "term": "링크리지 (linkage)", "def": "어떤 이름이 다른 번역 단위에서 같은 개체를 가리킬 수 있는가의 속성. 외부/내부로 나뉜다.", "chapter": "linkage" },
+  { "term": "내부 링크리지 (internal linkage)", "def": "이름이 번역 단위 안에 갇히는 것. nm에서 로컬 심볼(t)이 되어 링커의 전역 심볼 해소에서 빠진다.", "chapter": "linkage" },
+  { "term": "익명 네임스페이스 (anonymous namespace)", "def": "이름 없는 namespace 블록. 안의 모든 이름에 내부 링크리지를 준다 — 이 책이 static 대신 쓰는 기준 도구.", "chapter": "linkage" },
+  { "term": "using 선언 / using 지시문", "def": "선언(using std::cout)은 이름 하나를, 지시문(using namespace std)은 전부를 데려온다. 지시문은 헤더 금지.", "chapter": "linkage" },
+  { "term": "ADL (인자 의존 조회)", "def": "비한정 함수 호출 시 인자 타입이 속한 네임스페이스도 후보로 뒤지는 규칙. using std::swap; swap(a,b) 관용구의 기반.", "chapter": "linkage" },
+  { "term": "약한 심볼 (weak symbol, W)", "def": "inline 정의가 만드는 심볼 종류. 여러 번역 단위에 겹쳐도 링커가 충돌 대신 하나로 접는다.", "chapter": "linkage" },
+  { "term": "extern", "def": "변수의 '정의는 다른 데 있다'는 선언 표지. 오브젝트 파일에 U를 남기고 링커가 정의(D)와 짝짓는다.", "chapter": "linkage" },
+  { "term": "extern \"C\"", "def": "선언의 심볼을 C 방식(맹글링 없음)으로 다루게 하는 링크리지 지정. C API 라이브러리 경계에서 필수.", "chapter": "linkage" },
+  { "term": "정적 초기화 순서 문제 (static initialization order fiasco)", "def": "다른 번역 단위 전역들의 동적 초기화 순서가 미정이라 생기는 함정. 함수-로컬 static(마이어스 싱글턴)으로 해결.", "chapter": "linkage" }
 ]
