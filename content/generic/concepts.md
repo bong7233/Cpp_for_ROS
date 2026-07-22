@@ -83,7 +83,8 @@ maxval_vector_err.cpp:6:14: note:   'std::vector<JointReading>' is not derived f
     6 |     return a > b ? a : b;
       |            ~~^~~
 ...(같은 모양의 candidate/실패 쌍이 되풀이된다 — move_iterator, string_view,
-     std::pair, std::error_condition, std::filesystem::path 등 16개 후보)...
+     std::basic_string, std::tuple, std::pair, std::vector, std::error_code,
+     std::error_condition까지 총 16개 후보)...
 /usr/include/c++/13/bits/stl_iterator.h:558:5: note: candidate: 'template<class _IteratorL, class _IteratorR>
   constexpr bool std::operator>(const reverse_iterator<_IteratorL>&, const reverse_iterator<_IteratorR>&)
   requires requires{{std::operator>::__x->base() < std::operator>::__y->base()}
@@ -94,7 +95,7 @@ maxval_vector_err.cpp:6:14: note:   'std::vector<JointReading>' is not derived f
 maxval_vector_err.cpp:6:14: note:   'std::vector<JointReading>' is not derived from 'const std::reverse_iterator<_IteratorL>'
 ```
 
-(g++ 13.3 실측, 원본은 158줄에 후보(`note: candidate`)가 정확히 16개다 — 위는 그중 앞부분만 남기고 지면상 줄였다.) 근본 원인은 여전히 5번째 줄에 있는 **같은 문장**이다 — `no match for 'operator>'`. 하지만 이번엔 `<iostream>`이 끌고 들어온 `<string>`, `<vector>`, 반복자 어댑터들이 자기 네임스페이스(`std`)에 `operator<=>`나 `operator>`를 하나씩 갖고 있다. C++가 `a > b`를 풀 때 쓰는 인자 종속 탐색(ADL, argument-dependent lookup)은 `a`와 `b`의 타입(`std::vector<JointReading>`)이 속한 네임스페이스 `std` 전체를 뒤진다. `std` 안에는 `operator>`나 `operator<=>` 후보가 여럿 있으니 — reverse_iterator용, move_iterator용, pair용, filesystem::path용 — 컴파일러는 그 하나하나를 붙잡고 "이것도 아니다, 저것도 아니다"를 16번 반복해서 보고한다. **컴파일러는 거짓말을 하지 않는다. 그저 확인한 모든 것을 보고할 뿐이다.** 그 보고서 안에서 진짜 원인(연산자가 아예 없다는 것)과 무관한 소음(16개의 실패한 후보)을 가르는 일은 전적으로 당신 몫이다.
+(g++ 13.3 실측, 원본은 158줄에 후보(`note: candidate`)가 정확히 16개다 — 위는 그중 처음과 마지막 후보만 남기고 지면상 줄였고, 원래 한 줄인 긴 후보 시그니처는 지면 폭에 맞춰 여러 줄로 접었다. 실제 터미널에는 줄바꿈 없이 한 줄로 찍힌다.) 근본 원인은 여전히 5번째 줄에 있는 **같은 문장**이다 — `no match for 'operator>'`. 하지만 이번엔 `<iostream>`이 끌고 들어온 `<string>`, `<vector>`, 반복자 어댑터들이 자기 네임스페이스(`std`)에 `operator<=>`나 `operator>`를 하나씩 갖고 있다. C++가 `a > b`를 풀 때 쓰는 인자 종속 탐색(ADL, argument-dependent lookup)은 `a`와 `b`의 타입(`std::vector<JointReading>`)이 속한 네임스페이스 `std` 전체를 뒤진다. `std` 안에는 `operator>`나 `operator<=>` 후보가 여럿 있으니 — reverse_iterator용, move_iterator용, pair용, vector용, error_code/error_condition용 — 컴파일러는 그 하나하나를 붙잡고 "이것도 아니다, 저것도 아니다"를 16번 반복해서 보고한다. **컴파일러는 거짓말을 하지 않는다. 그저 확인한 모든 것을 보고할 뿐이다.** 그 보고서 안에서 진짜 원인(연산자가 아예 없다는 것)과 무관한 소음(16개의 실패한 후보)을 가르는 일은 전적으로 당신 몫이다.
 
 ::: warn 에러 메시지는 요구사항이 아니다
 158줄 중 어디에도 "`JointReading`에 `operator>`를 추가하라"는 지시는 없다. 컴파일러는 **당신이 뭘 원했는지 모른다** — `T`가 무엇이어야 하는지에 대한 제약이 코드 어디에도 쓰여 있지 않았기 때문이다. 에러 메시지는 실패 지점을 알려줄 뿐, 애초에 무엇을 만족해야 통과했을지는 알려주지 않는다. concepts가 바꾸는 지점이 정확히 여기다.
