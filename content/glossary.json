@@ -26,5 +26,13 @@
   { "term": "축소 변환 (narrowing conversion)", "def": "값을 잃을 수 있는 변환(double→int 등). 중괄호 초기화는 이를 컴파일 에러로 만든다.", "chapter": "variables" },
   { "term": "이름 가리기 (shadowing)", "def": "안쪽 스코프의 같은 이름이 바깥 이름을 가리는 것. -Wshadow로만 경고된다.", "chapter": "variables" },
   { "term": "수명 (lifetime)", "def": "객체가 실제로 존재하는 실행 시간 구간. 이름이 보이는 구간(스코프)과는 별개의 개념이다.", "chapter": "variables" },
-  { "term": "정적 지역 변수 (static local variable)", "def": "함수 안에 선언되지만 프로그램 전체 수명을 갖는 변수. 첫 호출 때 한 번만 초기화된다.", "chapter": "variables" }
+  { "term": "정적 지역 변수 (static local variable)", "def": "함수 안에 선언되지만 프로그램 전체 수명을 갖는 변수. 첫 호출 때 한 번만 초기화된다.", "chapter": "variables" },
+  { "term": "표현식 (expression)", "def": "평가되어 값과 타입을 낳는 코드 — 대입·증가도 값을 낳는 표현식이라 if 조건 자리에 들어갈 수 있다.", "chapter": "control-flow" },
+  { "term": "문장 (statement)", "def": "실행될 뿐 값이 없는 코드 — if, for, return, 선언.", "chapter": "control-flow" },
+  { "term": "부수효과 (side effect)", "def": "표현식이 값을 낳는 것에 더해 상태를 바꾸는 일 — 변수 수정, 출력 등.", "chapter": "control-flow" },
+  { "term": "미지정 동작 (unspecified behavior)", "def": "가능한 결과 중 하나가 나오지만 어느 것인지는 컴파일러 마음인 동작 — UB와 달리 프로그램 전체의 의미는 유지된다.", "chapter": "control-flow" },
+  { "term": "단락 평가 (short-circuit evaluation)", "def": "&&/||가 왼쪽을 먼저 평가하고 결과가 확정되면 오른쪽을 평가하지 않는, 표준이 보장하는 의미론.", "chapter": "control-flow" },
+  { "term": "fallthrough", "def": "switch에서 break 없는 case가 다음 case의 코드까지 계속 실행하는 기본 동작 — 의도한 통과는 [[fallthrough]] 속성으로 선언한다.", "chapter": "control-flow" },
+  { "term": "범위 기반 for (range-based for)", "def": "배열·컨테이너 순회의 기본형 — 루프 변수는 기본적으로 복사본이며 원본 수정에는 참조(auto&)가 필요하다.", "chapter": "control-flow" },
+  { "term": "init-statement", "def": "C++17부터 if/switch 괄호 안에서 변수를 선언해 수명을 그 분기 안으로 가두는 문법.", "chapter": "control-flow" }
 ]
