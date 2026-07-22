@@ -370,5 +370,18 @@
   { "term": "next vs step", "def": "gdb에서 현재 줄의 함수 호출을 만났을 때의 두 진행 명령. next는 호출을 통째로 실행하고 같은 프레임의 다음 줄로, step은 그 함수 내부로 들어가 첫 줄에 선다.", "chapter": "gdb" },
   { "term": "backtrace", "def": "gdb에서 현재 멈춘 지점까지 쌓인 호출 스택 프레임을 순서대로 보여주는 명령. #0이 현재 위치, 번호가 커질수록 그걸 호출한 상위 프레임이다.", "chapter": "gdb" },
   { "term": "코어 덤프 (core dump)", "def": "프로세스가 크래시할 때 그 순간의 메모리 전체를 파일로 남기는 것. gdb <실행파일> core로 열면 프로세스가 이미 종료된 뒤에도 크래시 시점의 스택과 변수를 그대로 재현해 볼 수 있다.", "chapter": "gdb" },
-  { "term": "gdbserver 원격 디버깅", "def": "타겟 보드에서 gdbserver가 프로그램을 대신 실행하고, 개발 머신의 gdb가 target remote로 접속해 중단점·print·backtrace를 그대로 쓰는 방식. 실제 하드웨어가 있어야만 재현되는 버그에 쓴다.", "chapter": "gdb" }
+  { "term": "gdbserver 원격 디버깅", "def": "타겟 보드에서 gdbserver가 프로그램을 대신 실행하고, 개발 머신의 gdb가 target remote로 접속해 중단점·print·backtrace를 그대로 쓰는 방식. 실제 하드웨어가 있어야만 재현되는 버그에 쓴다.", "chapter": "gdb" },
+  { "term": "정적 분석 (static analysis)", "def": "프로그램을 실행하지 않고 소스 코드의 구조(AST)만 분석해서 버그·개선점을 찾는 기법. clang-tidy가 대표적이다.", "chapter": "static-analysis" },
+  { "term": "동적 분석 (dynamic analysis)", "def": "프로그램을 실제로 실행해서 그 실행 경로에서 일어나는 문제를 잡는 기법. ASan/UBSan/TSan이 여기 속하며, 실행되지 않은 경로의 버그는 잡지 못한다.", "chapter": "static-analysis" },
+  { "term": "clang-tidy", "def": "clang 프론트엔드로 AST까지만 만들어 소스를 정적으로 검사하는 린터. modernize/bugprone/performance/cppcoreguidelines 등 카테고리별 검사를 제공한다.", "chapter": "static-analysis" },
+  { "term": "AST 매처 (AST matcher)", "def": "clang-tidy의 각 검사가 추상 구문 트리 위에서 특정 코드 패턴을 찾기 위해 쓰는 질의 방식.", "chapter": "static-analysis" },
+  { "term": ".clang-tidy (설정 파일)", "def": "프로젝트 루트에 두는 YAML 설정 파일. 어떤 clang-tidy 검사를 켜고 끌지를 Checks: 목록으로 관리한다.", "chapter": "static-analysis" },
+  { "term": "NOLINT", "def": "clang-tidy 특정 줄의 경고를 억제하는 주석. `// NOLINT(검사이름) -- 이유` 형태로 억제 사유를 남기는 것이 권장된다.", "chapter": "static-analysis" },
+  { "term": "오탐 (false positive)", "def": "정적 분석 도구가 실제로는 문제없는 코드를 버그로 잘못 진단하는 경우.", "chapter": "static-analysis" },
+  { "term": "CMAKE_CXX_CLANG_TIDY", "def": "이 변수를 설정하면 CMake가 각 C++ 소스를 컴파일할 때마다 clang-tidy를 자동으로 함께 실행한다.", "chapter": "static-analysis" },
+  { "term": "CI (지속적 통합, Continuous Integration)", "def": "커밋·풀 리퀘스트가 올라오는 순간 빌드·테스트·정적 분석을 사람 손 없이 자동으로 실행해, 검증 절차를 개인의 기억·환경이 아니라 저장소 이벤트에 묶는 관행.", "chapter": "ci" },
+  { "term": "워크플로 (GitHub Actions workflow)", "def": "이벤트(on) → job(병렬, 독립 러너) → step(순차 실행) 세 겹으로 이뤄진 GitHub Actions의 자동화 정의 파일(.github/workflows/*.yml).", "chapter": "ci" },
+  { "term": "빌드 매트릭스 (build matrix)", "def": "strategy.matrix로 같은 job 정의를 새니타이저 조합·컴파일러·OS 등 여러 축의 조합만큼 반복 실행하는 CI 문법 — 각 조합이 독립된 러너에서 병렬로 돈다.", "chapter": "ci" },
+  { "term": "상태 체크 (status check)", "def": "워크플로의 job 하나하나가 풀 리퀘스트 화면에 초록/빨강으로 표시되는 결과 — 저장소 설정에서 필수로 지정하면 실패한 체크가 있는 브랜치의 병합을 막을 수 있다.", "chapter": "ci" },
+  { "term": "actionlint", "def": "GitHub Actions 워크플로 YAML을 문법뿐 아니라 GitHub Actions 표현식·컨텍스트 스키마까지 검사하는 전용 정적 검사 도구.", "chapter": "ci" }
 ]
