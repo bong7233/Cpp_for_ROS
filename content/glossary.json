@@ -165,8 +165,21 @@
   { "term": "삼중 비교 연산자 (three-way comparison, <=>)", "def": "C++20이 추가한 비교 연산자. =default로 선언하면 <, >, <=, >=(그리고 ==)가 하나의 함수로부터 자동 생성돼 여섯 개를 손으로 써서 서로 어긋나는 위험을 없앤다.", "chapter": "operator-overloading" },
   { "term": "놀람 최소화 원칙 (principle of least astonishment)", "def": "연산자 기호가 그 타입에 대해 익숙한 뜻과 다르게 동작하면 안 된다는 설계 원칙. 오버로드된 &&가 단락 평가를 하지 않는 것이 대표적 위반 사례다.", "chapter": "operator-overloading" },
   { "term": "friend", "def": "클래스 밖의 자유 함수(또는 다른 클래스)에 그 클래스의 private 멤버 접근을 허용하는 선언. operator<<처럼 왼쪽 피연산자가 std::ostream이라 멤버가 될 수 없는 연산자에서 흔히 쓴다.", "chapter": "operator-overloading" },
+  { "term": "순수 가상 함수 (pure virtual function)", "def": "virtual 뒤에 몸체 대신 = 0을 붙여 선언하는, 정의가 없는 함수. 파생 클래스가 반드시 오버라이드해야 하고, 이 함수를 가진 클래스는 인스턴스화할 수 없다.", "chapter": "abstract-interfaces" },
+  { "term": "추상 클래스 (abstract class)", "def": "순수 가상 함수를 하나 이상 가져 인스턴스화가 컴파일 타임에 거부되는 클래스. 생성자·데이터 멤버·비순수 가상 함수를 같이 가질 수 있다(부분 추상).", "chapter": "abstract-interfaces" },
+  { "term": "순수 인터페이스 (pure interface)", "def": "데이터 멤버 없이 순수 가상 함수와 가상 소멸자만 가진 완전 추상 클래스. C++에는 별도의 interface 키워드가 없어 이런 클래스를 관례적으로 인터페이스라 부른다.", "chapter": "abstract-interfaces" },
+  { "term": "NVI 패턴 (Non-Virtual Interface pattern)", "def": "public 비가상 함수가 사전/사후 조건을 강제하고 그 안에서 private 가상 함수를 호출하는 설계. 파생 클래스는 핵심 로직만 오버라이드하며 조건을 우회할 수 없다.", "chapter": "abstract-interfaces" },
+  { "term": "인터페이스 분리 원칙 (Interface Segregation Principle, ISP)", "def": "거대한 인터페이스 하나보다 실제로 쓰이는 만큼만 담은 작은 인터페이스 여러 개로 나누라는 설계 원칙.", "chapter": "abstract-interfaces" },
+  { "term": "최종 오버라이더 (final overrider)", "def": "상속 계층에서 어떤 가상 함수 호출이 실제로 실행할, 가장 파생된 쪽에서 확정된 구현. 다중 상속에서 여러 경로가 있어도 최종 오버라이더 하나가 모든 경로의 슬롯을 채운다.", "chapter": "abstract-interfaces" },
+  { "term": "정적 바인딩 (static binding)", "def": "컴파일 타임에 포인터·레퍼런스의 선언(정적) 타입만 보고 호출할 함수를 확정하는 것. virtual이 없는 함수가 여기 해당한다.", "chapter": "virtual-vtable" },
+  { "term": "동적 바인딩 (dynamic binding, 동적 디스패치)", "def": "런타임에 객체가 실제로 가리키는(동적) 타입을 보고 호출할 함수를 확정하는 것. virtual 함수가 vptr을 따라가 이를 구현한다 — 다형성의 요점.", "chapter": "virtual-vtable" },
+  { "term": "vptr (virtual pointer)", "def": "virtual 함수를 가진 클래스의 인스턴스마다 숨어 있는 포인터. 그 객체의 실제 클래스가 쓰는 vtable을 가리키며, 같은 클래스의 모든 인스턴스는 같은 vptr 값(같은 vtable)을 공유한다.", "chapter": "virtual-vtable" },
+  { "term": "vtable (virtual table)", "def": "클래스 하나에 하나만 존재하는, virtual 함수들의 실제 주소를 담은 표. 동적 바인딩은 vptr로 이 표를 찾아 알맞은 슬롯의 함수를 호출하는 간접 점프로 구현된다.", "chapter": "virtual-vtable" },
+  { "term": "override", "def": "이 함수가 베이스의 virtual 함수를 오버라이드하는 의도임을 명시하는 지정자. 시그니처가 하나라도 다르면 컴파일 에러가 나 오버라이드 실패(새 함수가 되는 것)를 잡아준다.", "chapter": "virtual-vtable" },
+  { "term": "final", "def": "클래스나 virtual 함수에 붙여 더 이상 상속·오버라이드되지 못하게 봉인하는 지정자.", "chapter": "virtual-vtable" },
   { "term": "캡슐화 (encapsulation)", "def": "정보 은닉 자체가 아니라, private로 값을 바꾸는 통로를 하나로 좁혀 그 통로에 검사를 심음으로써 클래스 불변식을 지키기 위한 수단. private만으로는 부족하고 통로 안의 런타임 검증이 함께 있어야 한다.", "chapter": "classes" },
   { "term": "멤버 초기화 리스트 (member initializer list)", "def": "생성자 콜론 뒤에서 멤버를 만드는 문법. 본문 안의 대입과 달리 멤버가 생성되는 시점 자체이며, const·레퍼런스 멤버는 본문 대입이 불가능해 이 리스트로만 초기화할 수 있다.", "chapter": "classes" },
   { "term": "const 멤버 함수 (const member function)", "def": "선언에 const가 붙은 멤버 함수. 숨은 this가 T* 대신 const T*가 되어 함수 안에서 멤버 수정을 시도하면 컴파일 에러가 나고, const 객체는 이런 함수만 호출할 수 있다.", "chapter": "classes" },
-  { "term": "정적 멤버 함수 (static member function)", "def": "특정 객체 인스턴스가 아니라 클래스 전체에 속하는 함수. this 포인터가 없어 인스턴스 없이도 호출 가능하다.", "chapter": "classes" }
+  { "term": "정적 멤버 함수 (static member function)", "def": "특정 객체 인스턴스가 아니라 클래스 전체에 속하는 함수. this 포인터가 없어 인스턴스 없이도 호출 가능하다.", "chapter": "classes" },
+  { "term": "const 정확성 (const-correctness)", "def": "멤버 함수마다 이 함수가 객체를 바꾸는지를 const 유무로 정확히 표시하는 습관. 포인터 멤버가 가리키는 대상까지는 const가 전파되지 않는 얕은 const의 함정을 알고 있어야 한다.", "chapter": "class-design" }
 ]
