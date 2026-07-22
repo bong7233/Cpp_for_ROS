@@ -355,5 +355,14 @@
   { "term": "FetchContent", "def": "구성(configure) 시점에 Git 저장소 등 외부 소스를 실제로 내려받아 add_subdirectory()로 프로젝트에 편입시키는 CMake 모듈. find_package()와 달리 빌드 시 네트워크가 필요하다.", "chapter": "cmake-advanced" },
   { "term": "빌드 타입 (CMAKE_BUILD_TYPE)", "def": "Debug/Release/RelWithDebInfo 등 컴파일러 플래그 세트를 통째로 바꾸는 변수. 지정하지 않으면 CMake는 어떤 최적화·디버그 플래그도 추가하지 않는다.", "chapter": "cmake-advanced" },
   { "term": "제너레이터 표현식 (generator expression)", "def": "$<CONFIG:Debug> 같은, 빌드 파일을 찍어내는(generate) 시점에 설정별로 평가되는 CMake 표현식. 다중 설정 제너레이터에서 if(CMAKE_BUILD_TYPE STREQUAL ...)가 통하지 않는 문제를 해결하는 유일한 이식 가능한 방법이다.", "chapter": "cmake-advanced" },
-  { "term": "크로스 컴파일 (cross compilation)", "def": "개발 머신과 다른 CPU 아키텍처(예: ARM 로봇 보드)용 바이너리를 개발 머신에서 만드는 것. CMake에서는 CMAKE_TOOLCHAIN_FILE로 컴파일러와 탐색 경로를 재정의해 처리한다.", "chapter": "cmake-advanced" }
+  { "term": "크로스 컴파일 (cross compilation)", "def": "개발 머신과 다른 CPU 아키텍처(예: ARM 로봇 보드)용 바이너리를 개발 머신에서 만드는 것. CMake에서는 CMAKE_TOOLCHAIN_FILE로 컴파일러와 탐색 경로를 재정의해 처리한다.", "chapter": "cmake-advanced" },
+  { "term": "TEST() 매크로", "def": "GoogleTest에서 (스위트이름, 테스트이름) 두 인자로 독립적인 테스트 함수 하나를 정의하는 매크로.", "chapter": "googletest" },
+  { "term": "EXPECT_EQ / ASSERT_EQ", "def": "GoogleTest의 단언 매크로 쌍. EXPECT는 실패해도 테스트 함수 나머지를 계속 실행하고, ASSERT는 실패한 그 자리에서 함수를 종료한다.", "chapter": "googletest" },
+  { "term": "테스트 픽스처 (TEST_F)", "def": "::testing::Test를 상속해 여러 테스트가 공유하는 준비 상태를 캡슐화하는 클래스. SetUp/TearDown이 테스트 케이스마다 새로 호출된다.", "chapter": "googletest" },
+  { "term": "파라미터화 테스트 (TEST_P)", "def": "GetParam()으로 값을 받는 테스트 템플릿을 한 번 정의하고 INSTANTIATE_TEST_SUITE_P로 여러 입력값에 반복 적용하는 GoogleTest 기법.", "chapter": "googletest" },
+  { "term": "gtest_discover_tests", "def": "빌드된 GoogleTest 실행 파일을 실행해 개별 TEST 케이스를 하나하나 ctest 항목으로 자동 등록하는 CMake 함수. add_test()와 달리 실행 파일 전체가 아니라 케이스 단위로 pass/fail이 보고된다.", "chapter": "googletest" },
+  { "term": "ctest", "def": "CMake에 내장된 테스트 러너. enable_testing()으로 켜고, 등록된 테스트를 한 명령으로 전부 실행해 통과/실패를 집계한다.", "chapter": "googletest" },
+  { "term": "MOCK_METHOD / EXPECT_CALL", "def": "GoogleMock에서 인터페이스를 흉내 낸 가짜 객체를 만들고(MOCK_METHOD), 그 메서드가 특정 인자로 몇 번 호출되는지 검증하는(EXPECT_CALL) 매크로.", "chapter": "googletest" },
+  { "term": "그림자 메모리 (shadow memory)", "def": "ASan/TSan이 실제 메모리 접근을 감시하려고 유지하는 별도 메타데이터 영역 — ASan은 8바이트당 1바이트로 유효성을, TSan은 접근 이력과 동기화 관계를 담는다.", "chapter": "sanitizers" },
+  { "term": "레드존 (redzone)", "def": "ASan이 힙/스택 할당 앞뒤에 붙이는 여분의 감시 영역 — 그림자 바이트가 이 구간을 항상 무효로 표시해 범위 밖 접근을 잡는다.", "chapter": "sanitizers" }
 ]
