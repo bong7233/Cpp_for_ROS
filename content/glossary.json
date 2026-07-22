@@ -90,5 +90,14 @@
   { "term": "수명 연장 (lifetime extension)", "def": "const 레퍼런스(또는 rvalue 레퍼런스)가 임시 객체에 바인딩되면, 그 임시 객체의 수명이 레퍼런스의 수명까지 늘어나는 규칙.", "chapter": "references" },
   { "term": "댕글링 레퍼런스 (dangling reference)", "def": "참조하던 원본 객체가 이미 소멸했는데 남아 있는 레퍼런스 — 지역 변수 반환, 컨테이너 재할당 등으로 발생하며 읽으면 UB다.", "chapter": "references" },
   { "term": "레퍼런스 무효화 (reference invalidation)", "def": "vector의 재할당처럼 원소가 재배치되는 연산이 일어나면, 그 이전에 떠 둔 원소 레퍼런스가 낡은 메모리를 가리키게 되는 것.", "chapter": "references" },
-  { "term": "레퍼런스 멤버 (reference member)", "def": "클래스 멤버로 선언된 레퍼런스 — 재바인딩 불가 규칙 때문에 그 클래스의 복사 대입 연산자가 컴파일러에 의해 암묵적으로 삭제된다.", "chapter": "references" }
+  { "term": "레퍼런스 멤버 (reference member)", "def": "클래스 멤버로 선언된 레퍼런스 — 재바인딩 불가 규칙 때문에 그 클래스의 복사 대입 연산자가 컴파일러에 의해 암묵적으로 삭제된다.", "chapter": "references" },
+  { "term": "스택 프레임 (stack frame)", "def": "함수 호출마다 스택 위에 쌓이는, 그 함수의 지역 변수·매개변수·반환 주소를 담는 구획. 함수가 끝나면 통째로 걷힌다.", "chapter": "memory-model" },
+  { "term": "힙 (heap)", "def": "실행 중에 new/malloc으로 필요한 만큼씩 요청해 쓰는 메모리 구역. 할당자가 자유 리스트를 관리하며, 명시적으로 해제하기 전까지 남아 있다.", "chapter": "memory-model" },
+  { "term": "정적 영역 (static storage area)", "def": "전역·static 변수가 사는 메모리 구역. 프로그램 시작과 함께 자리를 잡고 끝날 때까지 같은 주소를 지킨다.", "chapter": "memory-model" },
+  { "term": "ASLR (Address Space Layout Randomization)", "def": "보안을 위해 코드·정적 영역·힙·스택의 시작 주소를 실행마다 무작위로 흩뜨리는 리눅스의 메커니즘. 절대 주소는 매번 다르지만 영역 간 순서는 유지된다.", "chapter": "memory-model" },
+  { "term": "자유 리스트 (free list)", "def": "힙 할당자가 내부적으로 관리하는, 해제된 메모리 블록들의 목록. new 호출 시 이 목록에서 맞는 크기를 탐색한다 — 힙이 스택보다 느린 주된 이유.", "chapter": "memory-model" },
+  { "term": "스택 오버플로 (stack overflow)", "def": "스레드에 예약된 스택 한도(리눅스 기본 8MB 안팎)를 재귀나 큰 지역 변수로 뚫는 것. ASan은 이를 stack-overflow로 진단한다.", "chapter": "memory-model" },
+  { "term": "댕글링 포인터 (dangling pointer)", "def": "가리키던 객체가 이미 소멸했는데 남아 있는 포인터. 역참조는 UB이며 ASan이 use-after-free/use-after-scope로 잡아낸다.", "chapter": "pointers" },
+  { "term": "nullptr", "def": "어떤 것도 가리키지 않음을 나타내는 C++11 포인터 리터럴. NULL/0과 달리 정수로 오인되지 않아 오버로드 모호성이 없다.", "chapter": "pointers" },
+  { "term": "역참조 (dereference)", "def": "포인터가 담은 주소로 가서 '거기 있는 값'을 얻는 연산(*p). &의 역연산이다.", "chapter": "pointers" }
 ]
