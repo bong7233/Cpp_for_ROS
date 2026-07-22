@@ -270,7 +270,7 @@ $ ./override_typo_no_keyword
 Base::update
 ```
 
-(g++ 13.3 실측, `-Wunused-parameter` 경고는 지면상 생략.) `Derived::update(float)`는 `Base::update(double)`를 오버라이드하지 않는다 — 매개변수 타입이 다르기 때문이다. [3.3의 이름 가리기](#/inheritance)와 같은 규칙으로 `Base::update`라는 이름 자체가 `Derived` 스코프에서 가려지지만, 정작 `p->update(1.0)`은 `p`의 **정적 타입**(`Base*`)으로 오버로드 해석을 하므로 `Base::update(double)` 쪽 오버로드가 뽑히고, 그 가상 함수는 여전히 `Base` 버전을 가리킨다. 결과: `Derived::update`를 원했는데 `Base::update`가 나왔다. `-Wall -Wextra`가 `-Woverloaded-virtual` 경고를 내긴 하지만, 실전 빌드 로그에서 수십 줄의 다른 경고 사이에 묻히기 쉽다 — **컴파일은 통과하고, 경고는 있지만 에러는 아니다.**
+(g++ 13.3 실측, `-Wunused-parameter` 경고는 지면상 생략.) `Derived::update(float)`는 매개변수 타입이 다르므로 `Base::update(double)`를 오버라이드하지 않는다. [3.3의 이름 가리기](#/inheritance)처럼 이름 자체는 가려지지만, `p->update(1.0)`은 `p`의 **정적 타입**(`Base*`)으로 오버로드 해석을 하므로 결국 `Base::update(double)`이 뽑히고, 그 가상 함수는 여전히 `Base` 버전을 가리킨다. `-Woverloaded-virtual` 경고가 뜨긴 하지만 빌드 로그의 다른 경고 사이에 묻히기 쉽다 — **컴파일은 통과하고, 경고는 있지만 에러는 아니다.**
 
 ::: warn 경고로는 부족하다
 `-Woverloaded-virtual`은 "이름이 가려졌다"는 사실만 알려줄 뿐, "오버라이드를 의도했는데 실패했다"는 작성자의 의도까지는 모른다. 오버라이드 의도가 있는 자리에는 반드시 `override`를 붙여서 그 의도 자체를 컴파일러에게 검증받아야 한다.
@@ -386,8 +386,7 @@ int main() {
 ```console
 $ g++ -std=c++20 -Wall -Wextra -g -fsanitize=address virtual_dtor_leak.cpp -o virtual_dtor_leak
 virtual_dtor_leak.cpp: In function 'int main()':
-virtual_dtor_leak.cpp:25:5: warning: deleting object of polymorphic class type 'Base' which
-has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
+virtual_dtor_leak.cpp:25:5: warning: deleting object of polymorphic class type 'Base' which has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
    25 |     delete p;
       |     ^~~~~~~~
 
@@ -406,7 +405,7 @@ SUMMARY: AddressSanitizer: new-delete-type-mismatch ... in operator delete(void*
 ==18361==ABORTING
 ```
 
-(g++ 13.3 / `-fsanitize=address` 실측. 스택 트레이스와 리크 세부 정보는 지면상 생략했다.) 컴파일 단계에서 이미 `-Wdelete-non-virtual-dtor` 경고가 정확한 진단을 내놓는다 — "다형적인(virtual 함수를 가진) 클래스인데 소멸자가 비가상이면 UB일 수 있다." 실행 결과는 그 경고가 옳았다는 걸 증명한다: `speak()`는 정상적으로 `Derived::speak`를 불렀는데, `delete p`가 부른 소멸자는 `~Base()` 하나뿐이다 — `~Derived() -- buf_ 해제` 줄 자체가 안 찍혔다. `delete`는 `p`의 **정적 타입**(`Base*`)만 보고 `Base`의 소멸자를 부르는데, `~Base()`가 `virtual`이 아니므로 여기서도 정적 바인딩이 적용된 것이다. 게다가 이 환경에서는 AddressSanitizer가 "`new`로 24바이트(`Derived` 전체)를 할당했는데 `delete`는 16바이트(`Base`만)로 해제하려 한다"는 크기 불일치까지 즉시 잡아 프로그램을 중단시켰다 — `buf_`가 가리키던 100개의 `int` 배열은 해제될 기회조차 얻지 못하고 누수됐다.
+(g++ 13.3 / `-fsanitize=address` 실측. 스택 트레이스는 지면상 생략했다.) 컴파일 단계에서 이미 `-Wdelete-non-virtual-dtor`가 정확히 경고한다 — "다형적인 클래스인데 소멸자가 비가상이면 UB일 수 있다." 실행 결과가 그걸 증명한다: `speak()`는 `Derived::speak`를 정상 호출했는데 `delete p`가 부른 소멸자는 `~Base()` 하나뿐이다 — `~Derived() -- buf_ 해제` 줄 자체가 안 찍혔다. `delete`는 `p`의 **정적 타입**(`Base*`)만 보고 소멸자를 부르는데, `~Base()`가 `virtual`이 아니라서 여기서도 정적 바인딩이 적용된 것이다. AddressSanitizer는 "`new`로 24바이트(`Derived` 전체)를 할당했는데 `delete`는 16바이트(`Base`만)로 해제하려 한다"는 크기 불일치까지 즉시 잡아 중단시켰다 — `buf_`가 가리키던 배열은 해제될 기회조차 얻지 못하고 누수됐다.
 
 소멸자 앞에 `virtual` 하나만 더한다.
 
@@ -476,12 +475,10 @@ int main() {
 ```console
 $ g++ -std=c++20 -Wall -Wextra pure_virtual_no_instance.cpp -o pure_virtual_no_instance
 pure_virtual_no_instance.cpp: In function 'int main()':
-pure_virtual_no_instance.cpp:10:21: error: cannot declare variable 's' to be of abstract type
-'SensorInterface'
+pure_virtual_no_instance.cpp:10:21: error: cannot declare variable 's' to be of abstract type 'SensorInterface'
    10 |     SensorInterface s;
       |                     ^
-pure_virtual_no_instance.cpp:3:7: note:   because the following virtual functions are pure
-within 'SensorInterface':
+pure_virtual_no_instance.cpp:3:7: note:   because the following virtual functions are pure within 'SensorInterface':
     3 | class SensorInterface {
       |       ^~~~~~~~~~~~~~~
 pure_virtual_no_instance.cpp:5:18: note:     'virtual void SensorInterface::speak() const'

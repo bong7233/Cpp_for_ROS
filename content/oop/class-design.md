@@ -1,7 +1,7 @@
 # 3.8 클래스 설계 실전
 
 ::: lead
-3.1~3.7은 결정 하나씩을 따로 배웠다 — 불변식을 지키는 캡슐화(3.1), 생성 순서(3.2), 상속의 비용(3.3), 값 타입 연산자(3.6), 상속과 컴포지션을 가르는 기준(3.7). 실전에서는 이 결정들이 한꺼번에, 순서를 정해서 내려져야 하는 클래스 하나로 뭉친다. 이 절은 헥사포드 다리 하나를 제어하는 `LegController`를 처음부터 설계하면서 그 순서를 보여준다. 새로 배우는 것은 하나뿐이다 — **const 정확성(const-correctness)**. 나머지는 전부 지금까지 배운 결정 기준을 실제 클래스에 적용하는 연습이다.
+3.1~3.7은 결정 하나씩을 따로 배웠다 — 불변식을 지키는 캡슐화(3.1), 상속의 비용(3.3), 값 타입 연산자(3.6), 상속과 컴포지션을 가르는 기준(3.7). 실전에서는 이 결정들이 순서를 정해서 한 클래스로 뭉친다. 이 절은 헥사포드 다리 하나를 제어하는 `LegController`를 처음부터 설계하며 그 순서를 보여준다. 새로 배우는 건 하나뿐이다 — **const 정확성(const-correctness)**. 나머지는 지금까지 배운 결정 기준을 실제 클래스에 적용하는 연습이다.
 :::
 
 ## 문제: 다리 하나를 제어하는 클래스
@@ -9,11 +9,11 @@
 헥사포드 다리 하나(coxa-femur-tibia 3관절)를 제어하는 클래스가 필요하다. 요구사항은 이렇다.
 
 - 관절 세 개 각각 물리적 각도 한계가 있고, 그 한계를 벗어나는 값이 액추에이터로 나가면 안 된다.
-- 몸체의 기울기를 알아야 한다 — IMU 센서의 자세값을 참조해야 발끝 위치 보정이 가능하다. IMU는 다리 하나의 소유물이 아니라 몸체 전체가 갖고 6개 다리가 공유한다.
-- 6개 다리를 벡터 하나에 담아 반복문 하나로 갱신해야 한다 — 호출하는 쪽이 "이게 실제 하드웨어 다리인지 시뮬레이션 다리인지" 몰라도 되어야 한다.
-- 복사되면 안 된다. 다리 하나에 컨트롤러 인스턴스가 두 개 생기면 액추에이터에 서로 다른 목표값을 내려보내는 명령 충돌이 생긴다 — [2.9](#/unique-ptr)에서 `unique_ptr`가 "소유자가 하나"를 강제한 것과 같은 이유로, `LegController` 자신도 하나여야 한다.
+- 몸체의 기울기를 알아야 한다 — IMU 자세값을 참조해야 발끝 보정이 가능하다. IMU는 다리 하나의 소유물이 아니라 몸체 전체가 갖고 6개 다리가 공유한다.
+- 6개 다리를 벡터 하나에 담아 반복문 하나로 갱신해야 한다 — 호출하는 쪽이 "실제 하드웨어인지 시뮬레이션인지" 몰라도 된다.
+- 복사되면 안 된다. 컨트롤러 인스턴스가 둘이면 액추에이터에 서로 다른 목표값을 내려보내는 명령 충돌이 생긴다 — [2.9](#/unique-ptr)의 `unique_ptr`가 "소유자가 하나"를 강제한 것과 같은 이유다.
 
-이 넷을 순서대로 처리한다. 다만 그 전에 이 클래스를 관통하는 새 습관 하나부터 본다 — 지금까지 예제 곳곳에서 `const`를 붙여 왔지만, 그 `const`가 어디까지 지켜 주고 어디서부터 안 지켜 주는지는 아직 정식으로 다루지 않았다.
+이 넷을 순서대로 처리한다. 그 전에 새 습관 하나부터 본다 — 예제 곳곳에서 `const`를 붙여 왔지만, 그게 어디까지 지켜 주고 어디서부터 안 지켜 주는지는 아직 정식으로 다루지 않았다.
 
 ## const 정확성: 붙이는 습관과 그게 지켜 주지 않는 것
 
@@ -243,7 +243,7 @@ $ ./interface_bloat
 
 ## 결정 체크리스트를 LegController에 순서대로 적용한다
 
-이제 요구사항 넷을 [3.7 결정 체크리스트](#/composition)의 순서로 하나씩 처리하면서 `LegController`를 완성한다.
+요구사항 넷을 [3.7 결정 체크리스트](#/composition)의 순서로 하나씩 처리해 `LegController`를 완성한다.
 
 ### ① 값 타입인가 다형 타입인가
 
@@ -264,10 +264,10 @@ public:
 
 ### ② 상속인가 컴포지션인가
 
-[3.7의 리스코프 치환 질문](#/composition)을 `LegController`가 갖는 두 관계 각각에 적용한다.
+[3.7의 리스코프 치환 질문](#/composition)을 두 관계 각각에 적용한다.
 
-- **`LegController`와 `LegControllerBase`**: `LegController`를 `LegControllerBase&`가 쓰이는 모든 자리(순회 벡터, `update()` 호출)에 넣어도 옳게 동작하는가? 그렇다 — 이게 ①에서 상속을 쓰기로 한 이유다. is-a가 성립하니 `public` 상속이 맞다.
-- **`LegController`와 `ImuSensor`**: `LegController`를 `ImuSensor&`가 필요한 자리에 대신 넣을 이유가 있는가? 없다. IMU는 다리의 한 종류가 아니라 다리가 참조하는 부품이다 — 명백한 has-a, 컴포지션이다.
+- **`LegController`-`LegControllerBase`**: `LegControllerBase&`가 쓰이는 모든 자리에 넣어도 옳게 동작하는가? 그렇다 — is-a, `public` 상속이 맞다.
+- **`LegController`-`ImuSensor`**: `ImuSensor&`가 필요한 자리에 대신 넣을 이유가 있는가? 없다 — IMU는 다리의 한 종류가 아니라 참조하는 부품이다. 명백한 has-a, 컴포지션이다.
 
 ### ③ 복사 가능해야 하는가
 
@@ -275,13 +275,13 @@ public:
 
 ### ④ 소유 관계는
 
-`LegController`가 갖는 세 종류의 부품에 [2.2](#/pointers)·[2.3](#/references)·[2.9](#/unique-ptr)의 기준을 각각 적용한다.
+세 종류의 부품에 [2.2](#/pointers)·[2.3](#/references)·[2.9](#/unique-ptr)의 기준을 각각 적용한다.
 
 | 부품 | 관계 | 선택 | 이유 |
 |---|---|---|---|
-| `JointLimit` 3개 | 소유, 값 타입 | `std::array<JointLimit, 3>` 값 멤버 | 작고 다형적이지 않다 — 포인터·스마트 포인터가 오히려 과하다 |
-| `ImuSensor` | 참조만, 소유 안 함 | `const ImuSensor&` | 몸체가 소유하고 6개 다리가 공유한다 — 재바인딩이 필요 없으니 레퍼런스로 충분하다(2.3) |
-| `ActuatorDriver` | 독점 소유, 다형 타입 | `std::unique_ptr<ActuatorDriver>` | 실물/시뮬레이션 구현이 갈리고(다형), 다리 하나가 배타적으로 소유한다(2.9) |
+| `JointLimit` 3개 | 소유, 값 타입 | `array<JointLimit, 3>` 값 멤버 | 작고 다형적이지 않다 — 포인터가 과하다 |
+| `ImuSensor` | 참조만, 소유 안 함 | `const ImuSensor&` | 몸체가 소유, 6개 다리가 공유(2.3) |
+| `ActuatorDriver` | 독점 소유, 다형 타입 | `unique_ptr<ActuatorDriver>` | 실물/시뮬레이션이 갈리고(다형), 배타적 소유(2.9) |
 
 **"소유하는가"와 "다형적인가"라는 두 축을 따로 물으면 포인터 종류가 저절로 정해진다.** 소유 안 하면 레퍼런스, 소유+값 타입이면 값 멤버, 소유+다형 타입이면 `unique_ptr`. `shared_ptr`는 이 표 어디에도 없다 — 누구와도 소유권을 나눌 이유가 없기 때문이다.
 
@@ -445,11 +445,11 @@ copy_attempt.cpp:6:7: note: 'LegController::LegController(const LegController&)'
 copy_attempt.cpp:6:7: error: use of deleted function 'std::unique_ptr<...>::unique_ptr(const std::unique_ptr<...>&)'
 ```
 
-(g++ 13.3 실측.) 에러 메시지의 "`implicitly deleted because the default definition would be ill-formed`"가 정확히 [2.8 Rule of 0/3/5](#/rule-of-five)의 도미노 규칙을 가리킨다 — `LegController`는 복사 생성자를 손으로 `delete`한 적이 없는데도, `actuator_`(`unique_ptr`)의 복사 생성자가 이미 없어서 컴파일러가 `LegController`의 복사 생성자도 자동으로 없앴다. **"복사되면 안 된다"는 요구사항을 만족시키려고 코드를 추가한 게 아니라, 소유 관계를 정확히 표현했더니 그 결정이 저절로 딸려 왔다.** 이게 Rule of Zero가 실전에서 갖는 진짜 무게다.
+(g++ 13.3 실측.) "`implicitly deleted because the default definition would be ill-formed`"가 [2.8 Rule of 0/3/5](#/rule-of-five)의 도미노 규칙을 가리킨다 — `LegController`는 복사 생성자를 손으로 `delete`한 적이 없는데도, `actuator_`(`unique_ptr`)의 복사 생성자가 이미 없어서 컴파일러가 자동으로 없앴다. **"복사되면 안 된다"는 요구사항을 만족시키려고 코드를 추가한 게 아니라, 소유 관계를 정확히 표현했더니 그 결정이 저절로 딸려 왔다.**
 
 ## 로봇 도메인: 이 클래스 자체가 목적지다
 
-이 절의 다른 절들과 달리 별도의 "로보틱스 연결" 문단이 필요 없다 — `LegController`는 처음부터 헥사포드 다리 하나를 제어하는 클래스로 설계됐다. [9.5 역기구학](#/inverse-kinematics)이 계산한 목표 관절각을 `set_target()`으로 받고, [10.9 ros2_control과 hardware_interface](#/ros2-control)의 제어 루프가 매 주기 `update()`를 부르는 그림이 이 클래스가 실제로 앉을 자리다. `ActuatorDriver`를 `SimActuatorDriver` 대신 실물 서보 드라이버로 갈아 끼워도 `LegController`의 코드는 한 줄도 안 바뀐다 — ①에서 다형 타입으로 결정한 값이 정확히 이 교체 가능성을 위한 것이었다.
+이 절은 별도의 "로보틱스 연결" 문단이 필요 없다 — `LegController`는 처음부터 헥사포드 다리 하나를 제어하는 클래스로 설계됐다. [9.5 역기구학](#/inverse-kinematics)이 계산한 목표 관절각을 `set_target()`으로 받고, [10.9 ros2_control과 hardware_interface](#/ros2-control)의 제어 루프가 매 주기 `update()`를 부르는 그림이 이 클래스가 앉을 자리다. `ActuatorDriver`를 실물 서보 드라이버로 갈아 끼워도 `LegController` 코드는 한 줄도 안 바뀐다 — ①에서 다형 타입으로 결정한 값이 정확히 이 교체 가능성을 위한 것이다.
 
 ::: interview 클래스를 설계할 때 어떤 순서로 결정을 내리나
 답변 뼈대: ① **값 타입인가 다형 타입인가**를 가장 먼저 묻는다 — 값 타입이면 연산자 오버로딩·자유로운 복사를, 다형 타입이면 순수 가상 인터페이스·제한된 복사를 검토하게 된다. ② **관계마다 리스코프 치환을 따로 적용**한다 — 한 클래스가 여러 부품을 가질 때 관계마다 상속/컴포지션이 다를 수 있다(`LegController`는 `LegControllerBase`와는 is-a, `ImuSensor`와는 has-a). ③ **복사 가능 여부는 요구사항에서 나온다** — 실물 자원을 대변하는 타입은 대개 복사 금지이고, Rule of Zero를 따르면 코드 없이 자동으로 반영되는 경우가 많다. ④ **소유 관계는 "소유하는가 × 다형적인가"의 교차표로 정한다** — 참조만 하면 레퍼런스, 소유+값 타입이면 값 멤버, 소유+다형 타입이면 `unique_ptr`. 이 순서를 지키면 완성된 클래스의 `public` 표면이 최소한으로 좁혀진다는 것까지 답하면 완결된다.
@@ -457,21 +457,21 @@ copy_attempt.cpp:6:7: error: use of deleted function 'std::unique_ptr<...>::uniq
 
 ## 요약
 
-- **const 정확성**은 멤버 함수마다 상태 변경 여부를 정확히 표시하는 습관이다. `const`는 **얕게** 적용된다 — 포인터/레퍼런스 멤버가 가리키는 대상까지는 지키지 않는다(실측: `const LegController&`인데도 `imu_->calibrate()`가 통과). 대상을 바꿀 생각이 없으면 포인터·레퍼런스 자체를 `const`로 선언해야 컴파일러가 잡아 준다.
-- const는 아래에서 위로 전파된다. 밑단 클래스의 메서드 하나에 `const`가 빠지면 그 위 모든 호출 사슬의 `const` 메서드가 막힌다(실측: `Filter::smoothed()`의 `const` 누락이 `LegController::body_orientation()`까지 전파). 그래서 나중에 덧붙이기보다 처음부터 붙이는 게 싸다.
+- **const 정확성**은 멤버 함수마다 상태 변경 여부를 정확히 표시하는 습관이다. `const`는 **얕게** 적용된다 — 포인터/레퍼런스가 가리키는 대상까지는 안 지킨다(실측: `const LegController&`인데도 `imu_->calibrate()`가 통과). 바꿀 생각이 없으면 포인터·레퍼런스 자체를 `const`로 선언해야 컴파일러가 잡는다.
+- const는 아래에서 위로 전파된다 — 밑단 메서드 하나의 `const` 누락이 그 위 모든 호출 사슬을 막는다(실측: `Filter::smoothed()`의 누락이 `LegController::body_orientation()`까지 전파). 나중에 덧붙이기보다 처음부터 붙이는 게 싸다.
 - `mutable`은 관찰 가능한 상태에 포함되지 않는 멤버(캐시, 통계)에만 쓴다 — `const` 함수 안에서도 그 멤버만 예외적으로 바뀐다(실측: `call_count = 3`).
-- **인터페이스 최소화**: public 멤버 하나하나가 불변식을 우회할 수 있는 통로다. "디버깅하다 편해서" 남은 참조 반환·세터가 clamp 같은 검사를 통째로 무력화할 수 있다(실측: `raw_angles()[0] = 9999.0`이 경고 없이 통과).
-- 설계 결정은 순서가 있다 — ① 값 타입 vs 다형 타입(3.6/3.4) → ② 관계별 리스코프 치환으로 상속/컴포지션(3.7) → ③ 복사 가능 여부(2.8 Rule of Zero) → ④ 소유 관계를 "소유+다형" 교차표로(2.9). `LegController`는 이 순서로 상속 1개(`LegControllerBase`), 컴포지션 1개(`ImuSensor`, 레퍼런스), 독점 소유 1개(`ActuatorDriver`, `unique_ptr`)를 얻었다.
-- 복사 금지는 `= delete`를 손으로 쓰지 않아도 된다 — `unique_ptr` 멤버가 있으면 Rule of Zero에 따라 컴파일러가 이미 복사를 지운다(실측: `implicitly deleted because the default definition would be ill-formed`). `static_assert`로 그 사실을 코드에 못박아라.
+- **인터페이스 최소화**: public 멤버 하나하나가 불변식을 우회하는 통로다. "편해서" 남은 참조 반환·세터가 clamp 검사를 통째로 무력화할 수 있다(실측: `raw_angles()[0] = 9999.0`이 경고 없이 통과).
+- 설계 결정은 순서가 있다 — ① 값 vs 다형 타입(3.6/3.4) → ② 관계별 리스코프 치환으로 상속/컴포지션(3.7) → ③ 복사 가능 여부(2.8) → ④ 소유 관계를 "소유×다형" 교차표로(2.9). `LegController`는 상속 1개, 컴포지션 1개(레퍼런스), 독점 소유 1개(`unique_ptr`)를 이 순서로 얻었다.
+- 복사 금지는 `= delete`를 손으로 안 써도 된다 — `unique_ptr` 멤버가 있으면 Rule of Zero에 따라 컴파일러가 이미 복사를 지운다(실측: `implicitly deleted`). `static_assert`로 그 사실을 코드에 못박아라.
 
 ::: quiz 연습문제
 1~2번은 개념, 3번은 예측, 4~5번은 실습(코드 작성형)이다.
 
-1. `shallow_const.cpp`에서 `meddle()`이 `const` 멤버 함수인데도 `imu_->calibrate()`가 컴파일되는 이유를 "얕은 const"라는 용어를 써서 설명하라. `imu_`의 선언을 어떻게 바꾸면 이 호출이 컴파일 에러가 되는가?
-2. `LegController`가 `ImuSensor`는 컴포지션(레퍼런스)으로, `LegControllerBase`는 상속으로 연결한 이유를 리스코프 치환 원칙으로 각각 설명하라.
-3. `LegController`에 새 멤버 `std::shared_ptr<ActuatorDriver> actuator_;`를 `unique_ptr` 대신 썼다고 하자. `static_assert(!std::is_copy_constructible_v<LegController>)`가 여전히 통과하는지 예측하고, 그 이유를 `shared_ptr`와 `unique_ptr`의 복사 가능 여부 차이로 설명하라.
-4. (실습) `MotorDriver`라는 새 클래스를 이 절의 체크리스트(①~④) 순서로 처음부터 설계하라 — 모터 하나의 목표 RPM 한계를 강제하고, 온도 센서를 참조하며, 다형적으로(여러 모터 종류) 다뤄질 수 있고, 복사되면 안 된다는 요구사항을 스스로 정하고 코드로 반영하라. `g++ -std=c++20 -Wall -Wextra`로 경고 없이 컴파일되는지 확인하라.
-5. (실습) 4번의 `MotorDriver`에 `static_assert`로 복사 불가·이동 가능·(다형 베이스가 있다면) 가상 소멸자 존재를 코드로 못박아라. 그중 하나를 일부러 깨뜨려(예: 온도 센서를 레퍼런스 대신 값으로 복사해 넣기) 어떤 `static_assert`가 실패하는지 직접 확인하라.
+1. `shallow_const.cpp`에서 `meddle()`이 `const`인데도 `imu_->calibrate()`가 컴파일되는 이유를 "얕은 const"로 설명하라. `imu_` 선언을 어떻게 바꾸면 컴파일 에러가 되는가?
+2. `LegController`가 `ImuSensor`는 컴포지션으로, `LegControllerBase`는 상속으로 연결한 이유를 리스코프 치환 원칙으로 각각 설명하라.
+3. `actuator_`를 `unique_ptr` 대신 `std::shared_ptr<ActuatorDriver>`로 바꾸면 `static_assert(!std::is_copy_constructible_v<LegController>)`가 여전히 통과하는지 예측하고, `shared_ptr`/`unique_ptr`의 복사 가능 여부 차이로 설명하라.
+4. (실습) `MotorDriver`를 이 절의 체크리스트(①~④) 순서로 처음부터 설계하라 — RPM 한계 강제, 온도 센서 참조, 다형적으로 다뤄질 것, 복사 금지를 스스로 요구사항으로 정하고 코드로 반영하라. `g++ -std=c++20 -Wall -Wextra`로 경고 없이 컴파일되는지 확인하라.
+5. (실습) 4번의 `MotorDriver`에 `static_assert`로 복사 불가·이동 가능·가상 소멸자 존재를 못박아라. 하나를 일부러 깨뜨려(예: 온도 센서를 값으로 복사) 어떤 `static_assert`가 실패하는지 확인하라.
 :::
 
 ::: answer 해설
@@ -482,6 +482,6 @@ copy_attempt.cpp:6:7: error: use of deleted function 'std::unique_ptr<...>::uniq
 5. `TemperatureSensor`를 값으로 복사해 저장하면 복사 자체가 막히지 않는다 — 값 멤버가 전부 복사 가능하면 클래스도 복사 가능해지기 때문이다. 이게 "소유 관계를 잘못 정하면 복사 금지 의도가 조용히 깨진다"는 이 절의 핵심을 실습으로 보여준다.
 :::
 
-이 절의 `LegController`는 전부 직접 타이핑해라. 특히 `shallow_const.cpp`와 `shallow_const_fixed.cpp`를 나란히 두고 포인터 선언에 `const`를 넣었다 뺐다 하며 어디서 컴파일이 막히는지 직접 보고, `copy_attempt.cpp`는 지우지 말고 그대로 컴파일해 에러 메시지 전문을 읽어라. 기준 명령: `g++ -std=c++20 -Wall -Wextra main.cpp -o main && ./main`, ASan은 `g++ -std=c++20 -Wall -Wextra -g -fsanitize=address main.cpp -o main && ./main`.
+이 절의 `LegController`는 전부 직접 타이핑해라. `shallow_const.cpp`와 `shallow_const_fixed.cpp`를 나란히 두고 포인터 선언에 `const`를 넣었다 뺐다 하며 어디서 막히는지 보고, `copy_attempt.cpp`는 그대로 컴파일해 에러 메시지 전문을 읽어라. 기준 명령: `g++ -std=c++20 -Wall -Wextra main.cpp -o main && ./main`, ASan은 `g++ -std=c++20 -Wall -Wextra -g -fsanitize=address main.cpp -o main && ./main`.
 
 **다음 절**: [4.1 함수 템플릿](#/function-templates) — Part III은 여기서 끝난다. Part IV는 관점을 완전히 바꾼다 — `LegController` 하나를 손으로 잘 설계했다면, 이제 같은 코드를 타입마다 다시 쓰지 않고 컴파일러가 대신 찍어내게 만드는 법을 본다.
