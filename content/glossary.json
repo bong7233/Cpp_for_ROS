@@ -261,5 +261,9 @@
   { "term": "초기화 캡처 (init capture, C++14)", "def": "캡처 목록에 [이름 = 표현식] 형태를 허용해 클로저 클래스에 새 멤버를 만들고 임의의 표현식으로 초기화하는 문법. std::move(x)를 써서 복사 생성자가 없는 타입(unique_ptr 등)도 이동으로 캡처할 수 있다.", "chapter": "lambdas" },
   { "term": "제네릭 람다 (generic lambda, C++14)", "def": "파라미터에 auto를 쓴 람다. 클로저 클래스의 operator()가 진짜 함수 템플릿이 되어, 호출되는 타입 조합마다 별도로 인스턴스화된다.", "chapter": "lambdas" },
   { "term": "람다 표현식 (lambda expression)", "def": "컴파일러가 그 자리에서 즉석으로 이름 없는 클래스(클로저 타입)를 정의하고 그 인스턴스를 만드는 표현식. 겉보기엔 함수 정의처럼 보이지만 실제로는 operator()를 가진 클래스 선언과 인스턴스화를 압축한 문법이다.", "chapter": "lambdas" },
-  { "term": "캡처 (capture)", "def": "람다가 바깥 스코프의 변수를 클로저 객체의 멤버 변수로 끌어들이는 것. 값 캡처는 복사본을, 레퍼런스 캡처는 참조(포인터로 구현)를 멤버로 저장한다.", "chapter": "lambdas" }
+  { "term": "캡처 (capture)", "def": "람다가 바깥 스코프의 변수를 클로저 객체의 멤버 변수로 끌어들이는 것. 값 캡처는 복사본을, 레퍼런스 캡처는 참조(포인터로 구현)를 멤버로 저장한다.", "chapter": "lambdas" },
+  { "term": "string_view (문자열 뷰)", "def": "포인터와 길이만으로 문자열을 가리키는, 소유하지 않는 C++17 읽기 전용 뷰. 16바이트 고정 크기이며 리터럴·std::string·부분 문자열을 복사 없이 감싼다.", "chapter": "views" },
+  { "term": "span", "def": "연속 메모리(vector·array·C 배열)를 포인터+길이로 가리키는 C++20 소유하지 않는 뷰. 크기를 타입에 고정하는 정적 extent(span<T,N>, 8바이트)와 런타임에 아는 동적 extent(span<T>, 16바이트)로 나뉜다.", "chapter": "views" },
+  { "term": "댕글링 뷰 (dangling view)", "def": "string_view·span처럼 원본을 소유하지 않는 뷰가, 가리키던 원본(임시 객체·지역 변수·재할당된 vector 버퍼 등)이 소멸한 뒤에도 남아 그 자리를 계속 가리키는 상태. 역참조는 UB이며 ASan이 heap-use-after-free로 잡는다.", "chapter": "views" },
+  { "term": "extent (익스텐트)", "def": "std::span이 아는 원소 개수가 컴파일 타임에 타입으로 고정되는지(정적 extent), 런타임에만 결정되는지(동적 extent, std::dynamic_extent)를 가르는 개념. 정적 extent는 크기 필드가 없어 포인터 하나 크기(8바이트)로 줄어든다.", "chapter": "views" }
 ]
