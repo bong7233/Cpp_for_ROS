@@ -146,5 +146,8 @@
   { "term": "false sharing", "def": "서로 다른 스레드가 각자 갱신하는 변수가 같은 캐시 라인에 있으면, 실제로는 무관한데도 캐시 일관성 프로토콜 때문에 캐시 라인 전체가 스레드 사이를 핑퐁하는 현상.", "chapter": "object-layout" },
   { "term": "미지정 동작 (unspecified behavior)", "def": "결과가 여러 개 중 하나로 나오지만 어느 것인지는 표준이 정하지 않고, 구현이 그 선택을 문서화할 의무도 없는 등급. 예: 함수 인자의 평가 순서.", "chapter": "ub-sanitizers" },
   { "term": "구현 정의 동작 (implementation-defined behavior)", "def": "결과가 여러 개 중 하나로 나오되, 구현이 어느 쪽을 골랐는지 반드시 문서화해야 하는 등급. 예: sizeof(int).", "chapter": "ub-sanitizers" },
-  { "term": "미정의 동작 (undefined behavior, UB)", "def": "표준이 결과에 아무 요구도 하지 않는 등급 — 표준을 위반하지 않고도 무슨 일이든 일어날 수 있다. 컴파일러는 UB가 나는 입력이 애초에 없다고 가정하고 최적화하므로, UB를 밟으면 앞뒤 코드의 의미까지 바뀔 수 있다.", "chapter": "ub-sanitizers" }
+  { "term": "미정의 동작 (undefined behavior, UB)", "def": "표준이 결과에 아무 요구도 하지 않는 등급 — 표준을 위반하지 않고도 무슨 일이든 일어날 수 있다. 컴파일러는 UB가 나는 입력이 애초에 없다고 가정하고 최적화하므로, UB를 밟으면 앞뒤 코드의 의미까지 바뀔 수 있다.", "chapter": "ub-sanitizers" },
+  { "term": "UndefinedBehaviorSanitizer (UBSan)", "def": "-fsanitize=undefined 플래그로 켜는 런타임 진단기 — signed/unsigned 오버플로, 널 역참조, 정렬 위반 등 언어 차원의 연산 규칙 위반을 잡는다. 메모리 범위 위반은 못 잡는다(ASan의 영역).", "chapter": "ub-sanitizers" },
+  { "term": "무오버플로 가정 (no-overflow assumption)", "def": "컴파일러가 signed 정수 연산에 오버플로가 없다고 전제하고 수행하는 최적화 가정 — 이 가정 위에서 x + 1 > x 같은 식이 상수 true로 접힐 수 있다.", "chapter": "ub-sanitizers" },
+  { "term": "-fwrapv", "def": "GCC/Clang 플래그 — signed 오버플로를 UB 대신 2의 보수 랩어라운드로 정의된 동작으로 강제해, 무오버플로 가정에 기반한 최적화를 끈다.", "chapter": "ub-sanitizers" }
 ]
