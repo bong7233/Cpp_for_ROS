@@ -301,5 +301,10 @@
   { "term": "std::unique_lock", "def": "lock_guard와 달리 중간에 unlock()/lock()을 다시 부르거나 소유권을 이동할 수 있는 RAII 뮤텍스 래퍼. condition_variable::wait()처럼 대기 중 락을 풀었다 다시 잠가야 하는 API에 필수다.", "chapter": "mutex" },
   { "term": "데드락 (deadlock)", "def": "둘 이상의 스레드가 서로 다른 순서로 여러 뮤텍스를 잠그려다 서로가 쥔 락을 서로 기다리며 영원히 멈추는 상황.", "chapter": "mutex" },
   { "term": "std::lock / std::scoped_lock (C++17)", "def": "여러 뮤텍스를 데드락 없이 한 번에 잠그는 함수(std::lock)와 그것을 RAII로 감싼 타입(scoped_lock). 잠그는 순서가 스레드마다 달라도 안전하다.", "chapter": "mutex" },
-  { "term": "futex (fast userspace mutex)", "def": "리눅스의 뮤텍스 구현 기반 메커니즘. 경합이 없으면 커널에 진입하지 않고 사용자 공간의 원자적 명령만으로 끝나지만, 경합이 생기면 커널 대기 큐와 문맥 전환을 거쳐야 해서 비용이 크게 뛴다.", "chapter": "mutex" }
+  { "term": "futex (fast userspace mutex)", "def": "리눅스의 뮤텍스 구현 기반 메커니즘. 경합이 없으면 커널에 진입하지 않고 사용자 공간의 원자적 명령만으로 끝나지만, 경합이 생기면 커널 대기 큐와 문맥 전환을 거쳐야 해서 비용이 크게 뛴다.", "chapter": "mutex" },
+  { "term": "std::atomic", "def": "값 하나에 대한 연산을 뮤텍스 없이 하드웨어 원자적 명령(x86의 lock xadd 등)으로 보장하는 템플릿. 경합이 없으면 뮤텍스와 비슷한 비용이지만 경합이 생기면 커널에 진입하지 않아 확실히 싸다.", "chapter": "atomic" },
+  { "term": "compare_exchange_weak/strong (CAS)", "def": "현재 값이 기대값과 같으면 새 값으로 원자적으로 바꾸고, 다르면 실패하며 기대값을 최신값으로 갱신하는 연산. weak는 값이 같아도 가끔 거짓 실패할 수 있어 반복문 안에서, strong은 단발성 시도에 쓴다. 락 없는 알고리즘의 기본 빌딩 블록이다.", "chapter": "atomic" },
+  { "term": "메모리 오더 (memory order)", "def": "atomic 연산이 다른 메모리 접근과 어떤 순서 관계를 갖는지 지정하는 옵션. relaxed(원자성만 보장)/release·acquire(짝을 이뤄 그 앞뒤 메모리 쓰기의 가시성을 보장)/seq_cst(가장 강한 기본값) 넷이 실무에서 중요하다.", "chapter": "atomic" },
+  { "term": "memory_order_release / memory_order_acquire", "def": "짝을 이뤄 쓰는 메모리 오더. release로 저장하기 이전의 모든 메모리 쓰기가, 같은 값을 acquire로 읽은 이후의 다른 스레드에 전부 보이는 것을 보장한다. 플래그로 데이터를 안전하게 넘기는 표준 패턴이다.", "chapter": "atomic" },
+  { "term": "memory_order_relaxed", "def": "연산의 원자성만 보장하고 다른 메모리 접근과의 순서는 전혀 보장하지 않는 메모리 오더. 순수 카운터·통계값에만 쓰고, 그 값으로 다른 데이터의 가시성을 전달하려 하면 표준상 허용된 데이터 레이스가 된다.", "chapter": "atomic" }
 ]
