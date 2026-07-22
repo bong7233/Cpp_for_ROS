@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>C++ 완전 정복 — 언어 코어부터 ROS 2 로봇 제어까지</title>
+<link rel="stylesheet" href="assets/style.css?v=c61733b145">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+
+<div id="app-loading">불러오는 중…</div>
+
+<header id="topbar">
+  <button id="btn-menu" class="icon-btn" aria-label="목차 열기" title="목차 (Esc)">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <a href="#/" id="brand">
+    <span class="brand-mark">🤖</span>
+    <span class="brand-text">C++ 완전 정복</span>
+  </a>
+  <div class="topbar-spacer"></div>
+  <button id="btn-search" class="icon-btn" aria-label="검색" title="검색 (/)">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.35-4.35"/></svg>
+  </button>
+  <button id="btn-font" class="icon-btn" aria-label="글자 크기" title="글자 크기">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19l6-14 6 14M6.5 14h7"/><path d="M16 19l4-9 4 9M17.4 16.5h5.2" transform="scale(.72) translate(6 5)"/></svg>
+  </button>
+  <button id="btn-theme" class="icon-btn" aria-label="테마 전환" title="테마 전환">
+    <svg viewBox="0 0 24 24" aria-hidden="true" class="ico-sun"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true" class="ico-moon"><path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/></svg>
+  </button>
+</header>
+
+<div id="scrollbar-progress"><div id="scrollbar-progress-fill"></div></div>
+
+<div id="layout">
+  <nav id="sidebar" aria-label="목차">
+    <div id="sidebar-head">
+      <div id="progress-summary">
+        <div class="ps-ring">
+          <svg viewBox="0 0 36 36" aria-hidden="true">
+            <circle class="ps-bg" cx="18" cy="18" r="15.9"/>
+            <circle class="ps-fg" cx="18" cy="18" r="15.9"/>
+          </svg>
+          <span id="ps-pct">0%</span>
+        </div>
+        <div class="ps-text">
+          <strong id="ps-title">학습 진도</strong>
+          <small id="ps-sub">0 / 0 절 완료</small>
+        </div>
+      </div>
+      <input id="toc-filter" type="search" placeholder="목차에서 거르기…" autocomplete="off" spellcheck="false">
+    </div>
+    <div id="toc"></div>
+    <div id="sidebar-foot">
+      <a id="btn-glossary" class="text-btn" href="#/glossary">용어 사전</a>
+      <button id="btn-reset" class="text-btn">진도 초기화</button>
+    </div>
+  </nav>
+  <div id="scrim"></div>
+
+  <main id="main">
+    <article id="content"></article>
+    <nav id="pager" aria-label="이전/다음"></nav>
+    <footer id="page-foot">
+      <span>C++ 완전 정복 · 인터랙티브 가이드북</span>
+    </footer>
+  </main>
+
+  <aside id="outline" aria-label="이 페이지 내용">
+    <div class="outline-title">이 페이지</div>
+    <div id="outline-list"></div>
+  </aside>
+</div>
+
+<div id="search-overlay" hidden>
+  <div id="search-panel" role="dialog" aria-modal="true" aria-label="전체 검색">
+    <div id="search-bar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.35-4.35"/></svg>
+      <input id="search-input" type="search" placeholder="전체 본문 검색 (예: vtable, RAII, executor)" autocomplete="off" spellcheck="false">
+      <kbd>Esc</kbd>
+    </div>
+    <div id="search-results"></div>
+    <div id="search-foot"><kbd>↑</kbd><kbd>↓</kbd> 이동 · <kbd>Enter</kbd> 열기</div>
+  </div>
+</div>
+
+<script src="assets/highlight.js?v=c61733b145"></script>
+<script src="assets/markdown.js?v=c61733b145"></script>
+<script src="assets/bundle.js?v=c61733b145"></script>
+<!-- widgets:start (build.py 가 assets/widgets/*.js 를 훑어 자동 관리한다 — 손으로 고치지 말 것) -->
+<script src="assets/widgets/widget-core.js?v=c61733b145"></script>
+<script src="assets/widgets/demo.js?v=c61733b145"></script>
+<!-- widgets:end -->
+<script src="assets/app.js?v=c61733b145"></script>
+</body>
+</html>
