@@ -266,6 +266,7 @@
   { "term": "타입 소거 (type erasure)", "def": "서로 다른 구체 타입(함수 포인터, 함자, 람다 등)을 고정 크기의 단일 타입 하나로 통일해 담는 기법. std::function이 대표 사례이며, 담긴 객체를 들고 다니는 코드는 원래 타입을 모른 채 시그니처만으로 다룬다.", "chapter": "callables" },
   { "term": "작은 버퍼 최적화 (small buffer optimization, SBO)", "def": "작은 크기의 데이터를 힙에 할당하지 않고 객체 자신의 내부 버퍼에 직접 저장하는 최적화. std::function은 콜러블이 크기·정렬 조건을 만족하면 SBO로 담고, 넘으면 힙 할당으로 전환한다(libstdc++ 13 기준 경계는 16바이트).", "chapter": "callables" },
   { "term": "std::bad_function_call", "def": "비어 있는(콜러블이 담기지 않은) std::function을 호출할 때 던져지는 예외. operator bool로 미리 확인하면 피할 수 있다.", "chapter": "callables" },
+  { "term": "함자 (functor)", "def": "operator()를 정의해 함수처럼 호출되는 클래스/구조체의 인스턴스. 람다는 컴파일러가 만드는 익명 함자다.", "chapter": "callables" },
   { "term": "string_view (문자열 뷰)", "def": "포인터와 길이만으로 문자열을 가리키는, 소유하지 않는 C++17 읽기 전용 뷰. 16바이트 고정 크기이며 리터럴·std::string·부분 문자열을 복사 없이 감싼다.", "chapter": "views" },
   { "term": "span", "def": "연속 메모리(vector·array·C 배열)를 포인터+길이로 가리키는 C++20 소유하지 않는 뷰. 크기를 타입에 고정하는 정적 extent(span<T,N>, 8바이트)와 런타임에 아는 동적 extent(span<T>, 16바이트)로 나뉜다.", "chapter": "views" },
   { "term": "댕글링 뷰 (dangling view)", "def": "string_view·span처럼 원본을 소유하지 않는 뷰가, 가리키던 원본(임시 객체·지역 변수·재할당된 vector 버퍼 등)이 소멸한 뒤에도 남아 그 자리를 계속 가리키는 상태. 역참조는 UB이며 ASan이 heap-use-after-free로 잡는다.", "chapter": "views" },
