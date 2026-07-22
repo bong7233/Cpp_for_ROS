@@ -333,5 +333,9 @@
   { "term": "사전 할당 (pre-allocation)", "def": "제어 루프처럼 마감이 있는 코드에 들어가기 전에 필요한 메모리를 전부 할당하고 실제로 터치까지 해 두어, 루프 본체 안에서 할당·페이지 폴트가 일어나지 않게 만드는 기법.", "chapter": "realtime" },
   { "term": "SCHED_FIFO / SCHED_RR", "def": "리눅스의 실시간 스케줄링 정책. 더 높은 우선순위의 스레드가 실행 가능해지면 낮은 우선순위 스레드(SCHED_OTHER 포함)를 즉시 선점한다.", "chapter": "realtime" },
   { "term": "우선순위 역전 (priority inversion)", "def": "낮은 우선순위 스레드가 뮤텍스를 쥔 채로 무관한 중간 우선순위 스레드에 밀려 임계 구역을 못 끝내는 바람에, 그 뮤텍스를 기다리는 더 높은 우선순위 스레드까지 무한정 대기하게 되는 상황.", "chapter": "realtime" },
-  { "term": "우선순위 상속 (priority inheritance)", "def": "우선순위 역전을 막는 프로토콜. 높은 우선순위 스레드가 뮤텍스를 기다리며 블록되는 순간, 그 뮤텍스를 쥔 스레드의 우선순위를 대기자 수준으로 일시적으로 끌어올린다. POSIX에서는 PTHREAD_PRIO_INHERIT로 켠다.", "chapter": "realtime" }
+  { "term": "우선순위 상속 (priority inheritance)", "def": "우선순위 역전을 막는 프로토콜. 높은 우선순위 스레드가 뮤텍스를 기다리며 블록되는 순간, 그 뮤텍스를 쥔 스레드의 우선순위를 대기자 수준으로 일시적으로 끌어올린다. POSIX에서는 PTHREAD_PRIO_INHERIT로 켠다.", "chapter": "realtime" },
+  { "term": "std::try_to_lock", "def": "unique_lock 생성자에 넘겨 lock() 대신 try_lock()을 한 번만 시도하게 하는 태그. 실패해도 블록되지 않고 즉시 owns_lock()==false 상태로 돌아온다 — 실시간 스레드가 비실시간 채널에 안전하게 접근하는 핵심 도구.", "chapter": "thread-architecture" },
+  { "term": "스레드 아키텍처 (thread architecture)", "def": "여러 스레드를 역할별로 나누고, 그 사이 데이터가 오가는 채널마다 각 편의 시간 제약(실시간/비실시간)에 맞는 동기화 도구를 고르는 설계.", "chapter": "thread-architecture" },
+  { "term": "드레인 (drain)", "def": "종료 시점에 큐나 버퍼에 남아 있는 데이터를 전부 소진해서 처리하는 것. 상류 스레드를 세운 뒤 하류 스레드를 세우기 전에 거쳐야 데이터 유실이 없다.", "chapter": "thread-architecture" },
+  { "term": "논블로킹 드롭 패턴 (non-blocking drop-on-contention)", "def": "실시간 생산자가 락을 못 얻거나 대상 큐가 찼을 때 기다리지 않고 그 자리에서 포기(드롭)하는 설계. 실시간 스레드가 비실시간 소비자에게 진단 데이터를 내보낼 때 블로킹을 피하는 방법.", "chapter": "thread-architecture" }
 ]
