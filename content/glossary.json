@@ -327,5 +327,11 @@
   { "term": "std::promise", "def": "다른 스레드의 future에 값이나 예외를 전달하기 위해 set_value()/set_exception()으로 채우는 통로. 이동만 가능하다.", "chapter": "async-future" },
   { "term": "std::future_error", "def": "future의 공유 상태가 없거나 이미 소비된 상태에서 get()을 다시 호출하는 등 잘못 사용했을 때 던져지는 예외.", "chapter": "async-future" },
   { "term": "std::packaged_task", "def": "호출 가능한 것과 그 결과를 담을 promise를 하나로 묶어, 태스크를 큐 등에 저장했다가 나중에 다른 스레드에서 실행할 수 있게 하는 래퍼.", "chapter": "async-future" },
-  { "term": "std::shared_future", "def": "future::share()로 만드는, 복사 가능하고 여러 스레드가 각자 get()을 불러도 같은 값을 받을 수 있는 future.", "chapter": "async-future" }
+  { "term": "std::shared_future", "def": "future::share()로 만드는, 복사 가능하고 여러 스레드가 각자 get()을 불러도 같은 값을 받을 수 있는 future.", "chapter": "async-future" },
+  { "term": "하드 실시간 (hard real-time)", "def": "마감시간을 단 한 번이라도 놓치면 시스템이 실패한 것으로 간주하는 실시간 기준. 평균 실행시간이 아니라 최악의 경우가 항상 마감을 지키는지가 판단 기준이다.", "chapter": "realtime" },
+  { "term": "지터 (jitter)", "def": "주기적으로 반복돼야 할 작업이 의도한 시각보다 실제로 얼마나 늦게 시작되는지를 나타내는 지연의 흔들림. 제어 루프에서는 평균이 아니라 최악값이 중요하다.", "chapter": "realtime" },
+  { "term": "사전 할당 (pre-allocation)", "def": "제어 루프처럼 마감이 있는 코드에 들어가기 전에 필요한 메모리를 전부 할당하고 실제로 터치까지 해 두어, 루프 본체 안에서 할당·페이지 폴트가 일어나지 않게 만드는 기법.", "chapter": "realtime" },
+  { "term": "SCHED_FIFO / SCHED_RR", "def": "리눅스의 실시간 스케줄링 정책. 더 높은 우선순위의 스레드가 실행 가능해지면 낮은 우선순위 스레드(SCHED_OTHER 포함)를 즉시 선점한다.", "chapter": "realtime" },
+  { "term": "우선순위 역전 (priority inversion)", "def": "낮은 우선순위 스레드가 뮤텍스를 쥔 채로 무관한 중간 우선순위 스레드에 밀려 임계 구역을 못 끝내는 바람에, 그 뮤텍스를 기다리는 더 높은 우선순위 스레드까지 무한정 대기하게 되는 상황.", "chapter": "realtime" },
+  { "term": "우선순위 상속 (priority inheritance)", "def": "우선순위 역전을 막는 프로토콜. 높은 우선순위 스레드가 뮤텍스를 기다리며 블록되는 순간, 그 뮤텍스를 쥔 스레드의 우선순위를 대기자 수준으로 일시적으로 끌어올린다. POSIX에서는 PTHREAD_PRIO_INHERIT로 켠다.", "chapter": "realtime" }
 ]
