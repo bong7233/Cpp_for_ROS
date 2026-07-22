@@ -302,9 +302,22 @@
   { "term": "데드락 (deadlock)", "def": "둘 이상의 스레드가 서로 다른 순서로 여러 뮤텍스를 잠그려다 서로가 쥔 락을 서로 기다리며 영원히 멈추는 상황.", "chapter": "mutex" },
   { "term": "std::lock / std::scoped_lock (C++17)", "def": "여러 뮤텍스를 데드락 없이 한 번에 잠그는 함수(std::lock)와 그것을 RAII로 감싼 타입(scoped_lock). 잠그는 순서가 스레드마다 달라도 안전하다.", "chapter": "mutex" },
   { "term": "futex (fast userspace mutex)", "def": "리눅스의 뮤텍스 구현 기반 메커니즘. 경합이 없으면 커널에 진입하지 않고 사용자 공간의 원자적 명령만으로 끝나지만, 경합이 생기면 커널 대기 큐와 문맥 전환을 거쳐야 해서 비용이 크게 뛴다.", "chapter": "mutex" },
+  { "term": "폴링 (polling)", "def": "조건이 충족됐는지 짧은 간격으로 반복 확인하는 대기 방식. CPU를 계속 점유하며 낭비하고, condition_variable로 대체하면 대기 중 CPU 사용률을 0%로 만들 수 있다.", "chapter": "condvar" },
+  { "term": "std::condition_variable", "def": "락을 원자적으로 풀고 스레드를 커널 수준에서 재웠다가, notify_one()/notify_all()을 받으면 다시 락을 잡고 깨어나게 하는 표준 타입. wait()는 std::unique_lock만 받는다.", "chapter": "condvar" },
+  { "term": "허위 기상 (spurious wakeup)", "def": "아무도 notify를 부르지 않았는데도 condition_variable::wait()가 깨어날 수 있다는, 표준이 명시적으로 허용하는 현상. wait를 if로 한 번만 확인하면 안 되고 while 루프나 술어 버전으로 조건을 재확인해야 하는 이유다.", "chapter": "condvar" },
+  { "term": "생산자-소비자 패턴 (producer-consumer)", "def": "한 스레드가 큐에 데이터를 넣고 다른 스레드가 condition_variable로 기다렸다가 꺼내는 대기 구조. 스레드 풀의 작업 큐 등 실전에서 가장 흔한 대기 패턴이다.", "chapter": "condvar" },
+  { "term": "lost wakeup (유실된 알림)", "def": "notify가 wait보다 먼저 불리면 그 신호가 그냥 사라지는 문제. 조건 자체를 뮤텍스로 보호된 상태로 두고 wait 진입 시점에 항상 재확인하면(술어 버전) 신호 유실과 무관하게 안전해진다.", "chapter": "condvar" },
+  { "term": "notify_one / notify_all", "def": "condition_variable에서 대기 중인 스레드를 깨우는 두 방법. notify_one은 정확히 하나만, notify_all은 대기 중인 전부를 깨우며 조건을 못 만족한 스레드는 다시 잠든다.", "chapter": "condvar" },
   { "term": "std::atomic", "def": "값 하나에 대한 연산을 뮤텍스 없이 하드웨어 원자적 명령(x86의 lock xadd 등)으로 보장하는 템플릿. 경합이 없으면 뮤텍스와 비슷한 비용이지만 경합이 생기면 커널에 진입하지 않아 확실히 싸다.", "chapter": "atomic" },
   { "term": "compare_exchange_weak/strong (CAS)", "def": "현재 값이 기대값과 같으면 새 값으로 원자적으로 바꾸고, 다르면 실패하며 기대값을 최신값으로 갱신하는 연산. weak는 값이 같아도 가끔 거짓 실패할 수 있어 반복문 안에서, strong은 단발성 시도에 쓴다. 락 없는 알고리즘의 기본 빌딩 블록이다.", "chapter": "atomic" },
   { "term": "메모리 오더 (memory order)", "def": "atomic 연산이 다른 메모리 접근과 어떤 순서 관계를 갖는지 지정하는 옵션. relaxed(원자성만 보장)/release·acquire(짝을 이뤄 그 앞뒤 메모리 쓰기의 가시성을 보장)/seq_cst(가장 강한 기본값) 넷이 실무에서 중요하다.", "chapter": "atomic" },
   { "term": "memory_order_release / memory_order_acquire", "def": "짝을 이뤄 쓰는 메모리 오더. release로 저장하기 이전의 모든 메모리 쓰기가, 같은 값을 acquire로 읽은 이후의 다른 스레드에 전부 보이는 것을 보장한다. 플래그로 데이터를 안전하게 넘기는 표준 패턴이다.", "chapter": "atomic" },
-  { "term": "memory_order_relaxed", "def": "연산의 원자성만 보장하고 다른 메모리 접근과의 순서는 전혀 보장하지 않는 메모리 오더. 순수 카운터·통계값에만 쓰고, 그 값으로 다른 데이터의 가시성을 전달하려 하면 표준상 허용된 데이터 레이스가 된다.", "chapter": "atomic" }
+  { "term": "memory_order_relaxed", "def": "연산의 원자성만 보장하고 다른 메모리 접근과의 순서는 전혀 보장하지 않는 메모리 오더. 순수 카운터·통계값에만 쓰고, 그 값으로 다른 데이터의 가시성을 전달하려 하면 표준상 허용된 데이터 레이스가 된다.", "chapter": "atomic" },
+  { "term": "ABA 문제 (ABA problem)", "def": "CAS가 값이 A에서 B로, 다시 A로 바뀐 것을 '안 바뀐 것'으로 착각해 성공 판정하는 문제. 데이터 레이스가 아니라 자료구조 논리의 결함이라 새니타이저가 잡지 못한다.", "chapter": "lockfree" },
+  { "term": "SPSC (Single Producer Single Consumer)", "def": "생산자 하나, 소비자 하나로 역할이 고정된 큐 구조. 각 인덱스를 한 스레드만 갱신하므로 CAS도 ABA 위험도 없이 load/store만으로 락 없는 구현이 가능하다.", "chapter": "lockfree" },
+  { "term": "MPMC (Multi Producer Multi Consumer)", "def": "여러 생산자·소비자가 같은 인덱스나 포인터를 두고 경합하는 큐 구조. CAS가 필요해지고 ABA 위험이 함께 따라와 직접 구현하기보다 검증된 라이브러리를 쓰는 것이 원칙이다.", "chapter": "lockfree" },
+  { "term": "링 버퍼 (ring buffer)", "def": "고정 크기 배열을 원형으로 취급해 인덱스를 순환시키는 큐 구현 방식. 용량 N이면 가득 참과 비어 있음을 구분하기 위해 실제로 담을 수 있는 건 N-1개다.", "chapter": "lockfree" },
+  { "term": "해저드 포인터 (hazard pointer)", "def": "스레드가 현재 참조 중인 노드를 전역에 알려, 다른 스레드가 그 노드를 실제로 해제하기 전에 반드시 확인하게 만드는 락 없는 메모리 회수 기법.", "chapter": "lockfree" },
+  { "term": "에포크 기반 회수 (epoch-based reclamation)", "def": "모든 스레드가 현재 접근 중인 세대(에포크)를 표시해 두고, 가장 오래된 접근자가 지나간 뒤에야 메모리를 실제로 회수하는 락 없는 자료구조의 메모리 관리 기법.", "chapter": "lockfree" },
+  { "term": "태그된 포인터 (tagged pointer)", "def": "포인터 옆에 카운터를 붙여 포인터와 카운터를 함께 CAS함으로써 ABA 문제를 막는 기법. x86-64에서는 128비트 cmpxchg16b로 지원한다.", "chapter": "lockfree" }
 ]
