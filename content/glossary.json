@@ -319,5 +319,13 @@
   { "term": "링 버퍼 (ring buffer)", "def": "고정 크기 배열을 원형으로 취급해 인덱스를 순환시키는 큐 구현 방식. 용량 N이면 가득 참과 비어 있음을 구분하기 위해 실제로 담을 수 있는 건 N-1개다.", "chapter": "lockfree" },
   { "term": "해저드 포인터 (hazard pointer)", "def": "스레드가 현재 참조 중인 노드를 전역에 알려, 다른 스레드가 그 노드를 실제로 해제하기 전에 반드시 확인하게 만드는 락 없는 메모리 회수 기법.", "chapter": "lockfree" },
   { "term": "에포크 기반 회수 (epoch-based reclamation)", "def": "모든 스레드가 현재 접근 중인 세대(에포크)를 표시해 두고, 가장 오래된 접근자가 지나간 뒤에야 메모리를 실제로 회수하는 락 없는 자료구조의 메모리 관리 기법.", "chapter": "lockfree" },
-  { "term": "태그된 포인터 (tagged pointer)", "def": "포인터 옆에 카운터를 붙여 포인터와 카운터를 함께 CAS함으로써 ABA 문제를 막는 기법. x86-64에서는 128비트 cmpxchg16b로 지원한다.", "chapter": "lockfree" }
+  { "term": "태그된 포인터 (tagged pointer)", "def": "포인터 옆에 카운터를 붙여 포인터와 카운터를 함께 CAS함으로써 ABA 문제를 막는 기법. x86-64에서는 128비트 cmpxchg16b로 지원한다.", "chapter": "lockfree" },
+  { "term": "std::async", "def": "함수(와 인자)를 받아 비동기로 실행되도록 예약하고 결과를 받을 std::future를 즉시 돌려주는 표준 라이브러리 함수. launch::async를 명시해도 내부적으로 스레드 하나를 만드는 비용은 그대로다.", "chapter": "async-future" },
+  { "term": "std::future", "def": "비동기로 실행된 작업의 결과값(또는 예외)을 나중에 get()으로 한 번만 꺼낼 수 있는 손잡이. 두 번째 get() 호출은 std::future_error를 던진다.", "chapter": "async-future" },
+  { "term": "공유 상태 (shared state)", "def": "future와 promise(또는 async, packaged_task)가 내부적으로 공유하는, 결과값·예외·준비 여부를 담는 저장소. get()이 이 상태를 소비한다.", "chapter": "async-future" },
+  { "term": "std::launch::async / std::launch::deferred", "def": "std::async의 실행 정책. async는 호출 즉시 별도 스레드에서, deferred는 get() 호출 시점에 그 호출자 스레드 위에서 지연 실행된다.", "chapter": "async-future" },
+  { "term": "std::promise", "def": "다른 스레드의 future에 값이나 예외를 전달하기 위해 set_value()/set_exception()으로 채우는 통로. 이동만 가능하다.", "chapter": "async-future" },
+  { "term": "std::future_error", "def": "future의 공유 상태가 없거나 이미 소비된 상태에서 get()을 다시 호출하는 등 잘못 사용했을 때 던져지는 예외.", "chapter": "async-future" },
+  { "term": "std::packaged_task", "def": "호출 가능한 것과 그 결과를 담을 promise를 하나로 묶어, 태스크를 큐 등에 저장했다가 나중에 다른 스레드에서 실행할 수 있게 하는 래퍼.", "chapter": "async-future" },
+  { "term": "std::shared_future", "def": "future::share()로 만드는, 복사 가능하고 여러 스레드가 각자 get()을 불러도 같은 값을 받을 수 있는 future.", "chapter": "async-future" }
 ]
