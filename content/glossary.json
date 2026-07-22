@@ -200,5 +200,14 @@
   { "term": "템플릿 인스턴스화 (template instantiation)", "def": "함수/클래스 템플릿이 특정 타입으로 호출되는 순간, 그 타입을 대입한 실제 함수/클래스를 컴파일러가 컴파일해 넣는 과정. nm으로 호출된 타입마다 별도 심볼이 생기는 것으로 확인된다.", "chapter": "function-templates" },
   { "term": "non-type 템플릿 매개변수", "def": "타입이 아니라 정수 등 컴파일 타임 값을 템플릿 인자로 받는 매개변수. template<int N> 형태이며, N이 다르면 서로 다른 타입이 인스턴스화된다.", "chapter": "function-templates" },
   { "term": "auto 템플릿 매개변수 (C++20)", "def": "non-type 템플릿 매개변수의 타입 자체도 추론에 맡기는 C++20 문법. template<auto N>은 정수든 부동소수점이든 온 값의 타입을 그대로 받는다.", "chapter": "function-templates" },
-  { "term": "코드 팽창 (code bloat)", "def": "템플릿을 호출하는 타입이 늘어날수록 실행 파일에 컴파일된 함수 개수와 바이너리 크기가 함께 느는 현상. 실행 속도가 아니라 크기·명령어 캐시 문제다.", "chapter": "function-templates" }
+  { "term": "코드 팽창 (code bloat)", "def": "템플릿을 호출하는 타입이 늘어날수록 실행 파일에 컴파일된 함수 개수와 바이너리 크기가 함께 느는 현상. 실행 속도가 아니라 크기·명령어 캐시 문제다.", "chapter": "function-templates" },
+  { "term": "파라미터 팩 (parameter pack)", "def": "template<typename... Args>처럼 개수가 정해지지 않은 템플릿 매개변수 묶음. sizeof...(Args)로 개수를 세고, 재귀 전개나 폴드 표현식으로 하나씩 꺼내 쓴다.", "chapter": "variadic-templates" },
+  { "term": "폴드 표현식 (fold expression, C++17)", "def": "(args + ...) 같은 문법으로 파라미터 팩을 재귀 함수 없이 한 번에 연산자로 접는 것. 왼쪽/오른쪽 폴드는 결합 법칙이 안 깨지는 연산(+)에서는 같은 값을, 깨지는 연산(-)에서는 다른 값을 낸다.", "chapter": "variadic-templates" },
+  { "term": "완벽 전달 (perfect forwarding)", "def": "template<typename... Args> void f(Args&&... args) { g(std::forward<Args>(args)...); } 형태로, 인자의 lvalue/rvalue 값 범주를 잃지 않고 다음 함수로 그대로 넘기는 관용구.", "chapter": "variadic-templates" },
+  { "term": "concept (C++20)", "def": "템플릿 매개변수가 만족해야 할 요구사항(연산·타입)을 이름 붙여 표현한 것. requires 절로 템플릿에 걸면 위반 시 짧고 명확한 진단이 나온다.", "chapter": "concepts" },
+  { "term": "requires 절 (requires clause)", "def": "template<typename T> requires 콘셉트<T> 형태로, 이미 정의된 콘셉트(또는 불리언 표현식)를 템플릿의 제약으로 거는 문법.", "chapter": "concepts" },
+  { "term": "requires 표현식 (requires expression)", "def": "requires(매개변수) { 표현식들; } 형태로 임의의 표현식이 유효한지를 참/거짓으로 접어, 새로운 concept를 정의하는 재료로 쓰는 문법.", "chapter": "concepts" },
+  { "term": "sizeof... (패키지 크기 연산자)", "def": "파라미터 팩에 담긴 원소 개수를 컴파일 타임 상수로 돌려주는 연산자. sizeof(T)와 이름만 비슷할 뿐 완전히 다른 연산이다.", "chapter": "variadic-templates" },
+  { "term": "전달 레퍼런스 (forwarding reference)", "def": "템플릿 파라미터가 그 자리에서 추론될 때만 성립하는 T&& — lvalue와 rvalue를 모두 받을 수 있다. rvalue 레퍼런스(T&&)와 문법은 같지만 성립 조건이 다르다.", "chapter": "variadic-templates" },
+  { "term": "std::forward", "def": "전달 레퍼런스로 받은 인자의 원래 값 범주(lvalue/rvalue)를 그대로 복원해 다른 함수로 넘기는 캐스트. 안 쓰면 함수 안에서 이름 붙은 인자는 항상 lvalue로 취급된다(완벽 전달).", "chapter": "variadic-templates" }
 ]
