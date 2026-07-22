@@ -1,1 +1,8 @@
-[]
+[
+  { "term": "designated initializer (지정 초기화)", "def": "구조체 멤버를 이름으로 지정해 초기화하는 C++20 문법 — { .position = 1.57 } 형태.", "chapter": "toolchain-setup" },
+  { "term": "concepts (콘셉트)", "def": "템플릿 인자가 만족해야 할 제약을 타입에 새기는 C++20 기능. 4.5절에서 본격적으로 다룬다.", "chapter": "toolchain-setup" },
+  { "term": "build-essential", "def": "gcc, g++, make, C 표준 라이브러리 헤더를 묶은 우분투 메타패키지. C++ 빌드 환경의 최소 단위.", "chapter": "toolchain-setup" },
+  { "term": "GNU 확장", "def": "표준 C++가 아니지만 g++가 추가로 받아 주는 문법. 기본 모드(gnu++17 등)에서 조용히 통과해 이식성 문제를 만든다.", "chapter": "toolchain-setup" },
+  { "term": "구성 (configure)", "def": "CMake의 1단계 — 컴파일러를 찾고 빌드 파일을 생성한다. 실제 컴파일은 2단계인 빌드(cmake --build)에서 일어난다.", "chapter": "toolchain-setup" },
+  { "term": "디버그 정보 (-g)", "def": "실행파일에 소스 줄 번호와 변수 이름을 담는 컴파일 옵션. gdb로 열려면 필요하다.", "chapter": "toolchain-setup" }
+]
