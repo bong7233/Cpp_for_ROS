@@ -84,5 +84,11 @@
   { "term": "불완전 타입 (incomplete type)", "def": "선언만 있고 정의가 없어 크기·멤버를 모르는 타입.", "chapter": "headers" },
   { "term": "순환 include", "def": "두 헤더가 서로를 include하는 구조 — 가드가 있어도 한쪽은 상대 이름 없이 컴파일된다.", "chapter": "headers" },
   { "term": "우산 헤더 (umbrella header)", "def": "라이브러리 공개 API 전체를 include 연쇄로 끌어들이는 편의용 최상위 헤더(예: rclcpp/rclcpp.hpp).", "chapter": "headers" },
-  { "term": "모듈 (C++20 module)", "def": "텍스트 복사 대신 컴파일된 인터페이스를 import하는 헤더의 현대적 대안.", "chapter": "headers" }
+  { "term": "모듈 (C++20 module)", "def": "텍스트 복사 대신 컴파일된 인터페이스를 import하는 헤더의 현대적 대안.", "chapter": "headers" },
+  { "term": "레퍼런스 (reference)", "def": "이미 존재하는 객체의 별명 — 초기화 이후 재바인딩이 불가능하고, 정의상 항상 유효한 객체를 가리킨다. &와 sizeof는 항상 원본의 값을 낸다.", "chapter": "references" },
+  { "term": "재바인딩 (rebinding)", "def": "포인터가 다른 대상을 다시 가리키도록 바꾸는 것 — 레퍼런스에는 존재하지 않는 연산이라, r = y는 재바인딩이 아니라 r이 별명인 원본에 대한 대입이다.", "chapter": "references" },
+  { "term": "수명 연장 (lifetime extension)", "def": "const 레퍼런스(또는 rvalue 레퍼런스)가 임시 객체에 바인딩되면, 그 임시 객체의 수명이 레퍼런스의 수명까지 늘어나는 규칙.", "chapter": "references" },
+  { "term": "댕글링 레퍼런스 (dangling reference)", "def": "참조하던 원본 객체가 이미 소멸했는데 남아 있는 레퍼런스 — 지역 변수 반환, 컨테이너 재할당 등으로 발생하며 읽으면 UB다.", "chapter": "references" },
+  { "term": "레퍼런스 무효화 (reference invalidation)", "def": "vector의 재할당처럼 원소가 재배치되는 연산이 일어나면, 그 이전에 떠 둔 원소 레퍼런스가 낡은 메모리를 가리키게 되는 것.", "chapter": "references" },
+  { "term": "레퍼런스 멤버 (reference member)", "def": "클래스 멤버로 선언된 레퍼런스 — 재바인딩 불가 규칙 때문에 그 클래스의 복사 대입 연산자가 컴파일러에 의해 암묵적으로 삭제된다.", "chapter": "references" }
 ]
