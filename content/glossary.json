@@ -337,5 +337,16 @@
   { "term": "std::try_to_lock", "def": "unique_lock 생성자에 넘겨 lock() 대신 try_lock()을 한 번만 시도하게 하는 태그. 실패해도 블록되지 않고 즉시 owns_lock()==false 상태로 돌아온다 — 실시간 스레드가 비실시간 채널에 안전하게 접근하는 핵심 도구.", "chapter": "thread-architecture" },
   { "term": "스레드 아키텍처 (thread architecture)", "def": "여러 스레드를 역할별로 나누고, 그 사이 데이터가 오가는 채널마다 각 편의 시간 제약(실시간/비실시간)에 맞는 동기화 도구를 고르는 설계.", "chapter": "thread-architecture" },
   { "term": "드레인 (drain)", "def": "종료 시점에 큐나 버퍼에 남아 있는 데이터를 전부 소진해서 처리하는 것. 상류 스레드를 세운 뒤 하류 스레드를 세우기 전에 거쳐야 데이터 유실이 없다.", "chapter": "thread-architecture" },
-  { "term": "논블로킹 드롭 패턴 (non-blocking drop-on-contention)", "def": "실시간 생산자가 락을 못 얻거나 대상 큐가 찼을 때 기다리지 않고 그 자리에서 포기(드롭)하는 설계. 실시간 스레드가 비실시간 소비자에게 진단 데이터를 내보낼 때 블로킹을 피하는 방법.", "chapter": "thread-architecture" }
+  { "term": "논블로킹 드롭 패턴 (non-blocking drop-on-contention)", "def": "실시간 생산자가 락을 못 얻거나 대상 큐가 찼을 때 기다리지 않고 그 자리에서 포기(드롭)하는 설계. 실시간 스레드가 비실시간 소비자에게 진단 데이터를 내보낼 때 블로킹을 피하는 방법.", "chapter": "thread-architecture" },
+  { "term": "타겟 (target, CMake)", "def": "add_executable/add_library로 선언하는 빌드 단위. CMake의 target_* 함수 전부가 파일이 아니라 이 타겟에 속성을 붙인다.", "chapter": "cmake-basics" },
+  { "term": "빌드 시스템 생성기 (build system generator)", "def": "CMake가 직접 컴파일하지 않고 Makefile이나 Ninja 빌드 파일 같은 실제 빌드 시스템의 설정을 만들어 내는 역할. -G 옵션으로 생성기를 바꿀 수 있다.", "chapter": "cmake-basics" },
+  { "term": "사용 요구사항 전파 (usage requirement propagation)", "def": "PRIVATE/PUBLIC/INTERFACE로 결정되는, 한 타겟의 include 경로·링크·컴파일 옵션이 그 타겟을 링크하는 다른 타겟에도 전달되는지 여부.", "chapter": "cmake-basics" },
+  { "term": "INTERFACE 라이브러리 (interface library)", "def": "자신은 컴파일할 소스가 없지만(헤더 전용 등) 이를 링크하는 타겟에는 include 경로 등 설정을 넘겨주는 CMake 라이브러리 타입.", "chapter": "cmake-basics" },
+  { "term": "target_compile_features", "def": "C++ 표준 버전 등 컴파일러 기능 요구사항을 프로젝트 전역이 아니라 타겟 단위로 지정하는 CMake 함수. PUBLIC 지정 시 이 요구사항이 링크하는 타겟에도 전파된다.", "chapter": "cmake-basics" },
+  { "term": "포트 (port, vcpkg)", "def": "vcpkg가 관리하는 라이브러리 단위. vcpkg.json(메타데이터)과 portfile.cmake(빌드 스크립트)로 구성된 디렉터리 하나.", "chapter": "package-managers" },
+  { "term": "매니페스트 모드 (manifest mode)", "def": "프로젝트 루트의 vcpkg.json으로 의존성을 선언해 프로젝트별로 격리된 vcpkg_installed/ 폴더에 설치하는 vcpkg의 방식. 클래식(전역 설치) 모드의 버전 충돌 문제를 해결한다.", "chapter": "package-managers" },
+  { "term": "triplet (vcpkg)", "def": "플랫폼·아키텍처·링크 방식(정적/동적) 조합을 지정하는 vcpkg의 빌드 타겟 식별자. 예: x64-linux, x64-windows-static-md.", "chapter": "package-managers" },
+  { "term": "툴체인 파일 (toolchain file)", "def": "CMAKE_TOOLCHAIN_FILE로 지정해 CMake의 find_package가 vcpkg 설치 경로를 먼저 찾아보게 만드는 CMake 스크립트(vcpkg.cmake).", "chapter": "package-managers" },
+  { "term": "프로파일 (Conan profile)", "def": "컴파일러·아키텍처·빌드 타입 등 빌드 환경을 기술하는 Conan의 설정 파일. vcpkg의 triplet과 같은 역할을 한다.", "chapter": "package-managers" },
+  { "term": "rosdep", "def": "ROS 2 패키지의 package.xml에 적힌 의존성 이름을 배포판별 시스템 패키지 이름으로 변환해 apt로 설치하는 도구. vcpkg/Conan과 역할이 겹치지 않는다.", "chapter": "package-managers" }
 ]
