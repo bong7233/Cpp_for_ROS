@@ -34,5 +34,15 @@
   { "term": "단락 평가 (short-circuit evaluation)", "def": "&&/||가 왼쪽을 먼저 평가하고 결과가 확정되면 오른쪽을 평가하지 않는, 표준이 보장하는 의미론.", "chapter": "control-flow" },
   { "term": "fallthrough", "def": "switch에서 break 없는 case가 다음 case의 코드까지 계속 실행하는 기본 동작 — 의도한 통과는 [[fallthrough]] 속성으로 선언한다.", "chapter": "control-flow" },
   { "term": "범위 기반 for (range-based for)", "def": "배열·컨테이너 순회의 기본형 — 루프 변수는 기본적으로 복사본이며 원본 수정에는 참조(auto&)가 필요하다.", "chapter": "control-flow" },
-  { "term": "init-statement", "def": "C++17부터 if/switch 괄호 안에서 변수를 선언해 수명을 그 분기 안으로 가두는 문법.", "chapter": "control-flow" }
+  { "term": "init-statement", "def": "C++17부터 if/switch 괄호 안에서 변수를 선언해 수명을 그 분기 안으로 가두는 문법.", "chapter": "control-flow" },
+  { "term": "암묵 변환 (implicit conversion)", "def": "캐스트 표기 없이 컴파일러가 자동으로 수행하는 타입 변환 — 승격, 통상 산술 변환, bool 변환 등.", "chapter": "casting" },
+  { "term": "통상 산술 변환 (usual arithmetic conversions)", "def": "이항 연산자의 양쪽 타입이 다를 때 정보를 덜 잃는 쪽으로 피연산자를 맞추는 규칙. 연산자 단위로 적용된다.", "chapter": "casting" },
+  { "term": "static_cast", "def": "타입 시스템이 의미를 아는 변환을 명시적으로 수행하는 기본 캐스트 — 컴파일 타임 검사, 런타임 비용 없음.", "chapter": "casting" },
+  { "term": "const_cast", "def": "포인터·레퍼런스의 const/volatile 자격을 벗기거나 붙이는 캐스트 — 원래 const인 객체를 수정하면 UB.", "chapter": "casting" },
+  { "term": "reinterpret_cast", "def": "같은 비트를 다른 타입으로 다시 읽는 캐스트 — 변환 명령이 없는 대신 정렬·strict aliasing 책임을 작성자가 진다.", "chapter": "casting" },
+  { "term": "dynamic_cast", "def": "상속 계층의 다운캐스트를 RTTI로 런타임 검사하는 유일한 캐스트. 실패 시 nullptr 또는 예외.", "chapter": "casting" },
+  { "term": "0 방향 절단 (truncation toward zero)", "def": "부동소수점→정수 변환의 규칙 — 반올림·내림이 아니라 소수부를 버린다 (-2.9 → -2).", "chapter": "casting" },
+  { "term": "strict aliasing", "def": "서로 다른 타입의 포인터는 같은 메모리를 가리키지 않는다는 컴파일러의 최적화 가정 — 위반하면 UB.", "chapter": "casting" },
+  { "term": "정렬 (alignment)", "def": "타입이 요구하는 주소의 배수 조건 — float는 4바이트 정렬, 위반 접근은 UB (ARM에서 버스 폴트 가능).", "chapter": "casting" },
+  { "term": "std::bit_cast", "def": "크기가 같은 두 타입 사이의 비트 재해석을 UB 없이 수행하는 C++20 표준 함수 — memcpy 관용구의 표준화.", "chapter": "casting" }
 ]
