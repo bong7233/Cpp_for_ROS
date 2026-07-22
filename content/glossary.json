@@ -210,6 +210,7 @@
   { "term": "sizeof... (패키지 크기 연산자)", "def": "파라미터 팩에 담긴 원소 개수를 컴파일 타임 상수로 돌려주는 연산자. sizeof(T)와 이름만 비슷할 뿐 완전히 다른 연산이다.", "chapter": "variadic-templates" },
   { "term": "전달 레퍼런스 (forwarding reference)", "def": "템플릿 파라미터가 그 자리에서 추론될 때만 성립하는 T&& — lvalue와 rvalue를 모두 받을 수 있다. rvalue 레퍼런스(T&&)와 문법은 같지만 성립 조건이 다르다.", "chapter": "variadic-templates" },
   { "term": "std::forward", "def": "전달 레퍼런스로 받은 인자의 원래 값 범주(lvalue/rvalue)를 그대로 복원해 다른 함수로 넘기는 캐스트. 안 쓰면 함수 안에서 이름 붙은 인자는 항상 lvalue로 취급된다(완벽 전달).", "chapter": "variadic-templates" },
+  { "term": "상수 표현식 (constant expression)", "def": "리터럴, 다른 constexpr 값, 사칙연산처럼 프로그램을 실행하지 않고도 컴파일러가 값을 도출할 수 있는 식. 배열 크기·템플릿 인자·static_assert 조건·constexpr 변수 초기화식이 이 자격을 요구하는 required constant expression 컨텍스트다.", "chapter": "constexpr" },
   { "term": "constexpr 변수", "def": "초기화 식 자체가 컴파일 타임에 계산 가능해야 하는 변수. const와 달리 런타임 값으로는 초기화할 수 없고, 배열 크기나 템플릿 비타입 인자 자리에 쓸 수 있다.", "chapter": "constexpr" },
   { "term": "constexpr 함수", "def": "컴파일 타임에도 런타임에도 호출 가능한 함수. 인자가 상수 표현식이면 컴파일러가 그 자리에서 계산을 끝내 call 명령 자체가 사라지고, 런타임 값이면 평범한 함수로 컴파일된다.", "chapter": "constexpr" },
   { "term": "consteval (C++20)", "def": "반드시 컴파일 타임에만 평가되도록 강제하는 함수 지정자. constexpr와 달리 런타임 값으로 호출하면 그 자리에서 컴파일 에러가 난다.", "chapter": "constexpr" },
@@ -217,5 +218,12 @@
   { "term": "SFINAE", "def": "치환 실패는 에러가 아니다(Substitution Failure Is Not An Error) — 템플릿 조건이 거짓이면 해당 오버로드가 에러 없이 조용히 후보에서 빠지는 C++20 이전의 제약 기법. std::enable_if로 구현했다.", "chapter": "concepts" },
   { "term": "constraints not satisfied", "def": "템플릿 인자가 requires 절의 조건을 만족하지 못했을 때 나는 진단 문구. SFINAE 시절의 방대한 후보 목록 대신 어떤 조건이 왜 거짓인지를 짧게 명시한다.", "chapter": "concepts" },
   { "term": "축약 템플릿 문법 (abbreviated template syntax)", "def": "template<std::integral T>처럼 콘셉트 이름을 typename 자리에 직접 쓰거나, std::floating_point auto 파라미터로 requires 절 자체를 생략하는 C++20 문법.", "chapter": "concepts" },
-  { "term": "서브섬션 (subsumption)", "def": "한 콘셉트의 조건이 다른 콘셉트의 조건을 완전히 포함하는 관계. 제약이 겹치는 오버로드 중 더 좁게 제약된 쪽이 오버로드 해석에서 우선한다.", "chapter": "concepts" }
+  { "term": "서브섬션 (subsumption)", "def": "한 콘셉트의 조건이 다른 콘셉트의 조건을 완전히 포함하는 관계. 제약이 겹치는 오버로드 중 더 좁게 제약된 쪽이 오버로드 해석에서 우선한다.", "chapter": "concepts" },
+  { "term": "auto 타입 추론", "def": "함수 템플릿의 인자 타입 추론과 같은 규칙을 쓰는 auto의 동작. 값으로 받는 자리(auto)는 레퍼런스 자격과 최상위 const를 벗기고, auto&는 레퍼런스는 씌우되 원본의 const는 벗기지 못한다.", "chapter": "type-deduction" },
+  { "term": "최상위 const (top-level const)", "def": "값 자신을 못 바꾼다는 속성으로서의 const. const int* p에서 포인터가 가리키는 대상의 const는 최상위가 아니라서 auto가 받아도 벗겨지지 않는다.", "chapter": "type-deduction" },
+  { "term": "decltype", "def": "표현식의 타입을 레퍼런스와 const까지 그대로 보존해 돌려주는 연산자. decltype(x)(이름)는 선언된 타입을, decltype((x))(괄호 친 표현식)는 값 범주까지 반영한 타입을 낸다 — 둘은 서로 다른 타입을 낼 수 있다.", "chapter": "type-deduction" },
+  { "term": "decltype(auto) (C++14)", "def": "함수 반환 타입 자리에서 반환식에 decltype의 규칙을 그대로 적용해 값 범주를 보존하는 지정자. 평범한 auto 반환은 레퍼런스를 벗기지만 decltype(auto)는 벗기지 않는다.", "chapter": "type-deduction" },
+  { "term": "auto&& (auto 전달 레퍼런스)", "def": "템플릿 파라미터가 아닌 문맥에서도 전달 레퍼런스와 같은 규칙을 따르는 auto 조합. lvalue를 바인딩하면 T&로, rvalue를 바인딩하면 T&&로 축소되어, lvalue·rvalue를 둘 다 받는 유일한 auto 형태다.", "chapter": "type-deduction" },
+  { "term": "std::vector<bool>::reference (프록시 참조)", "def": "std::vector<bool>이 비트 하나로 값을 압축 저장하기 위해 operator[]가 진짜 bool& 대신 돌려주는 프록시 클래스. auto로 받으면 타입을 bool로 착각하기 쉽고, 원본 버퍼가 재할당되면 댕글링 상태가 된다.", "chapter": "type-deduction" },
+  { "term": "함수 반환 타입 추론 (C++14)", "def": "함수 선언에 auto만 적고 본문의 return문에서 반환 타입을 추론하게 하는 문법. 여러 return문의 타입이 서로 어긋나면 그 자리에서 컴파일 에러가 난다.", "chapter": "type-deduction" }
 ]
