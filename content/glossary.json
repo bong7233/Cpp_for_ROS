@@ -196,5 +196,9 @@
   { "term": "2단계 이름 조회 (two-phase lookup)", "def": "템플릿 정의를 읽는 시점(1단계, T와 무관한 문법만 검사)과 실제 인스턴스화하는 시점(2단계, T에 의존하는 표현식을 그제야 검사)이 분리되는 규칙. 안 쓰는 템플릿 함수의 T 의존 버그는 호출 전까지 조용하다.", "chapter": "template-mechanics" },
   { "term": "암묵적 인스턴스화 (implicit instantiation)", "def": "컴파일러가 호출을 보고 알아서 코드를 찍어내는 기본 방식. 정의가 보이는 것과 실제로 인스턴스화되는 것은 별개이며, 호출이 없으면 코드도 만들어지지 않는다.", "chapter": "template-mechanics" },
   { "term": "명시적 인스턴스화 (explicit instantiation)", "def": "template 반환타입 함수<타입>(인자); 문법으로 특정 타입의 코드를 저자가 직접 지시해 미리 찍어 두는 것. 정의를 .cpp에 숨기고 헤더에는 선언만 노출하는 라이브러리 배포를 가능하게 한다.", "chapter": "template-mechanics" },
-  { "term": "extern template", "def": "C++11 지시문 — 이 인스턴스는 다른 곳에서 이미 명시적으로 만들어지므로 이 번역 단위에서 다시 인스턴스화하지 말라고 컴파일러에 알려 컴파일 시간을 아낀다.", "chapter": "template-mechanics" }
+  { "term": "extern template", "def": "C++11 지시문 — 이 인스턴스는 다른 곳에서 이미 명시적으로 만들어지므로 이 번역 단위에서 다시 인스턴스화하지 말라고 컴파일러에 알려 컴파일 시간을 아낀다.", "chapter": "template-mechanics" },
+  { "term": "템플릿 인스턴스화 (template instantiation)", "def": "함수/클래스 템플릿이 특정 타입으로 호출되는 순간, 그 타입을 대입한 실제 함수/클래스를 컴파일러가 컴파일해 넣는 과정. nm으로 호출된 타입마다 별도 심볼이 생기는 것으로 확인된다.", "chapter": "function-templates" },
+  { "term": "non-type 템플릿 매개변수", "def": "타입이 아니라 정수 등 컴파일 타임 값을 템플릿 인자로 받는 매개변수. template<int N> 형태이며, N이 다르면 서로 다른 타입이 인스턴스화된다.", "chapter": "function-templates" },
+  { "term": "auto 템플릿 매개변수 (C++20)", "def": "non-type 템플릿 매개변수의 타입 자체도 추론에 맡기는 C++20 문법. template<auto N>은 정수든 부동소수점이든 온 값의 타입을 그대로 받는다.", "chapter": "function-templates" },
+  { "term": "코드 팽창 (code bloat)", "def": "템플릿을 호출하는 타입이 늘어날수록 실행 파일에 컴파일된 함수 개수와 바이너리 크기가 함께 느는 현상. 실행 속도가 아니라 크기·명령어 캐시 문제다.", "chapter": "function-templates" }
 ]
