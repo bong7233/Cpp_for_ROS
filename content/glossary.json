@@ -270,5 +270,15 @@
   { "term": "string_view (문자열 뷰)", "def": "포인터와 길이만으로 문자열을 가리키는, 소유하지 않는 C++17 읽기 전용 뷰. 16바이트 고정 크기이며 리터럴·std::string·부분 문자열을 복사 없이 감싼다.", "chapter": "views" },
   { "term": "span", "def": "연속 메모리(vector·array·C 배열)를 포인터+길이로 가리키는 C++20 소유하지 않는 뷰. 크기를 타입에 고정하는 정적 extent(span<T,N>, 8바이트)와 런타임에 아는 동적 extent(span<T>, 16바이트)로 나뉜다.", "chapter": "views" },
   { "term": "댕글링 뷰 (dangling view)", "def": "string_view·span처럼 원본을 소유하지 않는 뷰가, 가리키던 원본(임시 객체·지역 변수·재할당된 vector 버퍼 등)이 소멸한 뒤에도 남아 그 자리를 계속 가리키는 상태. 역참조는 UB이며 ASan이 heap-use-after-free로 잡는다.", "chapter": "views" },
-  { "term": "extent (익스텐트)", "def": "std::span이 아는 원소 개수가 컴파일 타임에 타입으로 고정되는지(정적 extent), 런타임에만 결정되는지(동적 extent, std::dynamic_extent)를 가르는 개념. 정적 extent는 크기 필드가 없어 포인터 하나 크기(8바이트)로 줄어든다.", "chapter": "views" }
+  { "term": "extent (익스텐트)", "def": "std::span이 아는 원소 개수가 컴파일 타임에 타입으로 고정되는지(정적 extent), 런타임에만 결정되는지(동적 extent, std::dynamic_extent)를 가르는 개념. 정적 extent는 크기 필드가 없어 포인터 하나 크기(8바이트)로 줄어든다.", "chapter": "views" },
+  { "term": "std::optional", "def": "값이 있을 수도 없을 수도 있음을 타입으로 표현하는 C++17 어휘 타입. 힙 할당 없이 값과 has_value 플래그를 인라인으로 담는다.", "chapter": "vocabulary-types" },
+  { "term": "std::bad_optional_access", "def": "값이 없는 std::optional에 value()를 호출했을 때 던져지는 예외.", "chapter": "vocabulary-types" },
+  { "term": "std::variant", "def": "여러 타입 중 정확히 하나를 타입 안전하게 담는 C++17 어휘 타입. 판별 태그로 지금 담긴 타입을 추적하며, 크기는 가장 큰 대안 타입을 정렬 단위로 올림한 값과 같다.", "chapter": "vocabulary-types" },
+  { "term": "std::bad_variant_access", "def": "지금 담긴 타입과 다른 타입으로 std::get을 호출했을 때 던져지는 예외.", "chapter": "vocabulary-types" },
+  { "term": "std::get_if", "def": "variant나 optional에서 예외 없이 타입을 검사해 포인터(없으면 nullptr)를 돌려주는 접근자.", "chapter": "vocabulary-types" },
+  { "term": "std::visit", "def": "variant에 지금 담긴 대안 타입에 맞는 방문자(visitor) 콜러블을 정확히 하나 골라 호출하는 함수. 오버로드 세트가 모든 대안을 처리하지 못하면 컴파일 타임에 에러가 난다.", "chapter": "vocabulary-types" },
+  { "term": "오버로드 세트 (Overloaded lambda idiom)", "def": "여러 람다를 다중 상속으로 묶어 operator()를 모아 std::visit의 방문자로 쓰는 C++17 관용구. 클래스 템플릿 인자 추론(CTAD)과 함께 쓰인다.", "chapter": "vocabulary-types" },
+  { "term": "std::expected (C++23)", "def": "성공값 T와 실패 이유 E를 예외 없이 값으로 표현하는 어휘 타입. g++ 13.3.0은 -std=c++23에서만 지원하며 -std=c++20에서는 타입 자체가 정의되지 않는다(실측 확인).", "chapter": "vocabulary-types" },
+  { "term": "std::unexpected", "def": "std::expected의 실패 상태를 생성할 때 실패값을 감싸는 래퍼.", "chapter": "vocabulary-types" },
+  { "term": "어휘 타입 (vocabulary type)", "def": "특정 라이브러리에 종속되지 않고 인터페이스 경계에서 의도를 명확히 표현하기 위해 널리 쓰이는 표준 타입(예: optional, variant, expected, string_view, span).", "chapter": "vocabulary-types" }
 ]
