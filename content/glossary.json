@@ -56,5 +56,12 @@
   { "term": "one-past-end 포인터", "def": "배열 마지막 요소 바로 다음을 가리키는 포인터 — 만들기·비교까지는 합법(루프 종료 조건), 역참조는 UB.", "chapter": "arrays-strings" },
   { "term": "널 종단 (null termination)", "def": "값 0인 문자('\\0')로 문자열의 끝을 표시하는 C의 관례 — 길이를 저장하지 않으므로 strlen이 O(n)이다.", "chapter": "arrays-strings" },
   { "term": "SSO (Small String Optimization)", "def": "짧은 문자열을 힙이 아니라 std::string 객체 내부 버퍼에 저장하는 최적화 — 경계는 구현 정의(libstdc++ 15자).", "chapter": "arrays-strings" },
-  { "term": "AddressSanitizer (ASan)", "def": "-fsanitize=address 플래그로 켜는 런타임 메모리 오류 탐지기 — 범위 밖 접근을 종류·위치·피해 변수까지 짚어 리포트한다.", "chapter": "arrays-strings" }
+  { "term": "AddressSanitizer (ASan)", "def": "-fsanitize=address 플래그로 켜는 런타임 메모리 오류 탐지기 — 범위 밖 접근을 종류·위치·피해 변수까지 짚어 리포트한다.", "chapter": "arrays-strings" },
+  { "term": "집성체 (aggregate)", "def": "사용자 선언 생성자·private 멤버·가상함수가 없는 데이터 묶음 타입 — 중괄호로 멤버를 선언 순서대로 직접 초기화할 수 있다.", "chapter": "structs-enums" },
+  { "term": "병렬 배열 (parallel array)", "def": "한 개체의 속성들을 같은 인덱스의 여러 배열에 흩어 담는 구조 — 의미 단위가 타입에 없어 컴파일러가 지켜 주지 못한다.", "chapter": "structs-enums" },
+  { "term": "기본 멤버 초기화자 (default member initializer)", "def": "멤버 선언에 붙이는 기본값(double position = 0.0;) — 어떤 방식으로 선언해도 미정 상태를 원천 봉쇄한다.", "chapter": "structs-enums" },
+  { "term": "패딩 (padding)", "def": "정렬 요구 때문에 컴파일러가 구조체 멤버 사이·끝에 끼워 넣는 이름 없는 빈 공간 — sizeof가 멤버 합보다 커지는 이유.", "chapter": "structs-enums" },
+  { "term": "enum class (범위 있는 열거형)", "def": "열거자가 타입 이름 안에 갇히고 정수로 암묵 변환되지 않는 C++11 열거형 — 새 코드의 기본값.", "chapter": "structs-enums" },
+  { "term": "기저 타입 (underlying type)", "def": "열거형이 값 저장에 쓰는 정수 타입. enum class GaitState : uint8_t처럼 지정하며, enum class의 기본은 int다.", "chapter": "structs-enums" },
+  { "term": "std::to_underlying", "def": "열거형 값을 기저 타입 정수로 벗기는 C++23 함수 — C++20에서는 static_cast<std::underlying_type_t<E>>(e) 관용구를 쓴다.", "chapter": "structs-enums" }
 ]
