@@ -181,5 +181,7 @@
   { "term": "멤버 초기화 리스트 (member initializer list)", "def": "생성자 콜론 뒤에서 멤버를 만드는 문법. 본문 안의 대입과 달리 멤버가 생성되는 시점 자체이며, const·레퍼런스 멤버는 본문 대입이 불가능해 이 리스트로만 초기화할 수 있다.", "chapter": "classes" },
   { "term": "const 멤버 함수 (const member function)", "def": "선언에 const가 붙은 멤버 함수. 숨은 this가 T* 대신 const T*가 되어 함수 안에서 멤버 수정을 시도하면 컴파일 에러가 나고, const 객체는 이런 함수만 호출할 수 있다.", "chapter": "classes" },
   { "term": "정적 멤버 함수 (static member function)", "def": "특정 객체 인스턴스가 아니라 클래스 전체에 속하는 함수. this 포인터가 없어 인스턴스 없이도 호출 가능하다.", "chapter": "classes" },
-  { "term": "const 정확성 (const-correctness)", "def": "멤버 함수마다 이 함수가 객체를 바꾸는지를 const 유무로 정확히 표시하는 습관. 포인터 멤버가 가리키는 대상까지는 const가 전파되지 않는 얕은 const의 함정을 알고 있어야 한다.", "chapter": "class-design" }
+  { "term": "const 정확성 (const-correctness)", "def": "멤버 함수마다 이 함수가 객체를 바꾸는지를 const 유무로 정확히 표시하는 습관. 포인터 멤버가 가리키는 대상까지는 const가 전파되지 않는 얕은 const의 함정을 알고 있어야 한다.", "chapter": "class-design" },
+  { "term": "얕은 const (shallow const)", "def": "const가 포인터/레퍼런스 값 자체까지만 닿고, 그것이 가리키는 대상에는 전파되지 않는 것 — const 객체에서도 포인터 멤버가 가리키는 대상은 여전히 바뀔 수 있다.", "chapter": "class-design" },
+  { "term": "mutable", "def": "관찰 가능한 상태(불변식)에 포함되지 않는 멤버(캐시, 통계, 락)를 const 멤버 함수 안에서도 바꿀 수 있게 하는 키워드.", "chapter": "class-design" }
 ]
