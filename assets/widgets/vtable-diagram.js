@@ -308,13 +308,8 @@
 
         // 2) 클래스 계층
         classBox(svgRoot, BASE, 'Base', ['virtual void speak();'].concat(
-          st.destructorWarn ? ['virtual ~Base();  ← 아님!'] : []
+          st.destructorWarn ? ['~Base();  ← virtual 아님!'] : []
         ), C, { titleSize: 13 });
-        if (st.destructorWarn) {
-          svgRoot.appendChild(core.svgText(BASE.x + BASE.w - 8, BASE.y + 55, '⚠ 비가상 소멸자', {
-            'text-anchor': 'end', 'font-size': 10, 'font-weight': 700, fill: DANGER
-          }));
-        }
         classBox(svgRoot, DER1, 'Derived', ['speak() override'], C, { titleSize: 11.5, methodSize: 9.5 });
         svgRoot.appendChild(core.svg('path', {
           d: 'M' + (DER1.x + DER1.w / 2) + ',' + DER1.y + ' L' + (BASE.x + BASE.w * 0.3) + ',' + (BASE.y + BASE.h),
