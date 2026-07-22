@@ -209,5 +209,9 @@
   { "term": "requires 표현식 (requires expression)", "def": "requires(매개변수) { 표현식들; } 형태로 임의의 표현식이 유효한지를 참/거짓으로 접어, 새로운 concept를 정의하는 재료로 쓰는 문법.", "chapter": "concepts" },
   { "term": "sizeof... (패키지 크기 연산자)", "def": "파라미터 팩에 담긴 원소 개수를 컴파일 타임 상수로 돌려주는 연산자. sizeof(T)와 이름만 비슷할 뿐 완전히 다른 연산이다.", "chapter": "variadic-templates" },
   { "term": "전달 레퍼런스 (forwarding reference)", "def": "템플릿 파라미터가 그 자리에서 추론될 때만 성립하는 T&& — lvalue와 rvalue를 모두 받을 수 있다. rvalue 레퍼런스(T&&)와 문법은 같지만 성립 조건이 다르다.", "chapter": "variadic-templates" },
-  { "term": "std::forward", "def": "전달 레퍼런스로 받은 인자의 원래 값 범주(lvalue/rvalue)를 그대로 복원해 다른 함수로 넘기는 캐스트. 안 쓰면 함수 안에서 이름 붙은 인자는 항상 lvalue로 취급된다(완벽 전달).", "chapter": "variadic-templates" }
+  { "term": "std::forward", "def": "전달 레퍼런스로 받은 인자의 원래 값 범주(lvalue/rvalue)를 그대로 복원해 다른 함수로 넘기는 캐스트. 안 쓰면 함수 안에서 이름 붙은 인자는 항상 lvalue로 취급된다(완벽 전달).", "chapter": "variadic-templates" },
+  { "term": "constexpr 변수", "def": "초기화 식 자체가 컴파일 타임에 계산 가능해야 하는 변수. const와 달리 런타임 값으로는 초기화할 수 없고, 배열 크기나 템플릿 비타입 인자 자리에 쓸 수 있다.", "chapter": "constexpr" },
+  { "term": "constexpr 함수", "def": "컴파일 타임에도 런타임에도 호출 가능한 함수. 인자가 상수 표현식이면 컴파일러가 그 자리에서 계산을 끝내 call 명령 자체가 사라지고, 런타임 값이면 평범한 함수로 컴파일된다.", "chapter": "constexpr" },
+  { "term": "consteval (C++20)", "def": "반드시 컴파일 타임에만 평가되도록 강제하는 함수 지정자. constexpr와 달리 런타임 값으로 호출하면 그 자리에서 컴파일 에러가 난다.", "chapter": "constexpr" },
+  { "term": "constexpr if (C++17)", "def": "템플릿 안에서 컴파일 타임 조건에 따라 분기 중 선택되지 않은 쪽은 아예 인스턴스화되지 않게 하는 문법. 선택 안 된 분기의 타입 불일치 코드도 에러 없이 넘어간다.", "chapter": "constexpr" }
 ]
