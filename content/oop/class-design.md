@@ -465,21 +465,19 @@ copy_attempt.cpp:6:7: error: use of deleted function 'std::unique_ptr<...>::uniq
 - 복사 금지는 `= delete` 없이도 된다 — `unique_ptr` 멤버가 있으면 Rule of Zero에 따라 컴파일러가 복사를 이미 지운다(실측: `implicitly deleted`). `static_assert`로 그 사실을 못박아라.
 
 ::: quiz 연습문제
-1~2번은 개념, 3번은 예측, 4~5번은 실습(코드 작성형)이다.
+1번은 개념, 2번은 예측, 3~4번은 실습(코드 작성형)이다.
 
 1. `shallow_const.cpp`에서 `meddle()`이 `const`인데도 `imu_->calibrate()`가 컴파일되는 이유를 "얕은 const"로 설명하라. `imu_` 선언을 어떻게 바꾸면 컴파일 에러가 되는가?
-2. `LegController`가 `ImuSensor`는 컴포지션으로, `LegControllerBase`는 상속으로 연결한 이유를 리스코프 치환 원칙으로 각각 설명하라.
-3. `actuator_`를 `unique_ptr` 대신 `std::shared_ptr<ActuatorDriver>`로 바꾸면 `static_assert(!std::is_copy_constructible_v<LegController>)`가 여전히 통과하는지 예측하고, `shared_ptr`/`unique_ptr`의 복사 가능 여부 차이로 설명하라.
-4. (실습) `MotorDriver`를 이 절의 체크리스트(①~④) 순서로 처음부터 설계하라 — RPM 한계 강제, 온도 센서 참조, 다형적으로 다뤄질 것, 복사 금지를 스스로 요구사항으로 정하고 코드로 반영하라. `g++ -std=c++20 -Wall -Wextra`로 경고 없이 컴파일되는지 확인하라.
-5. (실습) 4번의 `MotorDriver`에 `static_assert`로 복사 불가·이동 가능·가상 소멸자 존재를 못박아라. 하나를 일부러 깨뜨려(예: 온도 센서를 값으로 복사) 어떤 `static_assert`가 실패하는지 확인하라.
+2. `actuator_`를 `unique_ptr` 대신 `std::shared_ptr<ActuatorDriver>`로 바꾸면 `static_assert(!std::is_copy_constructible_v<LegController>)`가 여전히 통과하는지 예측하고, `shared_ptr`/`unique_ptr`의 복사 가능 여부 차이로 설명하라.
+3. (실습) `MotorDriver`를 이 절의 체크리스트(①~④) 순서로 처음부터 설계하라 — RPM 한계 강제, 온도 센서 참조, 다형적으로 다뤄질 것, 복사 금지를 스스로 요구사항으로 정하고 코드로 반영하라. `g++ -std=c++20 -Wall -Wextra`로 경고 없이 컴파일되는지 확인하라.
+4. (실습) 3번의 `MotorDriver`에 `static_assert`로 복사 불가·이동 가능·가상 소멸자 존재를 못박아라. 하나를 일부러 깨뜨려(예: 온도 센서를 값으로 복사) 어떤 `static_assert`가 실패하는지 확인하라.
 :::
 
 ::: answer 해설
 1. `const`는 `*this`가 소유한 포인터 값 자체만 지킨다. `imu_`가 가리키는 `ImuSensor`는 소유한 값이 아니라 보호 범위 밖이다 — 얕은 const다. `imu_`를 `const ImuSensor*`(또는 `&`)로 선언하면 컴파일 에러가 난다.
-2. `ImuSensor`를 대신 넣어야 하는 자리가 없으므로(계약을 흉내 낼 이유가 없다) has-a다. `LegControllerBase&`가 필요한 모든 자리엔 넣어도 옳게 동작하므로(계약을 전부 지킨다) is-a이고 상속이 맞다.
-3. 통과하지 않는다 — `shared_ptr`의 복사 생성자는 `delete`되지 않고 참조 카운트를 늘리며 정상 동작한다([2.10](#/shared-ptr)). 이번엔 복사 생성자·대입을 손으로 `= delete`해야 한다 — Rule of Zero가 대신해 주지 않는다.
-4. `MotorDriverBase`(순수 가상), `RpmLimit`(생성자 검증)은 값 멤버, `TemperatureSensor`는 `const&`, 구동부는 `unique_ptr<MotorHardware>`로 짜면 같은 구조가 나온다.
-5. `TemperatureSensor`를 값으로 복사해 저장하면 복사 자체가 막히지 않는다 — 값 멤버가 전부 복사 가능하면 클래스도 복사 가능해지기 때문이다. "소유 관계를 잘못 정하면 복사 금지 의도가 조용히 깨진다"는 걸 실습으로 보여준다.
+2. 통과하지 않는다 — `shared_ptr`의 복사 생성자는 `delete`되지 않고 참조 카운트를 늘리며 정상 동작한다([2.10](#/shared-ptr)). 이번엔 복사 생성자·대입을 손으로 `= delete`해야 한다 — Rule of Zero가 대신해 주지 않는다.
+3. `MotorDriverBase`(순수 가상), `RpmLimit`(생성자 검증)은 값 멤버, `TemperatureSensor`는 `const&`, 구동부는 `unique_ptr<MotorHardware>`로 짜면 같은 구조가 나온다.
+4. `TemperatureSensor`를 값으로 복사해 저장하면 복사 자체가 막히지 않는다 — 값 멤버가 전부 복사 가능하면 클래스도 복사 가능해지기 때문이다. "소유 관계를 잘못 정하면 복사 금지 의도가 조용히 깨진다"는 걸 실습으로 보여준다.
 :::
 
 이 절의 `LegController`는 전부 직접 타이핑해라. `shallow_const.cpp`/`shallow_const_fixed.cpp`를 나란히 두고 `const`를 넣었다 뺐다 하며 어디서 막히는지 보고, `copy_attempt.cpp`는 그대로 컴파일해 에러 메시지를 읽어라. 기준 명령: `g++ -std=c++20 -Wall -Wextra main.cpp -o main && ./main`, ASan은 `g++ -std=c++20 -Wall -Wextra -g -fsanitize=address main.cpp -o main && ./main`.
