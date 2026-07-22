@@ -105,6 +105,8 @@
   { "term": "예외 안전성 (exception safety)", "def": "예외가 발생해도 자원 누수나 불변식 위반 없이 프로그램 상태가 안전하게 유지되는 성질. RAII가 C++에서 이를 보장하는 실용적 방법이다.", "chapter": "raii" },
   { "term": "이중 해제 (double free)", "def": "같은 자원(메모리, 파일 핸들 등)을 두 번 해제하는 것. 얕은 복사로 같은 자원을 가리키는 객체가 둘 생겼을 때 흔히 발생하며 UB다.", "chapter": "raii" },
   { "term": "자원 누수 (resource leak)", "def": "획득한 자원(메모리, 파일 디스크립터, 락 등)을 어떤 경로로도 해제하지 못해 프로세스가 계속 붙잡고 있는 상태.", "chapter": "raii" },
+  { "term": "메모리 누수 (memory leak)", "def": "힙에 할당된 블록을 가리키는 포인터가 프로그램 어디에도 남지 않아 회수되지 않는 것. valgrind는 definitely lost로, LeakSanitizer는 leaked로 잡는다.", "chapter": "dynamic-alloc" },
+  { "term": "new(std::nothrow)", "def": "할당 실패 시 예외 대신 nullptr을 반환하는 new의 변형.", "chapter": "dynamic-alloc" },
   { "term": "배열 쿠키 (array cookie)", "def": "new[]가 배열 앞에 몰래 붙여 두는, 원소 개수를 기록한 여분의 자리. delete[]가 소멸자를 몇 번 불러야 할지 아는 근거이며, new[]/delete 불일치가 힙을 깨뜨리는 원인이다.", "chapter": "dynamic-alloc" },
   { "term": "placement new", "def": "이미 확보된 메모리 위에 생성자만 실행하는 new(ptr) T(...) 문법. 메모리 확보와 객체 생성이 분리 가능한 두 단계임을 보여준다.", "chapter": "dynamic-alloc" },
   { "term": "std::bad_alloc", "def": "new가 요청한 메모리를 확보하지 못했을 때 던지는 표준 예외. 잡지 않으면 프로그램이 terminate로 죽는다.", "chapter": "dynamic-alloc" },
