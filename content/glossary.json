@@ -149,5 +149,16 @@
   { "term": "미정의 동작 (undefined behavior, UB)", "def": "표준이 결과에 아무 요구도 하지 않는 등급 — 표준을 위반하지 않고도 무슨 일이든 일어날 수 있다. 컴파일러는 UB가 나는 입력이 애초에 없다고 가정하고 최적화하므로, UB를 밟으면 앞뒤 코드의 의미까지 바뀔 수 있다.", "chapter": "ub-sanitizers" },
   { "term": "UndefinedBehaviorSanitizer (UBSan)", "def": "-fsanitize=undefined 플래그로 켜는 런타임 진단기 — signed/unsigned 오버플로, 널 역참조, 정렬 위반 등 언어 차원의 연산 규칙 위반을 잡는다. 메모리 범위 위반은 못 잡는다(ASan의 영역).", "chapter": "ub-sanitizers" },
   { "term": "무오버플로 가정 (no-overflow assumption)", "def": "컴파일러가 signed 정수 연산에 오버플로가 없다고 전제하고 수행하는 최적화 가정 — 이 가정 위에서 x + 1 > x 같은 식이 상수 true로 접힐 수 있다.", "chapter": "ub-sanitizers" },
-  { "term": "-fwrapv", "def": "GCC/Clang 플래그 — signed 오버플로를 UB 대신 2의 보수 랩어라운드로 정의된 동작으로 강제해, 무오버플로 가정에 기반한 최적화를 끈다.", "chapter": "ub-sanitizers" }
+  { "term": "-fwrapv", "def": "GCC/Clang 플래그 — signed 오버플로를 UB 대신 2의 보수 랩어라운드로 정의된 동작으로 강제해, 무오버플로 가정에 기반한 최적화를 끈다.", "chapter": "ub-sanitizers" },
+  { "term": "위임 생성자 (delegating constructor)", "def": "생성자의 초기화 리스트에서 멤버 대신 같은 클래스의 다른 생성자를 호출해, 위임받은 생성자가 완전히 끝난 뒤 이어서 실행되는 문법. 공통 초기화 로직의 중복을 없앤다.", "chapter": "constructors" },
+  { "term": "explicit", "def": "인자 하나짜리 생성자나 변환 연산자 앞에 붙여 암묵적 타입 변환을 막는 키워드. 붙이지 않으면 컴파일러가 경고 없이 조용히 그 타입으로 변환한다.", "chapter": "constructors" },
+  { "term": "2단계 초기화 (two-phase initialization)", "def": "생성자에서는 최소한만 하고, 객체가 완전히 만들어진 뒤 별도의 init() 함수를 명시적으로 호출해 나머지 초기화를 마치는 패턴. 생성자 안에서 가상 함수를 부르면 파생 버전이 불리지 않는 문제를 피하는 데 쓴다.", "chapter": "constructors" },
+  { "term": "객체 슬라이싱 (object slicing)", "def": "파생 클래스 객체를 베이스 타입의 값으로 다룰 때, 파생 전용 멤버가 물리적으로 복사되지 못하고 잘려나가는 현상. sizeof(Derived)가 sizeof(Base)보다 큰 만큼 못 담는다.", "chapter": "inheritance" },
+  { "term": "다이아몬드 문제 (diamond problem)", "def": "같은 베이스 클래스를 두 경로로 다중 상속하면 그 베이스의 서브오브젝트가 두 벌 생겨 멤버 접근이 모호해지는 문제. virtual 상속으로 단일 인스턴스를 강제해 해결한다.", "chapter": "inheritance" },
+  { "term": "virtual 상속 (virtual inheritance)", "def": "다이아몬드 상속 구조에서 베이스 서브오브젝트를 프로그램 전체에서 한 벌만 공유하도록 강제하는 상속 지정. 다이아몬드의 모든 경로에 적용해야 병합된다.", "chapter": "inheritance" },
+  { "term": "클래스 불변식 (class invariant)", "def": "모든 public 메서드가 실행을 마친 시점(정상 반환이든 예외든)에 항상 성립해야 하는, 멤버 값 사이의 관계. 구조체는 이를 표현할 문법이 없고, class + private + 검증 로직이 이를 강제하는 도구다.", "chapter": "classes" },
+  { "term": "캡슐화 (encapsulation)", "def": "정보 은닉 자체가 아니라, private로 값을 바꾸는 통로를 하나로 좁혀 그 통로에 검사를 심음으로써 클래스 불변식을 지키기 위한 수단. private만으로는 부족하고 통로 안의 런타임 검증이 함께 있어야 한다.", "chapter": "classes" },
+  { "term": "멤버 초기화 리스트 (member initializer list)", "def": "생성자 콜론 뒤에서 멤버를 만드는 문법. 본문 안의 대입과 달리 멤버가 생성되는 시점 자체이며, const·레퍼런스 멤버는 본문 대입이 불가능해 이 리스트로만 초기화할 수 있다.", "chapter": "classes" },
+  { "term": "const 멤버 함수 (const member function)", "def": "선언에 const가 붙은 멤버 함수. 숨은 this가 T* 대신 const T*가 되어 함수 안에서 멤버 수정을 시도하면 컴파일 에러가 나고, const 객체는 이런 함수만 호출할 수 있다.", "chapter": "classes" },
+  { "term": "정적 멤버 함수 (static member function)", "def": "특정 객체 인스턴스가 아니라 클래스 전체에 속하는 함수. this 포인터가 없어 인스턴스 없이도 호출 가능하다.", "chapter": "classes" }
 ]
