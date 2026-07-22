@@ -50,5 +50,11 @@
   { "term": "모호성 에러 (ambiguous call)", "def": "같은 서열의 오버로드 후보가 둘 이상이라 컴파일러가 선택을 거부하는 에러.", "chapter": "functions" },
   { "term": "기본 인자 (default argument)", "def": "생략된 인자를 호출 지점에서 컴파일러가 채워 넣는 파라미터 기본값 — 선언에 한 번만 적는다.", "chapter": "functions" },
   { "term": "출력 인자 (output parameter)", "def": "결과를 담을 객체를 참조/포인터로 받아 채우는 스타일 — 이 책은 반환값을 우선한다.", "chapter": "functions" },
-  { "term": "[[nodiscard]]", "def": "반환값을 버리면 컴파일 경고를 내게 하는 C++17 속성 — 에러 코드 반환 함수의 표준 장비.", "chapter": "functions" }
+  { "term": "[[nodiscard]]", "def": "반환값을 버리면 컴파일 경고를 내게 하는 C++17 속성 — 에러 코드 반환 함수의 표준 장비.", "chapter": "functions" },
+  { "term": "붕괴 (decay)", "def": "배열 타입 표현식이 대부분의 문맥에서 첫 요소를 가리키는 포인터 값으로 변환되는 것 — 예외는 sizeof, 단항 &, decltype, 배열 참조 바인딩.", "chapter": "arrays-strings" },
+  { "term": "포인터 산술 (pointer arithmetic)", "def": "포인터에 정수를 더하면 바이트가 아니라 sizeof(T) 요소 단위로 이동하는 연산 — a[i]는 *(a+i)의 문법 설탕.", "chapter": "arrays-strings" },
+  { "term": "one-past-end 포인터", "def": "배열 마지막 요소 바로 다음을 가리키는 포인터 — 만들기·비교까지는 합법(루프 종료 조건), 역참조는 UB.", "chapter": "arrays-strings" },
+  { "term": "널 종단 (null termination)", "def": "값 0인 문자('\\0')로 문자열의 끝을 표시하는 C의 관례 — 길이를 저장하지 않으므로 strlen이 O(n)이다.", "chapter": "arrays-strings" },
+  { "term": "SSO (Small String Optimization)", "def": "짧은 문자열을 힙이 아니라 std::string 객체 내부 버퍼에 저장하는 최적화 — 경계는 구현 정의(libstdc++ 15자).", "chapter": "arrays-strings" },
+  { "term": "AddressSanitizer (ASan)", "def": "-fsanitize=address 플래그로 켜는 런타임 메모리 오류 탐지기 — 범위 밖 접근을 종류·위치·피해 변수까지 짚어 리포트한다.", "chapter": "arrays-strings" }
 ]
