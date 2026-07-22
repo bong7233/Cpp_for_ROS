@@ -190,5 +190,11 @@
   { "term": "별칭 템플릿 (alias template)", "def": "template<typename T> using Y = X<T>;처럼 템플릿 매개변수를 열어 둔 채로 이름만 새로 붙이는 문법. typedef는 이미 확정된 타입에만 이름을 붙일 수 있어 이 역할을 하지 못한다.", "chapter": "class-templates" },
   { "term": "CTAD (Class Template Argument Deduction)", "def": "C++17부터 생성자 인자만 보고 클래스 템플릿의 타입 매개변수를 컴파일러가 추론하는 기능. 암묵적 추론 가이드가 생성자 시그니처에서 자동 생성되며, 부족하면 추론 가이드를 직접 써서 보충한다.", "chapter": "class-templates" },
   { "term": "추론 가이드 (deduction guide)", "def": "CTAD가 클래스 템플릿의 타입 매개변수를 어떻게 결정할지 컴파일러에 알려주는 규칙. 생성자 자체를 바꾸지 않고 추론 규칙만 추가한다.", "chapter": "class-templates" },
-  { "term": "비타입 템플릿 매개변수 (non-type template parameter)", "def": "타입이 아니라 정수 같은 값을 받는 템플릿 매개변수 — std::array<T, N>의 N이 대표적 예로, N이 다르면 컴파일 타임에 이미 서로 다른 타입이 된다.", "chapter": "class-templates" }
+  { "term": "비타입 템플릿 매개변수 (non-type template parameter)", "def": "타입이 아니라 정수 같은 값을 받는 템플릿 매개변수 — std::array<T, N>의 N이 대표적 예로, N이 다르면 컴파일 타임에 이미 서로 다른 타입이 된다.", "chapter": "class-templates" },
+  { "term": "함수 템플릿 (function template)", "def": "template <typename T> 뒤에 T를 타입 자리에 쓴 함수 선언. 같은 본문을 호출되는 타입마다 컴파일러가 별도의 실제 함수로 찍어내, 오버로딩처럼 손으로 중복 작성할 필요가 없다.", "chapter": "function-templates" },
+  { "term": "템플릿 인자 추론 (template argument deduction)", "def": "호출부의 인자 타입만 보고 컴파일러가 템플릿 매개변수 T를 결정하는 과정. 오버로드 해석과 달리 승격·변환을 해 주지 않아 서로 다른 타입을 넘기면 추론 자체가 실패한다.", "chapter": "function-templates" },
+  { "term": "2단계 이름 조회 (two-phase lookup)", "def": "템플릿 정의를 읽는 시점(1단계, T와 무관한 문법만 검사)과 실제 인스턴스화하는 시점(2단계, T에 의존하는 표현식을 그제야 검사)이 분리되는 규칙. 안 쓰는 템플릿 함수의 T 의존 버그는 호출 전까지 조용하다.", "chapter": "template-mechanics" },
+  { "term": "암묵적 인스턴스화 (implicit instantiation)", "def": "컴파일러가 호출을 보고 알아서 코드를 찍어내는 기본 방식. 정의가 보이는 것과 실제로 인스턴스화되는 것은 별개이며, 호출이 없으면 코드도 만들어지지 않는다.", "chapter": "template-mechanics" },
+  { "term": "명시적 인스턴스화 (explicit instantiation)", "def": "template 반환타입 함수<타입>(인자); 문법으로 특정 타입의 코드를 저자가 직접 지시해 미리 찍어 두는 것. 정의를 .cpp에 숨기고 헤더에는 선언만 노출하는 라이브러리 배포를 가능하게 한다.", "chapter": "template-mechanics" },
+  { "term": "extern template", "def": "C++11 지시문 — 이 인스턴스는 다른 곳에서 이미 명시적으로 만들어지므로 이 번역 단위에서 다시 인스턴스화하지 말라고 컴파일러에 알려 컴파일 시간을 아낀다.", "chapter": "template-mechanics" }
 ]
