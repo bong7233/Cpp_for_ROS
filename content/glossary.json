@@ -44,5 +44,11 @@
   { "term": "0 방향 절단 (truncation toward zero)", "def": "부동소수점→정수 변환의 규칙 — 반올림·내림이 아니라 소수부를 버린다 (-2.9 → -2).", "chapter": "casting" },
   { "term": "strict aliasing", "def": "서로 다른 타입의 포인터는 같은 메모리를 가리키지 않는다는 컴파일러의 최적화 가정 — 위반하면 UB.", "chapter": "casting" },
   { "term": "정렬 (alignment)", "def": "타입이 요구하는 주소의 배수 조건 — float는 4바이트 정렬, 위반 접근은 UB (ARM에서 버스 폴트 가능).", "chapter": "casting" },
-  { "term": "std::bit_cast", "def": "크기가 같은 두 타입 사이의 비트 재해석을 UB 없이 수행하는 C++20 표준 함수 — memcpy 관용구의 표준화.", "chapter": "casting" }
+  { "term": "std::bit_cast", "def": "크기가 같은 두 타입 사이의 비트 재해석을 UB 없이 수행하는 C++20 표준 함수 — memcpy 관용구의 표준화.", "chapter": "casting" },
+  { "term": "오버로드 해석 (overload resolution)", "def": "호출 인자 타입을 근거로 컴파일러가 오버로드 집합에서 하나를 고르는 컴파일 타임 규칙 — 서열은 정확 일치 > 승격 > 변환.", "chapter": "functions" },
+  { "term": "반환값 최적화 (RVO, copy elision)", "def": "값으로 반환되는 지역 변수를 호출자의 저장 공간에 직접 생성해 복사를 없애는 최적화.", "chapter": "functions" },
+  { "term": "모호성 에러 (ambiguous call)", "def": "같은 서열의 오버로드 후보가 둘 이상이라 컴파일러가 선택을 거부하는 에러.", "chapter": "functions" },
+  { "term": "기본 인자 (default argument)", "def": "생략된 인자를 호출 지점에서 컴파일러가 채워 넣는 파라미터 기본값 — 선언에 한 번만 적는다.", "chapter": "functions" },
+  { "term": "출력 인자 (output parameter)", "def": "결과를 담을 객체를 참조/포인터로 받아 채우는 스타일 — 이 책은 반환값을 우선한다.", "chapter": "functions" },
+  { "term": "[[nodiscard]]", "def": "반환값을 버리면 컴파일 경고를 내게 하는 C++17 속성 — 에러 코드 반환 함수의 표준 장비.", "chapter": "functions" }
 ]
