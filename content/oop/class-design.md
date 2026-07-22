@@ -452,17 +452,17 @@ copy_attempt.cpp:6:7: error: use of deleted function 'std::unique_ptr<...>::uniq
 이 절은 별도의 "로보틱스 연결" 문단이 필요 없다 — `LegController`는 처음부터 헥사포드 다리 하나를 제어하는 클래스로 설계됐다. [9.5 역기구학](#/inverse-kinematics)이 계산한 목표 관절각을 `set_target()`으로 받고, [10.9 ros2_control과 hardware_interface](#/ros2-control)의 제어 루프가 매 주기 `update()`를 부르는 그림이 이 클래스가 앉을 자리다. `ActuatorDriver`를 실물 서보 드라이버로 갈아 끼워도 `LegController` 코드는 한 줄도 안 바뀐다 — ①에서 다형 타입으로 결정한 값이 정확히 이 교체 가능성을 위한 것이다.
 
 ::: interview 클래스를 설계할 때 어떤 순서로 결정을 내리나
-답변 뼈대: ① **값 타입인가 다형 타입인가**를 가장 먼저 묻는다 — 값 타입이면 연산자 오버로딩·자유로운 복사를, 다형 타입이면 순수 가상 인터페이스·제한된 복사를 검토하게 된다. ② **관계마다 리스코프 치환을 따로 적용**한다 — 한 클래스가 여러 부품을 가질 때 관계마다 상속/컴포지션이 다를 수 있다(`LegController`는 `LegControllerBase`와는 is-a, `ImuSensor`와는 has-a). ③ **복사 가능 여부는 요구사항에서 나온다** — 실물 자원을 대변하는 타입은 대개 복사 금지이고, Rule of Zero를 따르면 코드 없이 자동으로 반영되는 경우가 많다. ④ **소유 관계는 "소유하는가 × 다형적인가"의 교차표로 정한다** — 참조만 하면 레퍼런스, 소유+값 타입이면 값 멤버, 소유+다형 타입이면 `unique_ptr`. 이 순서를 지키면 완성된 클래스의 `public` 표면이 최소한으로 좁혀진다는 것까지 답하면 완결된다.
+답변 뼈대: ① **값 타입인가 다형 타입인가**를 가장 먼저 묻는다 — 값 타입이면 연산자 오버로딩·자유로운 복사를, 다형 타입이면 순수 가상 인터페이스·제한된 복사를 검토한다. ② **관계마다 리스코프 치환을 따로 적용**한다 — 한 클래스가 여러 부품을 가지면 관계마다 상속/컴포지션이 다를 수 있다. ③ **복사 가능 여부는 요구사항에서 나온다** — Rule of Zero를 따르면 코드 없이 자동으로 반영되는 경우가 많다. ④ **소유 관계는 "소유하는가 × 다형적인가"의 교차표로 정한다** — 참조만 하면 레퍼런스, 소유+값이면 값 멤버, 소유+다형이면 `unique_ptr`.
 :::
 
 ## 요약
 
-- **const 정확성**은 멤버 함수마다 상태 변경 여부를 정확히 표시하는 습관이다. `const`는 **얕게** 적용된다 — 포인터/레퍼런스가 가리키는 대상까지는 안 지킨다(실측: `const LegController&`인데도 `imu_->calibrate()`가 통과). 바꿀 생각이 없으면 포인터·레퍼런스 자체를 `const`로 선언해야 컴파일러가 잡는다.
-- const는 아래에서 위로 전파된다 — 밑단 메서드 하나의 `const` 누락이 그 위 모든 호출 사슬을 막는다(실측: `Filter::smoothed()`의 누락이 `LegController::body_orientation()`까지 전파). 나중에 덧붙이기보다 처음부터 붙이는 게 싸다.
+- **const 정확성**은 멤버 함수마다 상태 변경 여부를 정확히 표시하는 습관이다. `const`는 **얕게** 적용된다 — 포인터/레퍼런스가 가리키는 대상까지는 안 지킨다(실측: `const LegController&`인데도 `imu_->calibrate()`가 통과). 바꿀 생각이 없으면 포인터 자체를 `const`로 선언해야 컴파일러가 잡는다.
+- const는 아래에서 위로 전파된다 — 밑단 메서드 하나의 누락이 그 위 호출 사슬 전부를 막는다(실측: `Filter::smoothed()`의 누락이 `body_orientation()`까지 전파). 나중보다 처음부터 붙이는 게 싸다.
 - `mutable`은 관찰 가능한 상태에 포함되지 않는 멤버(캐시, 통계)에만 쓴다 — `const` 함수 안에서도 그 멤버만 예외적으로 바뀐다(실측: `call_count = 3`).
 - **인터페이스 최소화**: public 멤버 하나하나가 불변식을 우회하는 통로다. "편해서" 남은 참조 반환·세터가 clamp 검사를 통째로 무력화할 수 있다(실측: `raw_angles()[0] = 9999.0`이 경고 없이 통과).
-- 설계 결정은 순서가 있다 — ① 값 vs 다형 타입(3.6/3.4) → ② 관계별 리스코프 치환으로 상속/컴포지션(3.7) → ③ 복사 가능 여부(2.8) → ④ 소유 관계를 "소유×다형" 교차표로(2.9). `LegController`는 상속 1개, 컴포지션 1개(레퍼런스), 독점 소유 1개(`unique_ptr`)를 이 순서로 얻었다.
-- 복사 금지는 `= delete`를 손으로 안 써도 된다 — `unique_ptr` 멤버가 있으면 Rule of Zero에 따라 컴파일러가 이미 복사를 지운다(실측: `implicitly deleted`). `static_assert`로 그 사실을 코드에 못박아라.
+- 설계 결정은 순서가 있다 — ① 값 vs 다형 타입(3.6/3.4) → ② 관계별 리스코프 치환(3.7) → ③ 복사 가능 여부(2.8) → ④ "소유×다형" 교차표(2.9). `LegController`는 이 순서로 상속 1개, 컴포지션 1개(레퍼런스), 독점 소유 1개(`unique_ptr`)를 얻었다.
+- 복사 금지는 `= delete` 없이도 된다 — `unique_ptr` 멤버가 있으면 Rule of Zero에 따라 컴파일러가 복사를 이미 지운다(실측: `implicitly deleted`). `static_assert`로 그 사실을 못박아라.
 
 ::: quiz 연습문제
 1~2번은 개념, 3번은 예측, 4~5번은 실습(코드 작성형)이다.
@@ -475,13 +475,13 @@ copy_attempt.cpp:6:7: error: use of deleted function 'std::unique_ptr<...>::uniq
 :::
 
 ::: answer 해설
-1. `const`는 `*this`가 소유한 포인터 값 자체만 지킨다. `imu_`가 가리키는 `ImuSensor`는 `LegController`가 소유한 값이 아니므로 보호 범위 밖이다 — 이게 얕은 const다. `imu_`를 `const ImuSensor*`(또는 `&`)로 선언하면 `calibrate()` 호출이 non-const 메서드 호출이 되어 컴파일 에러가 난다.
-2. `ImuSensor`를 `LegController` 대신 넣어야 하는 자리가 없으므로(계약을 흉내 낼 이유가 없다) has-a다. 반대로 `LegControllerBase&`가 필요한 모든 자리에 `LegController`를 넣어도 옳게 동작하므로(계약을 전부 지킨다) is-a이고 상속이 맞다.
-3. 통과하지 않는다 — `shared_ptr`의 복사 생성자는 `delete`되지 않고 참조 카운트를 늘리며 정상 동작한다([2.10](#/shared-ptr)). "복사되면 안 된다"는 요구사항을 지키려면 이번엔 복사 생성자·대입을 손으로 `= delete`해야 한다 — Rule of Zero가 대신해 주지 않는다.
-4. `MotorDriverBase`(순수 가상 `set_rpm`/`current_rpm`), `RpmLimit`(생성자 검증)은 값 멤버, `TemperatureSensor`는 `const&`, 실제 구동부는 `unique_ptr<MotorHardware>`로 짜면 `LegController`와 같은 구조가 나온다.
-5. `TemperatureSensor`를 값으로 복사해 저장하면 복사 자체가 막히지 않는다 — 값 멤버가 전부 복사 가능하면 클래스도 복사 가능해지기 때문이다. 이게 "소유 관계를 잘못 정하면 복사 금지 의도가 조용히 깨진다"는 이 절의 핵심을 실습으로 보여준다.
+1. `const`는 `*this`가 소유한 포인터 값 자체만 지킨다. `imu_`가 가리키는 `ImuSensor`는 소유한 값이 아니라 보호 범위 밖이다 — 얕은 const다. `imu_`를 `const ImuSensor*`(또는 `&`)로 선언하면 컴파일 에러가 난다.
+2. `ImuSensor`를 대신 넣어야 하는 자리가 없으므로(계약을 흉내 낼 이유가 없다) has-a다. `LegControllerBase&`가 필요한 모든 자리엔 넣어도 옳게 동작하므로(계약을 전부 지킨다) is-a이고 상속이 맞다.
+3. 통과하지 않는다 — `shared_ptr`의 복사 생성자는 `delete`되지 않고 참조 카운트를 늘리며 정상 동작한다([2.10](#/shared-ptr)). 이번엔 복사 생성자·대입을 손으로 `= delete`해야 한다 — Rule of Zero가 대신해 주지 않는다.
+4. `MotorDriverBase`(순수 가상), `RpmLimit`(생성자 검증)은 값 멤버, `TemperatureSensor`는 `const&`, 구동부는 `unique_ptr<MotorHardware>`로 짜면 같은 구조가 나온다.
+5. `TemperatureSensor`를 값으로 복사해 저장하면 복사 자체가 막히지 않는다 — 값 멤버가 전부 복사 가능하면 클래스도 복사 가능해지기 때문이다. "소유 관계를 잘못 정하면 복사 금지 의도가 조용히 깨진다"는 걸 실습으로 보여준다.
 :::
 
-이 절의 `LegController`는 전부 직접 타이핑해라. `shallow_const.cpp`와 `shallow_const_fixed.cpp`를 나란히 두고 포인터 선언에 `const`를 넣었다 뺐다 하며 어디서 막히는지 보고, `copy_attempt.cpp`는 그대로 컴파일해 에러 메시지 전문을 읽어라. 기준 명령: `g++ -std=c++20 -Wall -Wextra main.cpp -o main && ./main`, ASan은 `g++ -std=c++20 -Wall -Wextra -g -fsanitize=address main.cpp -o main && ./main`.
+이 절의 `LegController`는 전부 직접 타이핑해라. `shallow_const.cpp`/`shallow_const_fixed.cpp`를 나란히 두고 `const`를 넣었다 뺐다 하며 어디서 막히는지 보고, `copy_attempt.cpp`는 그대로 컴파일해 에러 메시지를 읽어라. 기준 명령: `g++ -std=c++20 -Wall -Wextra main.cpp -o main && ./main`, ASan은 `g++ -std=c++20 -Wall -Wextra -g -fsanitize=address main.cpp -o main && ./main`.
 
-**다음 절**: [4.1 함수 템플릿](#/function-templates) — Part III은 여기서 끝난다. Part IV는 관점을 완전히 바꾼다 — `LegController` 하나를 손으로 잘 설계했다면, 이제 같은 코드를 타입마다 다시 쓰지 않고 컴파일러가 대신 찍어내게 만드는 법을 본다.
+**다음 절**: [4.1 함수 템플릿](#/function-templates) — Part III은 여기서 끝난다. Part IV는 관점을 바꾼다 — `LegController`를 손으로 잘 설계했다면, 이제 같은 코드를 타입마다 다시 쓰지 않고 컴파일러가 찍어내게 만드는 법을 본다.
