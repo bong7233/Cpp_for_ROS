@@ -243,5 +243,19 @@
   { "term": "청크 배열 (chunk / map-of-chunks)", "def": "deque가 데이터를 저장하는 내부 구조 — 고정 크기 블록 여러 개와 그 블록들의 주소를 담은 포인터 배열(맵)로 구성된다.", "chapter": "seq-containers" },
   { "term": "이중 연결 리스트 (doubly linked list)", "def": "각 노드가 이전·다음 노드를 가리키는 포인터 두 개를 갖는 구조. std::list의 내부 구현이며, 임의 위치 삽입/삭제를 포인터 네 개 교체만으로 O(1)에 해낸다.", "chapter": "seq-containers" },
   { "term": "포인터 체이싱 (pointer chasing)", "def": "다음 데이터의 주소를 알기 위해 매번 포인터를 따라가야 하는 메모리 접근 패턴. 하드웨어 프리페처를 무력화해 캐시 미스를 유발한다.", "chapter": "seq-containers" },
-  { "term": "상각 상수 시간 (amortized O(1))", "def": "개별 연산은 가끔 더 비쌀 수 있지만, 충분히 여러 번 반복했을 때의 평균 비용이 상수로 수렴하는 시간복잡도.", "chapter": "seq-containers" }
+  { "term": "상각 상수 시간 (amortized O(1))", "def": "개별 연산은 가끔 더 비쌀 수 있지만, 충분히 여러 번 반복했을 때의 평균 비용이 상수로 수렴하는 시간복잡도.", "chapter": "seq-containers" },
+  { "term": "도입정렬 (introsort)", "def": "퀵정렬로 시작해 재귀가 깊어지면 힙정렬로, 구간이 작아지면 삽입정렬로 전환하는 하이브리드 정렬 알고리즘. std::sort의 사실상 표준 구현이며 최악의 경우까지 O(n log n)을 보장한다.", "chapter": "algorithms" },
+  { "term": "erase-remove idiom", "def": "std::remove/remove_if로 남길 원소를 앞으로 밀어 채운 뒤, 컨테이너의 erase(new_end, end())로 실제 크기를 줄이는 두 단계 관용구. remove만으로는 size()가 줄지 않는다.", "chapter": "algorithms" },
+  { "term": "std::erase_if (C++20)", "def": "erase-remove idiom을 컨테이너별 자유 함수 하나로 묶은 C++20 함수. 호출자가 두 단계 관용구를 몰라도 조건에 맞는 원소를 한 번의 호출로 지운다.", "chapter": "algorithms" },
+  { "term": "실행 정책 (execution policy)", "def": "std::sort/std::reduce 등에 std::execution::seq/par/par_unseq를 붙여 순차·병렬·병렬+벡터화 실행을 허용하는 C++17 기능. 허가일 뿐 강제가 아니라, 병렬 백엔드(TBB 등)가 없으면 조용히 순차로 대체될 수 있다.", "chapter": "algorithms" },
+  { "term": "std::reduce (C++17)", "def": "std::accumulate와 인터페이스는 같지만 원소를 묶는 순서를 표준이 보장하지 않아, 결합·교환 법칙이 성립하는 연산에 한해 병렬 실행이 가능한 합산 알고리즘.", "chapter": "algorithms" },
+  { "term": "반복자 카테고리 (iterator category)", "def": "반복자가 지원하는 연산 범위에 따른 다섯 계층 분류(input/forward/bidirectional/random-access, output은 별개). 상위 카테고리는 하위 카테고리의 연산을 전부 포함하며, vector/deque/array는 random-access, list/map/set은 bidirectional, unordered_map은 forward다.", "chapter": "iterators" },
+  { "term": "std::advance/std::distance의 카테고리 분기", "def": "std::advance(it, n)과 std::distance(first, last)는 반복자 카테고리에 따라 컴파일 타임에 다른 오버로드로 디스패치된다. random-access면 산술 한 번(O(1)), 그 아래는 ++/--를 n번 반복(O(n))한다.", "chapter": "iterators" },
+  { "term": "부분 무효화 (partial invalidation)", "def": "vector::insert가 재할당 없이 일어날 때, 삽입 지점 이전 포인터는 안전하지만 이후 포인터는 여전히 유효한 메모리를 가리키면서도 다른 원소를 가리키게 되는 상태. ASan 등 새니타이저가 잡지 못하는 의미론적 버그다.", "chapter": "iterators" },
+  { "term": "erase 반환값 관용구", "def": "컨테이너를 순회하며 원소를 지울 때 it = container.erase(it);처럼 erase의 반환값을 그 자리에서 반복자에 다시 대입하는 관용구. 반환값을 버리고 원래 반복자에 ++를 계속하면 무효화된 반복자를 쓰게 되어 세그폴트나 heap-buffer-overflow로 이어진다.", "chapter": "iterators" },
+  { "term": "클로저 타입/클로저 객체 (closure type/object)", "def": "람다 표현식이 나타날 때마다 컴파일러가 즉석으로 만드는 이름 없는 클래스(클로저 타입)와 그 인스턴스(클로저 객체). operator()가 실제 멤버 함수이고, 같은 코드의 람다 두 개도 서로 다른 타입이 된다.", "chapter": "lambdas" },
+  { "term": "값 캡처 vs 레퍼런스 캡처", "def": "람다의 캡처는 클로저 클래스의 멤버 변수로 저장된다. 값 캡처([x])는 캡처 시점의 값을 복사해 원본이 나중에 바뀌어도 영향받지 않고, 레퍼런스 캡처([&x])는 원본을 가리키는 참조를 저장해 원본의 수명이 클로저보다 짧아지면 댕글링이 된다.", "chapter": "lambdas" },
+  { "term": "mutable (람다)", "def": "값 캡처 멤버를 operator() 안에서 고칠 수 있게 클로저의 operator()에서 const를 벗기는 키워드. 클로저 내부 복사본만 바꿀 뿐 원본에는 반영되지 않는다.", "chapter": "lambdas" },
+  { "term": "초기화 캡처 (init capture, C++14)", "def": "캡처 목록에 [이름 = 표현식] 형태를 허용해 클로저 클래스에 새 멤버를 만들고 임의의 표현식으로 초기화하는 문법. std::move(x)를 써서 복사 생성자가 없는 타입(unique_ptr 등)도 이동으로 캡처할 수 있다.", "chapter": "lambdas" },
+  { "term": "제네릭 람다 (generic lambda, C++14)", "def": "파라미터에 auto를 쓴 람다. 클로저 클래스의 operator()가 진짜 함수 템플릿이 되어, 호출되는 타입 조합마다 별도로 인스턴스화된다.", "chapter": "lambdas" }
 ]
