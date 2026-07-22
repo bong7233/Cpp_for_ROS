@@ -99,5 +99,10 @@
   { "term": "스택 오버플로 (stack overflow)", "def": "스레드에 예약된 스택 한도(리눅스 기본 8MB 안팎)를 재귀나 큰 지역 변수로 뚫는 것. ASan은 이를 stack-overflow로 진단한다.", "chapter": "memory-model" },
   { "term": "댕글링 포인터 (dangling pointer)", "def": "가리키던 객체가 이미 소멸했는데 남아 있는 포인터. 역참조는 UB이며 ASan이 use-after-free/use-after-scope로 잡아낸다.", "chapter": "pointers" },
   { "term": "nullptr", "def": "어떤 것도 가리키지 않음을 나타내는 C++11 포인터 리터럴. NULL/0과 달리 정수로 오인되지 않아 오버로드 모호성이 없다.", "chapter": "pointers" },
-  { "term": "역참조 (dereference)", "def": "포인터가 담은 주소로 가서 '거기 있는 값'을 얻는 연산(*p). &의 역연산이다.", "chapter": "pointers" }
+  { "term": "역참조 (dereference)", "def": "포인터가 담은 주소로 가서 '거기 있는 값'을 얻는 연산(*p). &의 역연산이다.", "chapter": "pointers" },
+  { "term": "RAII (Resource Acquisition Is Initialization)", "def": "자원의 획득을 생성자에, 해제를 소멸자에 묶어 스코프를 벗어나는 모든 경로에서 자동으로 해제가 일어나게 하는 관용구.", "chapter": "raii" },
+  { "term": "스택 되감기 (stack unwinding)", "def": "예외가 던져진 지점부터 그것을 잡는 catch에 도달하기까지, 그 사이 모든 스택 프레임의 지역 객체 소멸자가 순서대로 호출되는 과정.", "chapter": "raii" },
+  { "term": "예외 안전성 (exception safety)", "def": "예외가 발생해도 자원 누수나 불변식 위반 없이 프로그램 상태가 안전하게 유지되는 성질. RAII가 C++에서 이를 보장하는 실용적 방법이다.", "chapter": "raii" },
+  { "term": "이중 해제 (double free)", "def": "같은 자원(메모리, 파일 핸들 등)을 두 번 해제하는 것. 얕은 복사로 같은 자원을 가리키는 객체가 둘 생겼을 때 흔히 발생하며 UB다.", "chapter": "raii" },
+  { "term": "자원 누수 (resource leak)", "def": "획득한 자원(메모리, 파일 디스크립터, 락 등)을 어떤 경로로도 해제하지 못해 프로세스가 계속 붙잡고 있는 상태.", "chapter": "raii" }
 ]
