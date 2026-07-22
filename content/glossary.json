@@ -230,6 +230,8 @@
   { "term": "성장 전략 (growth factor)", "def": "vector가 capacity를 다 채운 뒤 재할당할 때 새 버퍼를 얼마나 크게 잡을지 정하는 배율. C++ 표준은 강제하지 않고 구현이 자유롭게 고르며, g++ libstdc++는 실측상 매번 정확히 2배씩 키운다.", "chapter": "vector" },
   { "term": "재할당 (reallocation)", "def": "vector의 capacity가 바닥나 push_back을 한 번 더 호출할 때, 더 큰 새 버퍼를 할당하고 기존 원소를 전부 옮긴 뒤 옛 버퍼를 해제하는 과정. 기존 원소는 이동 생성자가 있고 noexcept면 이동으로, 아니면 복사로 옮겨진다.", "chapter": "vector" },
   { "term": "end_of_storage_ (capacity 포인터)", "def": "vector 내부에서 할당된 버퍼 전체의 끝(즉 capacity가 가리키는 지점)을 나타내는 포인터. begin_·end_과 함께 vector의 상태 전부(24바이트, x86-64 기준)를 구성한다.", "chapter": "vector" },
+  { "term": "operator[] 자동 삽입", "def": "map/unordered_map의 operator[]는 키가 없으면 그 키를 값 타입의 기본값으로 삽입한 뒤 그 레퍼런스를 돌려준다 — 조회만 하려던 코드가 컨테이너를 조용히 오염시키는 흔한 함정이다. const 컨테이너에서는 operator[]가 const 멤버 함수가 아니라 컴파일 자체가 막힌다.", "chapter": "assoc-containers" },
+  { "term": "contains() (C++20)", "def": "map/set/unordered_map/unordered_set에 C++20부터 추가된 멤버 함수. 키의 존재 여부만 bool로 돌려주고 컨테이너를 전혀 바꾸지 않는다 — find()·count()보다 의도가 분명한 존재 확인 수단.", "chapter": "assoc-containers" },
   { "term": "레드-블랙 트리 (red-black tree)", "def": "이진 탐색 트리에 색칠 규칙으로 균형을 강제하는 자료구조. std::map/std::set의 내부 구현(libstdc++의 _Rb_tree)으로, 삽입·삭제·탐색이 항상 O(log n)이고 중위 순회가 곧 오름차순 순회다.", "chapter": "assoc-containers" },
   { "term": "해시 테이블 (hash table)", "def": "키를 std::hash로 정수 해시값으로 뭉갠 뒤 버킷 개수로 나눈 나머지로 저장 위치를 정하는 자료구조. std::unordered_map/set의 내부 구현(libstdc++의 _Hashtable)으로, 평균 O(1) 삽입·탐색을 보장하지만 순서는 보장하지 않는다.", "chapter": "assoc-containers" },
   { "term": "버킷 (bucket)", "def": "해시 테이블 내부에서 같은 해시값(나머지 기준)을 가진 원소들이 모이는 슬롯. 여러 키가 같은 버킷에 몰리면 그 안에서 체인(연결 리스트)으로 관리된다.", "chapter": "assoc-containers" },
