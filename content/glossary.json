@@ -137,5 +137,9 @@
   { "term": "제어 블록 (control block)", "def": "shared_ptr가 소유 객체와 별도로 힙에 만드는 블록 — 강한 참조 수, 약한 참조 수, 딜리터를 담는다. shared_ptr 자신은 이 블록을 가리키는 포인터만 추가로 든다.", "chapter": "shared-ptr" },
   { "term": "use_count (참조 카운트)", "def": "제어 블록이 세는 강한 참조(shared_ptr) 수 — 복사할 때마다 오르고 소멸할 때마다 내리며, 0이 되는 순간 실제 객체가 delete된다.", "chapter": "shared-ptr" },
   { "term": "순환 참조 (circular reference)", "def": "두 객체가 서로를 shared_ptr로 소유해 각자의 use_count가 0에 도달하지 못하는 상황 — 소멸자가 영원히 안 불려 LeakSanitizer가 Indirect leak으로 잡는다.", "chapter": "shared-ptr" },
-  { "term": "weak_ptr", "def": "제어 블록의 약한 참조 수만 올리고 강한 참조 수(use_count)에는 영향을 주지 않는 관찰용 스마트 포인터 — lock()으로 임시 shared_ptr를 얻어야 접근할 수 있고, expired()로 원본 소멸 여부를 확인한다.", "chapter": "shared-ptr" }
+  { "term": "weak_ptr", "def": "제어 블록의 약한 참조 수만 올리고 강한 참조 수(use_count)에는 영향을 주지 않는 관찰용 스마트 포인터 — lock()으로 임시 shared_ptr를 얻어야 접근할 수 있고, expired()로 원본 소멸 여부를 확인한다.", "chapter": "shared-ptr" },
+  { "term": "캐시 라인 (cache line)", "def": "CPU가 메모리를 읽고 쓰는 최소 전송 단위(대개 64바이트). 이 경계를 넘나드는 접근이나 여러 스레드가 같은 라인을 공유하는 것이 성능 문제(false sharing)의 근원이다.", "chapter": "object-layout" },
+  { "term": "alignas", "def": "타입·변수에 컴파일러 기본값보다 더 엄격한 정렬을 강제하는 지정자. 캐시 라인 경계에 변수를 붙여 false sharing을 피하는 데 흔히 쓴다.", "chapter": "object-layout" },
+  { "term": "offsetof", "def": "<cstddef>가 제공하는 매크로 — 구조체 시작부터 특정 멤버까지의 바이트 오프셋을 컴파일 타임 상수로 돌려준다.", "chapter": "object-layout" },
+  { "term": "packed 구조체", "def": "[[gnu::packed]]나 #pragma pack으로 멤버 사이 패딩을 강제로 없앤 구조체. sizeof가 멤버 합과 같아지지만 정렬 보장을 잃어, 통신 프로토콜처럼 바이트 수가 계약인 경계에서만 쓴다.", "chapter": "object-layout" }
 ]
