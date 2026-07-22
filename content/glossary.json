@@ -74,5 +74,15 @@
   { "term": "약한 심볼 (weak symbol, W)", "def": "inline 정의가 만드는 심볼 종류. 여러 번역 단위에 겹쳐도 링커가 충돌 대신 하나로 접는다.", "chapter": "linkage" },
   { "term": "extern", "def": "변수의 '정의는 다른 데 있다'는 선언 표지. 오브젝트 파일에 U를 남기고 링커가 정의(D)와 짝짓는다.", "chapter": "linkage" },
   { "term": "extern \"C\"", "def": "선언의 심볼을 C 방식(맹글링 없음)으로 다루게 하는 링크리지 지정. C API 라이브러리 경계에서 필수.", "chapter": "linkage" },
-  { "term": "정적 초기화 순서 문제 (static initialization order fiasco)", "def": "다른 번역 단위 전역들의 동적 초기화 순서가 미정이라 생기는 함정. 함수-로컬 static(마이어스 싱글턴)으로 해결.", "chapter": "linkage" }
+  { "term": "정적 초기화 순서 문제 (static initialization order fiasco)", "def": "다른 번역 단위 전역들의 동적 초기화 순서가 미정이라 생기는 함정. 함수-로컬 static(마이어스 싱글턴)으로 해결.", "chapter": "linkage" },
+  { "term": "헤더 가드 (header guard)", "def": "같은 헤더가 한 번역 단위에 여러 번 붙여넣기돼도 한 번만 유효하게 만드는 장치.", "chapter": "headers" },
+  { "term": "#pragma once", "def": "파일 자체를 식별자로 쓰는 비표준(사실상 표준) 헤더 가드.", "chapter": "headers" },
+  { "term": "단일 진실 공급원 (single source of truth)", "def": "선언을 한 파일에 한 번만 두고 모든 번역 단위가 include로 공유하는 원칙.", "chapter": "headers" },
+  { "term": "자기 완결 헤더 (self-contained header)", "def": "자기가 쓰는 모든 이름의 선언을 스스로 include해 include 순서에 의존하지 않는 헤더.", "chapter": "headers" },
+  { "term": "IWYU (include what you use)", "def": "쓰는 것은 직접 include하고 안 쓰는 것은 include하지 않는 원칙.", "chapter": "headers" },
+  { "term": "전방 선언 (forward declaration)", "def": "타입의 존재만 알리는 선언(class Foo;) — 포인터·참조에는 충분하다.", "chapter": "headers" },
+  { "term": "불완전 타입 (incomplete type)", "def": "선언만 있고 정의가 없어 크기·멤버를 모르는 타입.", "chapter": "headers" },
+  { "term": "순환 include", "def": "두 헤더가 서로를 include하는 구조 — 가드가 있어도 한쪽은 상대 이름 없이 컴파일된다.", "chapter": "headers" },
+  { "term": "우산 헤더 (umbrella header)", "def": "라이브러리 공개 API 전체를 include 연쇄로 끌어들이는 편의용 최상위 헤더(예: rclcpp/rclcpp.hpp).", "chapter": "headers" },
+  { "term": "모듈 (C++20 module)", "def": "텍스트 복사 대신 컴파일된 인터페이스를 import하는 헤더의 현대적 대안.", "chapter": "headers" }
 ]
