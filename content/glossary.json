@@ -446,5 +446,12 @@
   { "term": "앨리어싱 (aliasing, 행렬 연산)", "def": "행렬 수식의 읽기 대상과 쓰기 대상이 겹치는 것. 지연 평가와 결합하면 아직 안 읽은 원소를 덮어써 틀린 결과를 만든다 — A = A.transpose()가 대표 사례.", "chapter": "eigen" },
   { "term": "comma-initializer", "def": "Eigen의 << 초기화 문법. 행 우선으로 원소를 채우고, 개수가 어긋나면 런타임 단언으로 실패한다.", "chapter": "eigen" },
   { "term": "noalias()", "def": "좌변과 우변이 겹치지 않음을 저자가 보증해, Eigen이 행렬 곱에서 기본으로 만드는 안전용 임시를 생략시키는 옵트아웃.", "chapter": "eigen" },
-  { "term": "정렬 인지 new (aligned new, C++17)", "def": "new 표현식이 타입의 alignof가 기본 보장(__STDCPP_DEFAULT_NEW_ALIGNMENT__)을 넘으면 operator new(size_t, align_val_t)를 자동 호출하는 C++17 기능 — EIGEN_MAKE_ALIGNED_OPERATOR_NEW를 은퇴시켰다.", "chapter": "eigen" }
+  { "term": "정렬 인지 new (aligned new, C++17)", "def": "new 표현식이 타입의 alignof가 기본 보장(__STDCPP_DEFAULT_NEW_ALIGNMENT__)을 넘으면 operator new(size_t, align_val_t)를 자동 호출하는 C++17 기능 — EIGEN_MAKE_ALIGNED_OPERATOR_NEW를 은퇴시켰다.", "chapter": "eigen" },
+  { "term": "순기구학 (forward kinematics, FK)", "def": "관절 각도에서 말단(발끝)의 위치·자세를 계산하는 함수. 관절·링크 변환을 뿌리부터 말단까지 곱한 것으로, 해가 항상 유일하게 존재한다.", "chapter": "forward-kinematics" },
+  { "term": "기구학 체인 (kinematic chain)", "def": "관절과 링크가 교대로 이어진 연결 구조. FK는 이 체인을 따라 동차 변환을 순서대로 곱하는 것이다.", "chapter": "forward-kinematics" },
+  { "term": "관절 공간 (joint space)", "def": "로봇 상태를 관절 각도의 배열로 기술하는 공간. 서보 명령·엔코더 값이 사는 곳이며, 작업 공간과는 기구학으로 오간다.", "chapter": "forward-kinematics" },
+  { "term": "작업공간 (workspace)", "def": "말단이 도달할 수 있는 영역. 2링크 다리는 [|l1−l2|, l1+l2] 반지름의 환형이며, 관절 한계가 실효 범위를 더 좁힌다.", "chapter": "forward-kinematics" },
+  { "term": "DH 파라미터 (Denavit-Hartenberg)", "def": "관절당 4개 숫자(a, α, d, θ)로 기구학 체인을 기술하는 1955년 관례. 현대 도구(URDF/SDF)는 대신 joint origin+axis 방식을 쓴다 — 읽을 줄만 알면 된다.", "chapter": "forward-kinematics" },
+  { "term": "leg odometry", "def": "지면에 붙은 지지 다리의 FK 변화량에서 몸통의 이동을 역산하는 오도메트리 기법. 관절 엔코더만으로 이동량을 추정하며, FK 정확도가 곧 항법 정확도가 된다.", "chapter": "forward-kinematics" },
+  { "term": "URDF", "def": "ROS의 로봇 구조 기술 XML 포맷. joint의 <origin xyz rpy>와 <axis>가 T_parent_child(q) = T_origin · Rot(axis, q) 변환을 정의하고, FK 라이브러리가 이를 읽어 곱한다.", "chapter": "forward-kinematics" }
 ]
