@@ -400,5 +400,11 @@
   { "term": "간접 분기 (indirect branch)", "def": "목적지 주소를 실행 시점에 레지스터/메모리에서 읽어 뛰는 분기 — 가상함수 호출이 대표적이며 목적지가 뒤섞이면 예측이 어렵다.", "chapter": "data-oriented" },
   { "term": "탈가상화 (devirtualization)", "def": "컴파일러가 실제 타입을 증명할 수 있을 때 가상 호출을 직접 호출로 바꾸는 최적화 — 인라인의 전제조건이 된다.", "chapter": "data-oriented" },
   { "term": "ECS (Entity Component System)", "def": "엔티티는 정수 ID, 데이터는 컴포넌트별 연속 배열, 시스템은 배열 순회 함수로 두는 아키텍처 — 데이터 지향 설계를 끝까지 민 형태.", "chapter": "data-oriented" },
-  { "term": "swap-and-pop", "def": "벡터 중간 원소를 마지막 원소와 바꾼 뒤 pop_back으로 O(1) 삭제하는 기법 — 마지막 원소의 인덱스가 바뀌는 부작용이 있다.", "chapter": "data-oriented" }
+  { "term": "swap-and-pop", "def": "벡터 중간 원소를 마지막 원소와 바꾼 뒤 pop_back으로 O(1) 삭제하는 기법 — 마지막 원소의 인덱스가 바뀌는 부작용이 있다.", "chapter": "data-oriented" },
+  { "term": "마이크로벤치마크 (microbenchmark)", "def": "함수·루프 하나 수준의 작은 코드 조각의 실행 시간을 반복 측정하는 벤치마크. 컴파일러 최적화·워밍업·분산이라는 세 함정을 처리해야 유효한 수치가 나온다.", "chapter": "benchmarking" },
+  { "term": "DoNotOptimize", "def": "Google Benchmark의 함수 — 빈 인라인 어셈블리에 값을 피연산자로 묶어 '관측된 값'으로 만들어, 그 값을 만드는 계산이 죽은 코드로 제거되는 것을 막는다. 실제 명령은 삽입하지 않는다.", "chapter": "benchmarking" },
+  { "term": "ClobberMemory", "def": "Google Benchmark의 함수 — '메모리 전체가 읽혔을 수 있다'는 컴파일러 배리어. 벤치마크의 결과가 반환값이 아니라 메모리 쓰기일 때 그 쓰기의 제거를 막는다.", "chapter": "benchmarking" },
+  { "term": "워밍업 (warm-up)", "def": "측정 초반의 콜드 스타트(페이지 폴트, 캐시·분기 예측기 적재, 할당자 초기화) 구간을 측정에서 제외하고 정상 상태만 재는 절차. 콜드와 웜은 서로 다른 질문에 대한 답이다.", "chapter": "benchmarking" },
+  { "term": "변동 계수 (coefficient of variation, cv)", "def": "표준편차를 평균으로 나눈 상대적 산포도. 벤치마크의 개선 폭이 cv보다 작으면 그 개선은 노이즈와 구분되지 않는다.", "chapter": "benchmarking" },
+  { "term": "Google Benchmark", "def": "마이크로벤치마크 표준 라이브러리 — 반복 횟수 자동 조정, 반복 측정 통계(mean/median/stddev/cv), 입력 크기 스윕(state.range), 커스텀 카운터를 제공한다. FetchContent로 받는다.", "chapter": "benchmarking" }
 ]
