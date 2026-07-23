@@ -453,5 +453,10 @@
   { "term": "작업공간 (workspace)", "def": "말단이 도달할 수 있는 영역. 2링크 다리는 [|l1−l2|, l1+l2] 반지름의 환형이며, 관절 한계가 실효 범위를 더 좁힌다.", "chapter": "forward-kinematics" },
   { "term": "DH 파라미터 (Denavit-Hartenberg)", "def": "관절당 4개 숫자(a, α, d, θ)로 기구학 체인을 기술하는 1955년 관례. 현대 도구(URDF/SDF)는 대신 joint origin+axis 방식을 쓴다 — 읽을 줄만 알면 된다.", "chapter": "forward-kinematics" },
   { "term": "leg odometry", "def": "지면에 붙은 지지 다리의 FK 변화량에서 몸통의 이동을 역산하는 오도메트리 기법. 관절 엔코더만으로 이동량을 추정하며, FK 정확도가 곧 항법 정확도가 된다.", "chapter": "forward-kinematics" },
-  { "term": "URDF", "def": "ROS의 로봇 구조 기술 XML 포맷. joint의 <origin xyz rpy>와 <axis>가 T_parent_child(q) = T_origin · Rot(axis, q) 변환을 정의하고, FK 라이브러리가 이를 읽어 곱한다.", "chapter": "forward-kinematics" }
+  { "term": "URDF", "def": "ROS의 로봇 구조 기술 XML 포맷. joint의 <origin xyz rpy>와 <axis>가 T_parent_child(q) = T_origin · Rot(axis, q) 변환을 정의하고, FK 라이브러리가 이를 읽어 곱한다.", "chapter": "forward-kinematics" },
+  { "term": "동차 좌표 (homogeneous coordinates)", "def": "3차원 점을 (x,y,z,1), 방향 벡터를 (x,y,z,0)으로 쓰는 4성분 표기. 이동이 행렬 곱 안에 들어가고, 마지막 성분이 이동의 적용 여부를 자동으로 가른다.", "chapter": "transforms" },
+  { "term": "동차 변환 (homogeneous transform)", "def": "회전 R과 이동 t를 [R t; 0 1] 블록으로 담은 4×4 행렬. 회전+이동의 합성이 행렬 곱 하나가 되고, 프레임 체인·TF 트리 계산의 기본 단위다.", "chapter": "transforms" },
+  { "term": "SE(3) (특수유클리드군)", "def": "R ∈ SO(3)인 4×4 동차 변환 전체 — 유효한 강체 변환(회전+이동)의 집합. 역변환이 [R^T, -R^T t] 닫힌 형태로 나와 일반 역행렬보다 싸다.", "chapter": "transforms" },
+  { "term": "Eigen::Isometry3d", "def": "강체 변환 전용 Eigen Transform 타입. 저장은 Matrix4d와 같은 4×4지만 선형 블록이 회전임을 컴파일 타임에 알아 inverse()가 닫힌 형태, rotation()이 linear() 별칭이다. 불변식 유지는 검증되지 않는 약속이다.", "chapter": "transforms" },
+  { "term": "좌표 프레임 (coordinate frame)", "def": "원점과 세 축으로 정의되는 측정 기준. 로봇의 프레임들은 부모 기준 변환 T_parent_child 하나씩으로 트리를 이루고, 임의 두 프레임 간 변환은 경로를 따라 곱한 것이다.", "chapter": "transforms" }
 ]
