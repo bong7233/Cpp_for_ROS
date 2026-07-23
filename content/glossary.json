@@ -411,5 +411,15 @@
   { "term": "인트린식 (intrinsics)", "def": "CPU 벡터 명령을 함수 모양으로 직접 부르는 컴파일러 내장 인터페이스 — x86은 <immintrin.h>의 _mm256_add_pd 류. 자동 벡터화·라이브러리가 다 안 통할 때의 최후 수단이다.", "chapter": "simd" },
   { "term": "__restrict", "def": "이 포인터가 가리키는 영역이 다른 포인터와 겹치지 않는다고 컴파일러에 약속하는 확장 한정자 — 앨리어싱 검사용 루프 버전 분기를 없애 준다. 약속이 거짓이면 UB이고 새니타이저도 못 잡는다.", "chapter": "simd" },
   { "term": "-march=native", "def": "빌드 머신 CPU의 모든 명령 세트 확장을 쓰도록 허가하는 GCC/Clang 플래그. 그 바이너리는 확장이 없는 다른 CPU에서 SIGILL로 즉사한다 — 배포 빌드는 타깃 CPU를 명시한다.", "chapter": "simd" },
-  { "term": "FMA (fused multiply-add)", "def": "a*b+c를 반올림 한 번으로 끝내는 단일 명령(x86의 vfmadd 계열). a*x+y 꼴 커널에서 컴파일러가 자동으로 쓴다.", "chapter": "simd" }
+  { "term": "FMA (fused multiply-add)", "def": "a*b+c를 반올림 한 번으로 끝내는 단일 명령(x86의 vfmadd 계열). a*x+y 꼴 커널에서 컴파일러가 자동으로 쓴다.", "chapter": "simd" },
+  { "term": "메모리 벽 (memory wall)", "def": "CPU 연산 속도와 메인 메모리 접근 지연 사이의 계속 벌어져 온 격차. 데이터 순회 코드의 시간이 연산이 아니라 메모리 대기에 지배되는 이유다.", "chapter": "cache" },
+  { "term": "캐시 (cache)", "def": "코어 옆에 둔 작고 빠른 SRAM 계층(L1/L2/L3). 최근 쓴 데이터의 사본을 유지해, 시간·공간 지역성이 좋은 접근을 메인 메모리 지연 없이 받아낸다.", "chapter": "cache" },
+  { "term": "시간 지역성 (temporal locality)", "def": "방금 접근한 데이터를 곧 다시 접근하는 프로그램의 성질. 캐시가 히트를 내는 두 근거 중 하나다.", "chapter": "cache" },
+  { "term": "공간 지역성 (spatial locality)", "def": "방금 접근한 데이터의 이웃 주소를 곧 접근하는 성질. 캐시 라인 단위 전송이 이득이 되는 근거다.", "chapter": "cache" },
+  { "term": "워킹셋 (working set)", "def": "한 루프가 반복해서 만지는 데이터 전체 크기. 어느 캐시 계층에 들어가는가가 같은 코드의 실행 속도를 몇 배씩 가른다.", "chapter": "cache" },
+  { "term": "cachegrind", "def": "valgrind의 캐시 시뮬레이터(--tool=cachegrind --cache-sim=yes). CPUID로 감지하거나 --I1/--D1/--LL로 지정한 캐시 모형에 모든 접근을 통과시켜 미스를 결정론적으로 센다.", "chapter": "cache" },
+  { "term": "AoS (Array of Structs)", "def": "구조체의 배열 — 한 개체의 모든 필드가 붙어 있는 배치. 개체 단위 접근에 유리하고, 한 필드만 훑는 순회에서는 캐시 라인을 낭비한다.", "chapter": "cache" },
+  { "term": "SoA (Struct of Arrays)", "def": "필드별 배열 — 모든 개체의 같은 필드가 연속인 배치. 필드 방향 순회의 캐시 라인 활용률이 100%가 되고 자동 벡터화의 전제가 된다.", "chapter": "cache" },
+  { "term": "프리페처 (hardware prefetcher)", "def": "연속 접근 패턴을 감지해 다음 캐시 라인을 미리 가져오는 CPU 하드웨어. 순차 순회의 미스 지연을 숨기지만 무작위 접근·포인터 체이싱은 돕지 못한다.", "chapter": "cache" },
+  { "term": "alignof", "def": "타입이 요구하는 정렬(주소 배수 조건)을 컴파일 타임 상수로 돌려주는 연산자. 구조체 멤버를 정렬 요구가 큰 순서로 선언하는 근거 데이터다.", "chapter": "cache" }
 ]
