@@ -421,5 +421,14 @@
   { "term": "AoS (Array of Structs)", "def": "구조체의 배열 — 한 개체의 모든 필드가 붙어 있는 배치. 개체 단위 접근에 유리하고, 한 필드만 훑는 순회에서는 캐시 라인을 낭비한다.", "chapter": "cache" },
   { "term": "SoA (Struct of Arrays)", "def": "필드별 배열 — 모든 개체의 같은 필드가 연속인 배치. 필드 방향 순회의 캐시 라인 활용률이 100%가 되고 자동 벡터화의 전제가 된다.", "chapter": "cache" },
   { "term": "프리페처 (hardware prefetcher)", "def": "연속 접근 패턴을 감지해 다음 캐시 라인을 미리 가져오는 CPU 하드웨어. 순차 순회의 미스 지연을 숨기지만 무작위 접근·포인터 체이싱은 돕지 못한다.", "chapter": "cache" },
-  { "term": "alignof", "def": "타입이 요구하는 정렬(주소 배수 조건)을 컴파일 타임 상수로 돌려주는 연산자. 구조체 멤버를 정렬 요구가 큰 순서로 선언하는 근거 데이터다.", "chapter": "cache" }
+  { "term": "alignof", "def": "타입이 요구하는 정렬(주소 배수 조건)을 컴파일 타임 상수로 돌려주는 연산자. 구조체 멤버를 정렬 요구가 큰 순서로 선언하는 근거 데이터다.", "chapter": "cache" },
+  { "term": "프로파일링 (profiling)", "def": "프로그램의 실행 시간이 실제로 어느 코드에서 소비되는지 측정하는 것. 최적화의 우선순위를 감이 아니라 측정으로 정하게 해 준다.", "chapter": "profiling" },
+  { "term": "샘플링 프로파일러 (sampling profiler)", "def": "주기적 인터럽트로 프로그램 카운터를 수집해 시간 분포를 통계적으로 추정하는 프로파일러(perf가 대표). 오버헤드가 작아 실행을 거의 왜곡하지 않지만 정확한 호출 횟수는 못 준다.", "chapter": "profiling" },
+  { "term": "계측 프로파일러 (instrumentation profiler)", "def": "프로그램에 측정 코드를 심거나 가상 CPU에서 재실행해 명령어·호출을 전수조사하는 프로파일러(callgrind가 대표). 계수가 정확하고 결정론적이지만 수십~백 배 느려진다.", "chapter": "profiling" },
+  { "term": "callgrind", "def": "valgrind의 콜 그래프 프로파일러. 프로그램을 가상 CPU에서 재실행하며 함수별 명령어 수(Ir)·호출 횟수·호출 관계를 정확히 센다. callgrind_annotate로 결과를 읽는다.", "chapter": "profiling" },
+  { "term": "gprof", "def": "컴파일 시 -pg가 심는 호출 기록(계측)과 100Hz 시간 샘플링을 섞은 고전 프로파일러. 공유 라이브러리의 시간을 못 보고, 최적화 빌드의 콜 그래프가 왜곡될 수 있다.", "chapter": "profiling" },
+  { "term": "perf", "def": "리눅스 커널에 내장된 샘플링 프로파일러. CPU의 PMU 하드웨어 카운터를 써서 재빌드 없이, 실행 중 프로세스에도 붙는다. 커널 버전과 짝을 맞춘 linux-tools 패키지로 설치한다.", "chapter": "profiling" },
+  { "term": "PMU (Performance Monitoring Unit)", "def": "사이클·명령어·캐시 미스 등을 하드웨어가 직접 세는 CPU 내장 카운터 장치. perf의 샘플링 트리거가 된다.", "chapter": "profiling" },
+  { "term": "Amdahl의 법칙", "def": "전체의 비율 p인 부분을 s배 빠르게 하면 전체 가속은 1/((1-p)+p/s)라는 공식. 부분 최적화의 이론적 상한(1/(1-p))을 착수 전에 계산하게 해 준다.", "chapter": "profiling" },
+  { "term": "self 비용 / inclusive 비용", "def": "프로파일 표에서 self는 함수 자신이 직접 실행한 양, inclusive는 그 함수가 부른 하위 호출까지 합친 양. 병목의 근원을 찾을 때는 둘을 함께 봐야 한다.", "chapter": "profiling" }
 ]
