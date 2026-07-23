@@ -438,5 +438,13 @@
   { "term": "쿼터니언 (quaternion)", "def": "축 û·각 θ 회전을 (cos θ/2, û sin θ/2) 4개 성분으로 담는 회전 표현. 특이점이 없고 합성이 싸고 slerp 보간이 되어 로봇 내부 자세 표현의 표준이다.", "chapter": "rotations" },
   { "term": "이중 덮개 (double cover)", "def": "단위 쿼터니언 q와 −q가 같은 회전을 나타내는 성질. 쿼터니언끼리 성분 비교·보간 전에 내적 부호를 맞추지 않으면 먼 길로 도는 버그가 된다.", "chapter": "rotations" },
   { "term": "slerp (구면 선형 보간)", "def": "두 단위 쿼터니언을 4차원 구면의 대원을 따라 등각속도로 잇는 보간. 모든 중간값이 유효한 회전으로 남는 유일하게 올바른 회전 보간이다.", "chapter": "rotations" },
-  { "term": "AngleAxis (축-각 표현)", "def": "\"이 축으로 이만큼\"을 그대로 담는 Eigen 타입(AngleAxisd). 단독 합성은 안 되지만 행렬·쿼터니언 어느 쪽으로도 곱 한 번에 흡수되는 중간 다리다.", "chapter": "rotations" }
+  { "term": "AngleAxis (축-각 표현)", "def": "\"이 축으로 이만큼\"을 그대로 담는 Eigen 타입(AngleAxisd). 단독 합성은 안 되지만 행렬·쿼터니언 어느 쪽으로도 곱 한 번에 흡수되는 중간 다리다.", "chapter": "rotations" },
+  { "term": "Eigen", "def": "C++ 템플릿으로 구현된 헤더 온리 선형대수 라이브러리. tf2·MoveIt2·PCL이 쓰는 ROS 2 생태계의 사실상 표준이다.", "chapter": "eigen" },
+  { "term": "표현식 템플릿 (expression template)", "def": "연산자가 값 대신 수식을 타입으로 인코딩한 경량 객체(CwiseBinaryOp 등)를 반환하게 해, 대입 시점에 전체 수식을 임시 객체 없이 루프 하나로 융합하는 템플릿 기법.", "chapter": "eigen" },
+  { "term": "지연 평가 (lazy evaluation)", "def": "계산을 결과가 실제로 필요한 시점(대입 등)까지 미루는 평가 전략 — Eigen 표현식 템플릿의 동작 원리이자 앨리어싱 함정의 원인.", "chapter": "eigen" },
+  { "term": "헤더 온리 라이브러리 (header-only library)", "def": ".so/.a 없이 헤더만으로 배포되는 라이브러리. 템플릿은 정의가 사용자 번역 단위에 보여야 하므로 이 형태가 강제된다.", "chapter": "eigen" },
+  { "term": "앨리어싱 (aliasing, 행렬 연산)", "def": "행렬 수식의 읽기 대상과 쓰기 대상이 겹치는 것. 지연 평가와 결합하면 아직 안 읽은 원소를 덮어써 틀린 결과를 만든다 — A = A.transpose()가 대표 사례.", "chapter": "eigen" },
+  { "term": "comma-initializer", "def": "Eigen의 << 초기화 문법. 행 우선으로 원소를 채우고, 개수가 어긋나면 런타임 단언으로 실패한다.", "chapter": "eigen" },
+  { "term": "noalias()", "def": "좌변과 우변이 겹치지 않음을 저자가 보증해, Eigen이 행렬 곱에서 기본으로 만드는 안전용 임시를 생략시키는 옵트아웃.", "chapter": "eigen" },
+  { "term": "정렬 인지 new (aligned new, C++17)", "def": "new 표현식이 타입의 alignof가 기본 보장(__STDCPP_DEFAULT_NEW_ALIGNMENT__)을 넘으면 operator new(size_t, align_val_t)를 자동 호출하는 C++17 기능 — EIGEN_MAKE_ALIGNED_OPERATOR_NEW를 은퇴시켰다.", "chapter": "eigen" }
 ]
