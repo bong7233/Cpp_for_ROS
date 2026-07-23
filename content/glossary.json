@@ -383,5 +383,22 @@
   { "term": "워크플로 (GitHub Actions workflow)", "def": "이벤트(on) → job(병렬, 독립 러너) → step(순차 실행) 세 겹으로 이뤄진 GitHub Actions의 자동화 정의 파일(.github/workflows/*.yml).", "chapter": "ci" },
   { "term": "빌드 매트릭스 (build matrix)", "def": "strategy.matrix로 같은 job 정의를 새니타이저 조합·컴파일러·OS 등 여러 축의 조합만큼 반복 실행하는 CI 문법 — 각 조합이 독립된 러너에서 병렬로 돈다.", "chapter": "ci" },
   { "term": "상태 체크 (status check)", "def": "워크플로의 job 하나하나가 풀 리퀘스트 화면에 초록/빨강으로 표시되는 결과 — 저장소 설정에서 필수로 지정하면 실패한 체크가 있는 브랜치의 병합을 막을 수 있다.", "chapter": "ci" },
-  { "term": "actionlint", "def": "GitHub Actions 워크플로 YAML을 문법뿐 아니라 GitHub Actions 표현식·컨텍스트 스키마까지 검사하는 전용 정적 검사 도구.", "chapter": "ci" }
+  { "term": "actionlint", "def": "GitHub Actions 워크플로 YAML을 문법뿐 아니라 GitHub Actions 표현식·컨텍스트 스키마까지 검사하는 전용 정적 검사 도구.", "chapter": "ci" },
+  { "term": "as-if 규칙 (as-if rule)", "def": "관찰 가능한 동작(출력, volatile 접근 등)만 같으면 컴파일러가 코드를 자유롭게 변환해도 된다는 표준의 계약 — 모든 최적화의 법적 근거.", "chapter": "codegen" },
+  { "term": "상수 접기 (constant folding)", "def": "피연산자가 전부 컴파일 타임 상수인 연산을 컴파일러가 미리 계산해 결과 상수로 치환하는 최적화. sqrt 같은 라이브러리 호출까지 접힐 수 있다.", "chapter": "codegen" },
+  { "term": "상수 전파 (constant propagation)", "def": "변수가 특정 상수임이 증명된 사실을 이후 코드로 흘려보내 접기·제거의 기회를 만드는 최적화 패스.", "chapter": "codegen" },
+  { "term": "인라이닝 (inlining)", "def": "함수 호출을 호출 지점에 몸통을 복사해 넣는 것으로 대체하는 최적화. 호출 비용 제거보다 다른 최적화가 호출 경계를 넘게 만드는 효과가 본질이다. inline 키워드와는 무관하게 옵티마이저가 결정한다.", "chapter": "codegen" },
+  { "term": "자동 벡터화 (auto-vectorization)", "def": "컴파일러가 스칼라 루프를 SIMD 벡터 명령으로 다시 쓰는 최적화. g++은 -O3에서 본격적으로 켜지며 -fopt-info-vec으로 성공/실패를 보고받을 수 있다.", "chapter": "codegen" },
+  { "term": "리덕션 (reduction)", "def": "루프가 값 하나(합, 최댓값 등)로 누적해 가는 패턴. 부동소수점 리덕션은 덧셈 순서 재배열이 결과를 바꿀 수 있어 -ffast-math 없이는 벡터화되지 않는다.", "chapter": "codegen" },
+  { "term": "최적화 수준 (-O0/-O1/-O2/-O3/-Os)", "def": "g++의 최적화 강도 묶음 플래그. -O0은 디버깅용, -O2가 실무 표준, -O3는 공격적 루프 최적화(더 빠르다는 보장 없음), -Os는 코드 크기 우선.", "chapter": "codegen" },
+  { "term": "-fopt-info", "def": "컴파일러가 자기 최적화 패스의 성공(optimized)·실패(missed)를 소스 위치와 함께 보고하게 하는 g++ 플래그 — -fopt-info-vec, -fopt-info-inline처럼 패스별로 필터한다.", "chapter": "codegen" },
+  { "term": "루프 버전 분기 (loop versioning)", "def": "포인터 겹침(aliasing) 가능성을 배제 못 할 때 컴파일러가 런타임 검사로 갈라지는 벡터판/스칼라판 두 벌의 루프를 만드는 기법.", "chapter": "codegen" },
+  { "term": "데이터 지향 설계 (data-oriented design)", "def": "코드 구조보다 데이터가 캐시를 통과하는 배치를 먼저 설계하는 접근 — 대량·동종·매 주기 전체 순회 워크로드에 적용한다.", "chapter": "data-oriented" },
+  { "term": "hot/cold 분리 (hot/cold splitting)", "def": "매 주기 접근하는 필드(hot)와 가끔 접근하는 필드(cold)를 별도 배열로 쪼개 순회가 만지는 캐시 라인을 줄이는 기법.", "chapter": "data-oriented" },
+  { "term": "existence-based processing", "def": "active 여부를 매번 if로 검사하는 대신, active한 원소만 모아둔 배열을 순회해 분기 자체를 없애는 패턴.", "chapter": "data-oriented" },
+  { "term": "분기 예측 (branch prediction)", "def": "CPU가 분기 결과가 나오기 전에 한쪽을 찍고 미리 실행하는 것 — 틀리면 파이프라인을 비우는 비용(이 환경 실측 약 22사이클)을 낸다.", "chapter": "data-oriented" },
+  { "term": "간접 분기 (indirect branch)", "def": "목적지 주소를 실행 시점에 레지스터/메모리에서 읽어 뛰는 분기 — 가상함수 호출이 대표적이며 목적지가 뒤섞이면 예측이 어렵다.", "chapter": "data-oriented" },
+  { "term": "탈가상화 (devirtualization)", "def": "컴파일러가 실제 타입을 증명할 수 있을 때 가상 호출을 직접 호출로 바꾸는 최적화 — 인라인의 전제조건이 된다.", "chapter": "data-oriented" },
+  { "term": "ECS (Entity Component System)", "def": "엔티티는 정수 ID, 데이터는 컴포넌트별 연속 배열, 시스템은 배열 순회 함수로 두는 아키텍처 — 데이터 지향 설계를 끝까지 민 형태.", "chapter": "data-oriented" },
+  { "term": "swap-and-pop", "def": "벡터 중간 원소를 마지막 원소와 바꾼 뒤 pop_back으로 O(1) 삭제하는 기법 — 마지막 원소의 인덱스가 바뀌는 부작용이 있다.", "chapter": "data-oriented" }
 ]
