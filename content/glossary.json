@@ -406,5 +406,10 @@
   { "term": "ClobberMemory", "def": "Google Benchmark의 함수 — '메모리 전체가 읽혔을 수 있다'는 컴파일러 배리어. 벤치마크의 결과가 반환값이 아니라 메모리 쓰기일 때 그 쓰기의 제거를 막는다.", "chapter": "benchmarking" },
   { "term": "워밍업 (warm-up)", "def": "측정 초반의 콜드 스타트(페이지 폴트, 캐시·분기 예측기 적재, 할당자 초기화) 구간을 측정에서 제외하고 정상 상태만 재는 절차. 콜드와 웜은 서로 다른 질문에 대한 답이다.", "chapter": "benchmarking" },
   { "term": "변동 계수 (coefficient of variation, cv)", "def": "표준편차를 평균으로 나눈 상대적 산포도. 벤치마크의 개선 폭이 cv보다 작으면 그 개선은 노이즈와 구분되지 않는다.", "chapter": "benchmarking" },
-  { "term": "Google Benchmark", "def": "마이크로벤치마크 표준 라이브러리 — 반복 횟수 자동 조정, 반복 측정 통계(mean/median/stddev/cv), 입력 크기 스윕(state.range), 커스텀 카운터를 제공한다. FetchContent로 받는다.", "chapter": "benchmarking" }
+  { "term": "Google Benchmark", "def": "마이크로벤치마크 표준 라이브러리 — 반복 횟수 자동 조정, 반복 측정 통계(mean/median/stddev/cv), 입력 크기 스윕(state.range), 커스텀 카운터를 제공한다. FetchContent로 받는다.", "chapter": "benchmarking" },
+  { "term": "SIMD", "def": "한 명령이 레지스터에 나란히 실린 여러 값에 같은 연산을 동시에 적용하는 실행 방식 — x86의 SSE(128비트)/AVX(256비트)/AVX-512(512비트) 계열이 대표다.", "chapter": "simd" },
+  { "term": "인트린식 (intrinsics)", "def": "CPU 벡터 명령을 함수 모양으로 직접 부르는 컴파일러 내장 인터페이스 — x86은 <immintrin.h>의 _mm256_add_pd 류. 자동 벡터화·라이브러리가 다 안 통할 때의 최후 수단이다.", "chapter": "simd" },
+  { "term": "__restrict", "def": "이 포인터가 가리키는 영역이 다른 포인터와 겹치지 않는다고 컴파일러에 약속하는 확장 한정자 — 앨리어싱 검사용 루프 버전 분기를 없애 준다. 약속이 거짓이면 UB이고 새니타이저도 못 잡는다.", "chapter": "simd" },
+  { "term": "-march=native", "def": "빌드 머신 CPU의 모든 명령 세트 확장을 쓰도록 허가하는 GCC/Clang 플래그. 그 바이너리는 확장이 없는 다른 CPU에서 SIGILL로 즉사한다 — 배포 빌드는 타깃 CPU를 명시한다.", "chapter": "simd" },
+  { "term": "FMA (fused multiply-add)", "def": "a*b+c를 반올림 한 번으로 끝내는 단일 명령(x86의 vfmadd 계열). a*x+y 꼴 커널에서 컴파일러가 자동으로 쓴다.", "chapter": "simd" }
 ]
