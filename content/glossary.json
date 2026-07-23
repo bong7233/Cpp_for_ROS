@@ -430,5 +430,13 @@
   { "term": "perf", "def": "리눅스 커널에 내장된 샘플링 프로파일러. CPU의 PMU 하드웨어 카운터를 써서 재빌드 없이, 실행 중 프로세스에도 붙는다. 커널 버전과 짝을 맞춘 linux-tools 패키지로 설치한다.", "chapter": "profiling" },
   { "term": "PMU (Performance Monitoring Unit)", "def": "사이클·명령어·캐시 미스 등을 하드웨어가 직접 세는 CPU 내장 카운터 장치. perf의 샘플링 트리거가 된다.", "chapter": "profiling" },
   { "term": "Amdahl의 법칙", "def": "전체의 비율 p인 부분을 s배 빠르게 하면 전체 가속은 1/((1-p)+p/s)라는 공식. 부분 최적화의 이론적 상한(1/(1-p))을 착수 전에 계산하게 해 준다.", "chapter": "profiling" },
-  { "term": "self 비용 / inclusive 비용", "def": "프로파일 표에서 self는 함수 자신이 직접 실행한 양, inclusive는 그 함수가 부른 하위 호출까지 합친 양. 병목의 근원을 찾을 때는 둘을 함께 봐야 한다.", "chapter": "profiling" }
+  { "term": "self 비용 / inclusive 비용", "def": "프로파일 표에서 self는 함수 자신이 직접 실행한 양, inclusive는 그 함수가 부른 하위 호출까지 합친 양. 병목의 근원을 찾을 때는 둘을 함께 봐야 한다.", "chapter": "profiling" },
+  { "term": "SO(3) (3차원 특수직교군)", "def": "R^T R = I 이고 det R = +1 인 3×3 행렬 전체 — 유효한 3D 회전의 집합. 역행렬이 전치와 같아 회전 뒤집기가 사실상 공짜다.", "chapter": "rotations" },
+  { "term": "오일러 각 (Euler angles)", "def": "세 축에 대한 세 번의 회전 각도로 자세를 기술하는 표현. 축 순서·기준(extrinsic/intrinsic)에 따라 12가지 이상 관례가 있어 반드시 관례를 함께 명시해야 한다.", "chapter": "rotations" },
+  { "term": "REP-103", "def": "ROS의 좌표계·단위 관례 문서. x 전방, y 좌측, z 상방, 회전은 roll(x)·pitch(y)·yaw(z) — URDF의 rpy 속성이 이 관례를 따른다.", "chapter": "rotations" },
+  { "term": "짐벌 락 (gimbal lock)", "def": "오일러 각에서 가운데 축이 ±90°가 될 때 첫·셋째 회전축이 겹쳐 자유도 하나가 사라지는 표현의 특이점. 회전 자체가 아니라 rpy 좌표계의 결함이다.", "chapter": "rotations" },
+  { "term": "쿼터니언 (quaternion)", "def": "축 û·각 θ 회전을 (cos θ/2, û sin θ/2) 4개 성분으로 담는 회전 표현. 특이점이 없고 합성이 싸고 slerp 보간이 되어 로봇 내부 자세 표현의 표준이다.", "chapter": "rotations" },
+  { "term": "이중 덮개 (double cover)", "def": "단위 쿼터니언 q와 −q가 같은 회전을 나타내는 성질. 쿼터니언끼리 성분 비교·보간 전에 내적 부호를 맞추지 않으면 먼 길로 도는 버그가 된다.", "chapter": "rotations" },
+  { "term": "slerp (구면 선형 보간)", "def": "두 단위 쿼터니언을 4차원 구면의 대원을 따라 등각속도로 잇는 보간. 모든 중간값이 유효한 회전으로 남는 유일하게 올바른 회전 보간이다.", "chapter": "rotations" },
+  { "term": "AngleAxis (축-각 표현)", "def": "\"이 축으로 이만큼\"을 그대로 담는 Eigen 타입(AngleAxisd). 단독 합성은 안 되지만 행렬·쿼터니언 어느 쪽으로도 곱 한 번에 흡수되는 중간 다리다.", "chapter": "rotations" }
 ]
