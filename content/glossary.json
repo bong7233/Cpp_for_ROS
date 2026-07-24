@@ -458,5 +458,16 @@
   { "term": "동차 변환 (homogeneous transform)", "def": "회전 R과 이동 t를 [R t; 0 1] 블록으로 담은 4×4 행렬. 회전+이동의 합성이 행렬 곱 하나가 되고, 프레임 체인·TF 트리 계산의 기본 단위다.", "chapter": "transforms" },
   { "term": "SE(3) (특수유클리드군)", "def": "R ∈ SO(3)인 4×4 동차 변환 전체 — 유효한 강체 변환(회전+이동)의 집합. 역변환이 [R^T, -R^T t] 닫힌 형태로 나와 일반 역행렬보다 싸다.", "chapter": "transforms" },
   { "term": "Eigen::Isometry3d", "def": "강체 변환 전용 Eigen Transform 타입. 저장은 Matrix4d와 같은 4×4지만 선형 블록이 회전임을 컴파일 타임에 알아 inverse()가 닫힌 형태, rotation()이 linear() 별칭이다. 불변식 유지는 검증되지 않는 약속이다.", "chapter": "transforms" },
-  { "term": "좌표 프레임 (coordinate frame)", "def": "원점과 세 축으로 정의되는 측정 기준. 로봇의 프레임들은 부모 기준 변환 T_parent_child 하나씩으로 트리를 이루고, 임의 두 프레임 간 변환은 경로를 따라 곱한 것이다.", "chapter": "transforms" }
+  { "term": "좌표 프레임 (coordinate frame)", "def": "원점과 세 축으로 정의되는 측정 기준. 로봇의 프레임들은 부모 기준 변환 T_parent_child 하나씩으로 트리를 이루고, 임의 두 프레임 간 변환은 경로를 따라 곱한 것이다.", "chapter": "transforms" },
+  { "term": "역기구학 (inverse kinematics, IK)", "def": "말단(발끝)의 목표 위치에서 관절 각도를 구하는 문제. FK와 반대로 해가 없거나(작업공간 밖), 여러 개거나(elbow-up/down), 무한할 수 있다(여유 자유도).", "chapter": "inverse-kinematics" },
+  { "term": "자코비안 (Jacobian)", "def": "관절 속도를 말단 속도로 보내는 선형 지도(FK의 국소 미분 행렬). 역행렬이 수치 IK의 반복 공식이 되고, 행렬식이 0이 되는 자세가 특이점이다.", "chapter": "inverse-kinematics" },
+  { "term": "특이점 (singularity, 기구학)", "def": "자코비안이 가역이 아닌(det J = 0) 로봇 자세. 그 자세 근처에서 잃어버린 이동 방향이 생기고, 작업공간 경계와 같은 사건인 경우가 많다.", "chapter": "inverse-kinematics" },
+  { "term": "DLS (damped least squares)", "def": "자코비안 역행렬 대신 J^T(JJ^T+λ²I)^-1를 쓰는 수치 IK 기법. 댐핑 항이 특이점에서도 보정량을 유한하게 유지하는 대신 수렴 속도와 정확도를 희생한다.", "chapter": "inverse-kinematics" },
+  { "term": "elbow-up / elbow-down", "def": "2링크 IK의 두 해 — 무릎(팔꿈치)이 목표-기준선을 기준으로 어느 쪽으로 꺾였는지를 가리키는 이름. cosθ2의 ± 부호 선택에 대응한다.", "chapter": "inverse-kinematics" },
+  { "term": "칼만 필터 (Kalman filter)", "def": "예측(모델)과 측정(센서)을 각각의 분산에 반비례해 가중 평균으로 섞는 상태 추정 필터. predict가 불확실성을 키우고 update가 줄이는 두 단계를 반복한다.", "chapter": "state-estimation" },
+  { "term": "칼만 이득 (Kalman gain)", "def": "predict/update에서 측정을 얼마나 수용할지 정하는 배분율 K = P/(P+R). 추정이 불확실할수록 1에 가깝고, 확실할수록 0에 가깝다.", "chapter": "state-estimation" },
+  { "term": "잔차 (innovation, 칼만 필터)", "def": "측정값에서 예측값을 뺀 값(z - Hx). 필터가 얼마나 잘 도는지 감시하는 창 — 한쪽으로 쏠리면 모델 오류, 분산을 자주 넘으면 Q/R 설정 오류다.", "chapter": "state-estimation" },
+  { "term": "프로세스 노이즈 Q / 측정 노이즈 R", "def": "칼만 필터의 두 튜닝 대상. Q는 모델을 얼마나 불신하는지(미끄러짐·미모델링 동역학의 예산), R은 센서를 얼마나 불신하는지를 나타내며, 필터의 성격은 절대값이 아니라 Q/R 비율이 정한다.", "chapter": "state-estimation" },
+  { "term": "EKF (확장 칼만 필터, Extended Kalman Filter)", "def": "비선형 상태 전이 모델을 그대로 쓰되 공분산 전파만 현재 추정치에서 계산한 자코비안으로 국소 선형화하는 칼만 필터. 매 스텝 재선형화하는 것이 핵심이다.", "chapter": "state-estimation" },
+  { "term": "조셉 형식 (Joseph form)", "def": "공분산 갱신을 P=(I-KH)P(I-KH)^T+KRK^T로 쓰는 형태. 반올림 오차가 있어도 대칭·양의 정부호가 구조적으로 보존되어 naive 갱신의 캔슬레이션 사고를 막는다.", "chapter": "state-estimation" }
 ]
