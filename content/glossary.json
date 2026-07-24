@@ -479,5 +479,12 @@
   { "term": "정착시간 (settling time)", "def": "출력이 목표값의 일정 오차 밴드(이 책은 ±2%) 안에 다시는 벗어나지 않게 되는 첫 시각.", "chapter": "pid" },
   { "term": "setpoint kick", "def": "목표값이 순간적으로 바뀔 때 오차의 미분이 순간 급증해 제어 출력이 튀는 현상 — 오차 대신 측정값을 미분하면 피할 수 있다.", "chapter": "pid" },
   { "term": "미분 저역 필터 (derivative low-pass filter)", "def": "측정 노이즈가 미분항에서 증폭되는 것을 막기 위해 미분 계산 결과에 거는 1차 IIR 필터. 시정수가 클수록 노이즈는 줄지만 실제 변화에 대한 반응도 늦어진다.", "chapter": "pid" },
-  { "term": "Ziegler-Nichols", "def": "1942년 제안된 PID 게인 산출 공식 — 임계 게인·임계 주기를 재서 표에 대입한다. 이름과 아이디어만 알아 두면 되고, 실무는 대개 P→D→I 순서의 수동 튜닝을 쓴다.", "chapter": "pid" }
+  { "term": "Ziegler-Nichols", "def": "1942년 제안된 PID 게인 산출 공식 — 임계 게인·임계 주기를 재서 표에 대입한다. 이름과 아이디어만 알아 두면 되고, 실무는 대개 P→D→I 순서의 수동 튜닝을 쓴다.", "chapter": "pid" },
+  { "term": "ULP (unit in the last place)", "def": "부동소수점이 표현 가능한 두 값 사이의 최소 간격. 값의 크기에 비례해 벌어지므로(1.0 근처 2.2e-16, 1e15 근처 0.125), 절대오차 비교가 스케일에 따라 무의미해지는 근거가 된다.", "chapter": "numerics" },
+  { "term": "흡수 (absorption)", "def": "큰 수에 그 수의 ULP보다 작은 값을 더하면 반올림으로 그대로 사라지는 현상. 결합법칙이 깨지는 근본 원인이며 대량 리덕션에서 합산이 일찍 멈추는 이유다.", "chapter": "numerics" },
+  { "term": "재앙적 상쇄 (catastrophic cancellation)", "def": "크기가 비슷한 두 수를 뺄 때 앞자리가 서로 지워지고 각 수의 반올림 잡음만 유효숫자로 남는 현상. 근의 공식·분산의 간편식(E[X²]-E[X]²)이 대표 사례다.", "chapter": "numerics" },
+  { "term": "Kahan summation (보상 합산)", "def": "매 덧셈에서 잘려나가는 하위 비트를 별도 변수에 추적해 다음 항에 되돌려주는 합산 기법. 대량 합산의 흡수를 막지만 연산량이 몇 배 늘고 -ffast-math에 취약하다.", "chapter": "numerics" },
+  { "term": "조건수 (condition number)", "def": "연산이 입력의 작은 오차를 출력에서 얼마나 증폭시키는지 나타내는 민감도. acos가 인자 ±1 근처에서 조건수가 발산해 오차를 수만 배로 키우는 것이 대표 사례다.", "chapter": "numerics" },
+  { "term": "NaN 전파 (NaN propagation)", "def": "NaN이 낀 연산은 전부 NaN이 되고, NaN과의 모든 비교(==, <, >)가 false가 되는 IEEE 754의 성질. 재귀 상태(필터, EMA)에 한 번 섞이면 이후 정상 입력으로도 씻기지 않는다.", "chapter": "numerics" },
+  { "term": "std::isfinite", "def": "값이 무한대나 NaN이 아닌지 검사하는 표준 함수. acos/sqrt/나눗셈 등 정의역 경계를 넘나드는 계산 직후에 걸어 NaN이 상태로 전파되기 전에 막는 표준 방어다.", "chapter": "numerics" }
 ]
